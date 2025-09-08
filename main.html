@@ -84,12 +84,23 @@
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
         gap: 20px;
     }
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 0;
+        padding: 0;
+    }
     .coin-balance {
         margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
     }
     .coin-balance span {
         font-weight: bold;
         margin-right: 10px;
+        
     }
     footer {
         background-color: #ffffff;
@@ -118,21 +129,20 @@
                 <div class="user">user</div>
             </div>
             <div>
-                <ul>
+                <ul class="nav-links">
                     <li><a href="">หน้าหลัก</a></li>
                     <li><a href="">ติดท็อป</a></li>
                     <li><a href="">หมวดหมู่</a></li>
+                    <div class="coin-balance">
+                      <span>Coin: 100 <button><a href="">เติมcoin</a></button></span> 
+                    </div>
                 </ul>
+                
             </div>
         </nav>
     </header>
     
     <main>
-        <div class="coin-balance">
-            <span>Coin: 100</span>
-            <button><a href="">เติมcoin</a></button>
-            <hr>
-        </div>
         <section class="max-w-7xl mx-auto px-4 py-6">
             <h2 class="text-xl font-bold mb-4">นิยายยอดนิยม</h2>
             <div class="swiper mySwiper">
@@ -219,10 +229,10 @@
             <section>
               <h3 class="text-xl font-bold mb-4">หมวดหมู่ยอดนิยม</h3>
               <div class="flex flex-wrap gap-2">
-                <span class="px-3 py-1 bg-zinc-100 rounded-full">#แฟนตาซี</span>
-                <span class="px-3 py-1 bg-zinc-100 rounded-full">#โรแมนซ์</span>
-                <span class="px-3 py-1 bg-zinc-100 rounded-full">#วาย</span>
-                <span class="px-3 py-1 bg-zinc-100 rounded-full">#ไซไฟ</span>
+                <span class="px-3 py-1 bg-zinc-100 rounded-full"><a href="">#แฟนตาซี</a></span>
+                <span class="px-3 py-1 bg-zinc-100 rounded-full"><a href="">#โรแมนซ์</a></span>
+                <span class="px-3 py-1 bg-zinc-100 rounded-full"><a href="">#วาย</a></span>
+                <span class="px-3 py-1 bg-zinc-100 rounded-full"><a href="">#ไซไฟ</a></span>
               </div>
             </section>
         
@@ -242,12 +252,21 @@
                   </div>
                   <span class="ml-auto text-sm text-zinc-600">👁 312,340</span>
                 </li>
+                <li class="flex items-center gap-3 bg-white p-3 rounded-lg shadow">
+                  <span class="w-6 text-center font-bold">2</span>
+                  <img src="https://picsum.photos/60/90?random3" class="rounded-md" alt="">
+                  <div>
+                    <p class="font-semibold">กาลครั้งในอาณาจักรชา</p>
+                    <p class="text-sm text-zinc-500">Null</p>
+                  </div>
+                  <span class="ml-auto text-sm text-zinc-600">👁 312,340</span>
+                </li>
               </ol>
             </section>
     </main>
     <footer>
         <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-zinc-500">
-          &copy; 2024 YourWebsite. สงวนลิขสิทธิ์.
+          &copy; 2025 cat fat. สงวนลิขสิทธิ์.
         </div>
     </footer>
 
