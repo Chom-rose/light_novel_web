@@ -25,7 +25,7 @@
     nav div:first-child {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: space-evenly;
     }
     nav div:first-child div {
         margin: 0 10px;
@@ -117,6 +117,11 @@
     footer a:hover {
         text-decoration: underline;
     }
+    span a {
+        text-decoration: none;
+        color: inherit;
+        font-weight: bold;
+    }
 </style>
 <body>
     <header>
@@ -124,13 +129,13 @@
             <div>
                 <div class="logo">logo</div>
                 <div><a href="">นิยาย</a></div>
-                <div><a>สร้างผลงาน</a></div>
+                <div><a href="">สร้างผลงาน</a></div>
                 <div><button>Search</button></div>
                 <div class="user">user</div>
             </div>
             <div>
                 <ul class="nav-links">
-                    <li><a href="">หน้าหลัก</a></li>
+                    <li><span><a href="">หน้าหลัก</a></span></li>
                     <li><a href="">ติดท็อป</a></li>
                     <li><a href="">หมวดหมู่</a></li>
                     <div class="coin-balance">
