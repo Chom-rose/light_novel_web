@@ -4,14 +4,25 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "express": "^5.1.0",
+    "express": "^5.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chom-rose/light_novel_web.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Chom-rose/light_novel_web/issues"
+  },
+  "homepage": "https://github.com/Chom-rose/light_novel_web#readme",
+  "devDependencies": {
     "nodemon": "^3.1.10"
   }
 }
