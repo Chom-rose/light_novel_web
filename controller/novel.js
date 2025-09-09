@@ -8,6 +8,7 @@ exports.read = async (req, res) => {
     }
 };
 
+<<<<<<< HEAD
 exports.create = async (req, res) => {
     try {
         const {name, category } = req.body;
@@ -23,3 +24,13 @@ exports.create = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 };
+=======
+/*
+exports.create = async (req, res) => {
+    try {
+        const 
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}; */
+>>>>>>> 626a386e48e7e1c81cc649e0acae38601e8e38fb
