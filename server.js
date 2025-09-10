@@ -13,9 +13,10 @@ const lightNovelRouter = require("./router/novel");
 app.use("/admin", adminRouter);
 app.use("/light-novel", lightNovelRouter);
 
-// redirect root -> หน้าเว็บหลัก
-app.get("/", (req, res) => res.redirect("/light-novel"));
+app.get("/", (_req, res) => {
+res.redirect("/light-novel");
+});
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+console.log(`Server running at http://localhost:${port}`);
 });
