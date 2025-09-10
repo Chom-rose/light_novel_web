@@ -1,393 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>หน้าหลัก</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
-  />
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>หน้าหลัก</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/main.css">
 </head>
-<style>
-  body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f9f9f9;
-        margin: 0;
-        padding: 0;
-    }
-    header {
-        background-color: #ffffff;
-        border-bottom: 1px solid #e5e7eb;
-        padding: 10px 20px;
-    }
-    nav div:first-child {
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-    }
-    nav div:first-child div {
-        margin: 0 10px;
-    }
-    nav div:first-child .logo {
-        font-size: 1.5em;
-        font-weight: bold;
-    }
-    nav div:first-child .user {
-        background-color: #e5e7eb;
-        padding: 5px 10px;
-        border-radius: 5px;
-    }
-    nav div:last-child ul {
-        display: flex;
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
-    nav div:last-child ul li {
-        margin-right: 20px;
-    }
-    nav div:last-child ul li a {
-        text-decoration: none;
-        color: #374151;
-        font-weight: bold;
-    }
-    main {
-        max-width: 1200px;
-        margin: 20px auto;
-        padding: 0 20px;
-    }
-    main > div {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-    main > div button {
-        background-color: #4f46e5;
-        color: white;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    section {
-        margin-top: 30px;
-    }
-    section h3 {
-        font-size: 1.25em;
-        margin-bottom: 10px;
-        font-weight: bold;
-    }
-    section .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 20px;
-    }
-    .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin: 0;
-        padding: 0;
-    }
-    .coin-balance {
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        justify-content: flex-end;
-    }
-    .coin-balance span {
-        font-weight: bold;
-        margin-right: 10px; 
-    }
-    .coin-balance button {
-        background-color: #4f46e5;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.875em; 
-    }
-    
-    footer {
-        background-color: #ffffff;
-        border-top: 1px solid #e5e7eb;
-        padding: 20px;
-        text-align: center;
-        color: #6b7280;
-        font-size: 0.875em;
-    }
-    footer a {
-        color: #4f46e5;
-        text-decoration: none;
-    }
-    footer a:hover {
-        text-decoration: underline;
-    }
-    span a {
-        text-decoration: none;
-        color: inherit;
-        font-weight: bold;
-    }
-</style>
+
 <body>
-    <header>
-        <nav>
-            <div>
-                <div class="logo">logo</div>
-                <div><a href="">นิยาย</a></div>
-                <div><a href="">สร้างผลงาน</a></div>
-                <button id="openSearch" class="p-2">
-                  <i class="bx bx-search text-2xl"></i>
-                </button>
-                
-                <!-- Overlay กล่องค้นหา (ซ่อนอยู่ก่อน) -->
-                <div id="searchOverlay" 
-                     class="fixed inset-0 bg-black/40 flex items-start justify-center pt-20 hidden z-50">
-                  <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
-                    <div class="flex items-center gap-2">
-                      
-                      <!-- ประเภท -->
-                      <select class="border rounded-lg px-3 py-2 text-sm">
-                        <option>นิยาย</option>
-                        <option>การ์ตูน</option>
-                      </select>
-                
-                      <!-- หมวดหมู่ -->
-                      <select class="border rounded-lg px-3 py-2 text-sm">
-                        <option>ทุกหมวด</option>
-                        <option>แฟนตาซี</option>
-                        <option>โรแมนซ์</option>
-                      </select>
-                
-                      <!-- Input -->
-                      <input type="text" placeholder="ค้นหานิยาย ชื่อเรื่อง หรือผู้เขียน"
-                             class="flex-1 border rounded-lg px-3 py-2 text-sm">
-                
-                      <!-- ปุ่มค้นหา -->
-                      <button class="bg-orange-500 text-white px-5 py-2 rounded-lg">
-                        ค้นหา
-                      </button>
-                
-                      <!-- ปุ่มปิด -->
-                      <button id="closeSearch" class="ml-2 text-gray-500 hover:text-black">
-                        ✕
-                      </button>
-                    </div>
-                  </div>
-                </div>
+  <header>
+    <nav>
+      <div class="nav-header">
+        <div class="logo">logo</div>
+        <div><a href="">นิยาย</a></div>
+        <div><a href="">สร้างผลงาน</a></div>
+        <div class="search-user">
+          <button id="openSearch" class="p-2">
+            <i class="bx bx-search text-2xl"></i>
+          </button>
 
-                <button id="profileBtn" class="relative p-2">
-                  <i class="bx bx-user text-2xl"></i>
+          <!-- Overlay กล่องค้นหา (ซ่อนอยู่ก่อน) -->
+          <div id="searchOverlay" class="fixed inset-0 bg-black/40 flex items-start justify-center pt-3 hidden z-50">
+            <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
+              <div class="flex items-center gap-2">
+
+                <!-- ประเภท -->
+                <select class="border rounded-lg px-3 py-2 text-sm">
+                  <option>นิยายสั้น</option>
+                  <option>นิยายยาว</option>
+                </select>
+
+                <!-- หมวดหมู่ -->
+                <select class="border rounded-lg px-3 py-2 text-sm">
+                  <option>ทุกหมวด</option>
+                  <option>แฟนตาซี</option>
+                  <option>ระทึกขวัญ</option>
+                  <option>โรแมนซ์</option>
+                  <option>แอ๊คชั่น</option>
+                  <option>ดราม่า</option>
+                  <option>ไซไฟ</option>
+                  <option>ตลก</option>
+                </select>
+
+                <!-- Input -->
+                <input type="text" placeholder="ค้นหานิยาย ชื่อเรื่อง หรือผู้เขียน"
+                  class="flex-1 border rounded-lg px-3 py-2 text-sm">
+
+
+                <!-- ปุ่มค้นหา -->
+                <button class="bg-orange-500 text-gray-500 px-5 py-2 rounded-lg hover:text-black">
+                  ค้นหา
                 </button>
 
-                <!-- เมนู dropdown -->
-<div id="profileMenu" 
-class="absolute right-4 mt-2 w-56 bg-white rounded-lg shadow-lg border hidden">
-<ul class="py-2 text-sm text-gray-700">
-<li><a href="#" class="block px-4 py-2 hover:bg-gray-100">เข้าสู่ระบบ / สมัครสมาชิก</a></li>
-<li class="px-4 py-2 flex items-center justify-between">
- โหมดการแสดงผล
- <label class="inline-flex items-center cursor-pointer">
-   <input type="checkbox" class="sr-only peer">
-   <div class="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:bg-indigo-500 relative after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5"></div>
- </label>
-</li>
-<li><a href="#" class="block px-4 py-2 hover:bg-gray-100">สร้างผลงาน</a></li>
-<li><a href="#" class="block px-4 py-2 hover:bg-gray-100">การตั้งค่า</a></li>
-<li><a href="#" class="block px-4 py-2 hover:bg-gray-100">วิธีใช้ / ช่วยเหลือ</a></li>
-</ul>
-</div>
+                <!-- ปุ่มปิด -->
+                <button id="closeSearch" class="ml-2 text-gray-500 hover:text-black">
+                  ✕
+                </button>
+              </div>
+            </div>
+          </div>
 
-            </div>
-            <div>
-                <ul class="nav-links">
-                    <li><span><a href="">หน้าหลัก</a></span></li>
-                    <li><a href="">ติดท็อป</a></li>
-                    <li><a href="">หมวดหมู่</a></li>
-                    <div class="coin-balance">
-                      <span>Coin: 100 <button><a href="">เติมcoin</a></button></span> 
-                    </div>
-                </ul>
-                
-            </div>
-        </nav>
-    </header>
-    
-    <main>
-        <section class="max-w-7xl mx-auto px-4 py-6">
-            <h2 class="text-xl font-bold mb-4">นิยายยอดนิยม</h2>
-            <div class="swiper mySwiper">
-              <div class="swiper-wrapper">
-                <!-- Slide 1 -->
-                <div class="swiper-slide">
-                  <div class="relative">
-                    <img src="https://picsum.photos/800/400?random=1" 
-                         class="w-full rounded-xl" alt="Novel 1">
-                    <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">
-                      หอคอยกระจก
-                    </div>
-                  </div>
-                </div>
-                <!-- Slide 2 -->
-                <div class="swiper-slide">
-                  <div class="relative">
-                    <img src="https://picsum.photos/800/400?random=2" 
-                         class="w-full rounded-xl" alt="Novel 2">
-                    <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">
-                      แชตลับฉบับรัก
-                    </div>
-                  </div>
-                </div>
-                <!-- Slide 3 -->
-                <div class="swiper-slide">
-                  <div class="relative">
-                    <img src="https://picsum.photos/800/400?random=3" 
-                         class="w-full rounded-xl" alt="Novel 3">
-                    <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">
-                      กาลครั้งในอาณาจักรชา
-                    </div>
-                  </div>
-                </div>
+
+          <div class="profile">
+            <button id="profileBtn" class="p-2">
+              <i class="bx bx-user text-2xl"></i>
+            </button>
+
+            <!-- เมนู dropdown -->
+            <div id="profileMenu" class="dropdown hidden">
+              <div class="dropdown-header">
+                <strong>สมาชิก</strong><br>
+                <small>guest</small>
               </div>
-              <!-- Navigation -->
-              <div class="swiper-button-next"></div>
-              <div class="swiper-button-prev"></div>
-              <!-- Pagination -->
-              <div class="swiper-pagination"></div>
-            </div>
-          </section>
-        
-          
-        
-            <!-- Latest Updates -->
-            <section class="max-w-7xl mx-auto px-4 py-10 space-y-12">
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold">นิยายมาใหม่</h3>
-                <a href="#" class="text-sm text-indigo-600 hover:underline">ดูทั้งหมด</a>
-              </div>
-              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                <article class="bg-white rounded-xl shadow p-2">
-                  <img src="https://picsum.photos/200/300?random=1" alt="" class="rounded-lg">
-                  <h4 class="font-semibold mt-2">หอคอยกระจก</h4>
-                  <p class="text-sm text-zinc-500">Mina K.</p>
-                </article>
-                <article class="bg-white rounded-xl shadow p-2">
-                  <img src="https://picsum.photos/200/300?random=2" alt="" class="rounded-lg">
-                  <h4 class="font-semibold mt-2">แชตลับฉบับรัก</h4>
-                  <p class="text-sm text-zinc-500">tenten</p>
-                </article>
-                <!-- เพิ่มการ์ดต่อได้ -->
-              </div>
-            </section>
-        
-            <!-- Trending -->
-            <section>
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold">กำลังมาแรง</h3>
-                <a href="#" class="text-sm text-indigo-600 hover:underline">ดูอันดับ</a>
-              </div>
-              <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-                <article class="bg-white rounded-xl shadow p-2">
-                  <img src="https://picsum.photos/200/300?random=3" alt="" class="rounded-lg">
-                  <h4 class="font-semibold mt-2">กาลครั้งในอาณาจักรชา</h4>
-                  <p class="text-sm text-zinc-500">Sora</p>
-                </article>
-                <!-- เพิ่มการ์ดต่อได้ -->
-              </div>
-            </section>
-        
-            <!-- Categories -->
-            <section>
-              <h3 class="text-xl font-bold mb-4">หมวดหมู่ยอดนิยม</h3>
-              <div class="flex flex-wrap gap-2">
-                <span class="px-3 py-1 bg-zinc-100 rounded-full"><a href="">#แฟนตาซี</a></span>
-                <span class="px-3 py-1 bg-zinc-100 rounded-full"><a href="">#โรแมนซ์</a></span>
-                <span class="px-3 py-1 bg-zinc-100 rounded-full"><a href="">#วาย</a></span>
-                <span class="px-3 py-1 bg-zinc-100 rounded-full"><a href="">#ไซไฟ</a></span>
-              </div>
-            </section>
-        
-            <!-- Ranking -->
-            <section>
-              <div class="flex items-center justify-between mb-4">
-                <h3 class="text-xl font-bold">จัดอันดับยอดอ่าน</h3>
-                <a href="#" class="text-sm text-indigo-600 hover:underline">ดูทั้งหมด</a>
-              </div>
-              <ol class="space-y-2">
-                <li class="flex items-center gap-3 bg-white p-3 rounded-lg shadow">
-                  <span class="w-6 text-center font-bold">1</span>
-                  <img src="https://picsum.photos/60/90?random=4" class="rounded-md" alt="">
-                  <div>
-                    <p class="font-semibold">ดาวเคราะห์หมายเลข 404</p>
-                    <p class="text-sm text-zinc-500">Null</p>
-                  </div>
-                  <span class="ml-auto text-sm text-zinc-600">👁 312,340</span>
+              <ul>
+                <li>
+                  โหมดการแสดงผล
+                  <label class="switch">
+                    <input type="checkbox">
+                    <span class="slider round"></span>
+                  </label>
                 </li>
-                <li class="flex items-center gap-3 bg-white p-3 rounded-lg shadow">
-                  <span class="w-6 text-center font-bold">2</span>
-                  <img src="https://picsum.photos/60/90?random3" class="rounded-md" alt="">
-                  <div>
-                    <p class="font-semibold">กาลครั้งในอาณาจักรชา</p>
-                    <p class="text-sm text-zinc-500">Null</p>
-                  </div>
-                  <span class="ml-auto text-sm text-zinc-600">👁 312,340</span>
-                </li>
-              </ol>
-            </section>
-    </main>
-    <footer>
-        <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-zinc-500">
-          &copy; 2025 cat fat. สงวนลิขสิทธิ์.
+                <li><a href="#">สร้างผลงาน</a></li>
+                <li><a href="#">การตั้งค่า</a></li>
+                <li><a href="#">วิธีใช้ / ช่วยเหลือ</a></li>
+              </ul>
+            </div>
+          </div>
         </div>
-    </footer>
+      </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-      var swiper = new Swiper(".mySwiper", {
-        loop: true,
-        autoplay: {
-          delay: 3000,
-          disableOnInteraction: false,
-        },
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-      });
+      <div class="nav-body">
+        <ul class="nav-links">
+          <li><span><a href="">หน้าหลัก</a></span></li>
+          <li><a href="">ติดท็อป</a></li>
+          <li><a href="">หมวดหมู่</a></li>
+        </ul>
+        <div class="coin-balance">
+          <span>Coin: 100 </span>
+          <button><a href="">เติมcoin </a></button>
+        </div>
+      </div>
+    </nav>
+  </header>
 
-      // เปิดกล่องค้นหา
-      const openBtn = document.getElementById("openSearch");
-  const closeBtn = document.getElementById("closeSearch");
-  const overlay = document.getElementById("searchOverlay");
+  <main>
+    <section class="max-w-7xl mx-auto px-4 py-6">
+      <h2 class="text-xl font-bold mb-4">นิยายยอดนิยม</h2>
+      <div class="swiper mySwiper">
+        <div class="swiper-wrapper">
+          <!-- Slide 1 -->
+          <div class="swiper-slide">
+            <div class="relative">
+              <img src="https://picsum.photos/800/400?random=1" class="w-full rounded-xl" alt="Novel 1">
+              <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">
+                หอคอยกระจก
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="swiper-slide">
+            <div class="relative">
+              <img src="https://picsum.photos/800/400?random=2" class="w-full rounded-xl" alt="Novel 2">
+              <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">
+                แชตลับฉบับรัก
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="swiper-slide">
+            <div class="relative">
+              <img src="https://picsum.photos/800/400?random=3" class="w-full rounded-xl" alt="Novel 3">
+              <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">
+                กาลครั้งในอาณาจักรชา
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Navigation -->
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
+        <!-- Pagination -->
+        <div class="swiper-pagination"></div>
+      </div>
+    </section>
 
-  openBtn.addEventListener("click", () => {
-    overlay.classList.remove("hidden");
-  });
 
-  closeBtn.addEventListener("click", () => {
-    overlay.classList.add("hidden");
-  });
-  const btn = document.getElementById("profileBtn");
-  const menu = document.getElementById("profileMenu");
 
-  btn.addEventListener("click", () => {
-    menu.classList.toggle("hidden");
-  });
+    <!-- Latest Updates -->
+    <section class="max-w-7xl mx-auto px-4 py-10 space-y-12">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold">นิยายมาใหม่</h3>
+        <a href="#" class="text-sm text-indigo-600 hover:underline">ดูทั้งหมด</a>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <article class="bg-white rounded-xl shadow p-2">
+          <img src="https://picsum.photos/200/300?random=1" alt="" class="rounded-lg">
+          <h4 class="font-semibold mt-2">หอคอยกระจก</h4>
+          <p class="text-sm text-zinc-500">Mina K.</p>
+        </article>
+        <article class="bg-white rounded-xl shadow p-2">
+          <img src="https://picsum.photos/200/300?random=2" alt="" class="rounded-lg">
+          <h4 class="font-semibold mt-2">แชตลับฉบับรัก</h4>
+          <p class="text-sm text-zinc-500">tenten</p>
+        </article>
+        <!-- เพิ่มการ์ดต่อได้ -->
+      </div>
+    </section>
 
-  // ปิดเมนูเมื่อคลิกข้างนอก
-  document.addEventListener("click", (e) => {
-    if (!btn.contains(e.target) && !menu.contains(e.target)) {
-      menu.classList.add("hidden");
-    };
-  });
-    </script>
+    <!-- Trending -->
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold">กำลังมาแรง</h3>
+        <a href="#" class="text-sm text-indigo-600 hover:underline">ดูอันดับ</a>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <article class="bg-white rounded-xl shadow p-2">
+          <img src="https://picsum.photos/200/300?random=3" alt="" class="rounded-lg">
+          <h4 class="font-semibold mt-2">กาลครั้งในอาณาจักรชา</h4>
+          <p class="text-sm text-zinc-500">Sora</p>
+        </article>
+        <!-- เพิ่มการ์ดต่อได้ -->
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <section>
+      <h3 class="text-xl font-bold mb-4">หมวดหมู่ยอดนิยม</h3>
+      <div class="flex flex-wrap gap-2">
+        <span><a href="">#แฟนตาซี</a></span>
+        <span><a href="">#โรแมนซ์</a></span>
+        <span><a href="">#วาย</a></span>
+        <span><a href="">#ไซไฟ</a></span>
+      </div>
+    </section>
+
+    <!-- Ranking -->
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold">จัดอันดับยอดอ่าน</h3>
+        <a href="#" class="text-sm text-indigo-600 hover:underline">ดูทั้งหมด</a>
+      </div>
+      <ol class="space-y-2">
+        <li class="flex items-center gap-3 bg-white p-3 rounded-lg shadow">
+          <h2>1</h2> 
+          <img src="https://picsum.photos/60/90?random=4" class="rounded-md" alt="">
+          <div>
+            <p class="font-semibold">ดาวเคราะห์หมายเลข 404</p>
+            <p class="text-sm text-zinc-500">Null</p>
+          </div>
+          <span class="ml-auto text-sm text-zinc-600">👁 312,340</span>
+        </li>
+        <li class="flex items-center gap-3 bg-white p-3 rounded-lg shadow">
+          <h2>2</h2>
+          <img src="https://picsum.photos/60/90?random3" class="rounded-md" alt="">
+          <div>
+            <p class="font-semibold">กาลครั้งในอาณาจักรชา</p>
+            <p class="text-sm text-zinc-500">Null</p>
+          </div>
+          <span class="ml-auto text-sm text-zinc-600">👁 312,340</span>
+        </li>
+      </ol>
+    </section>
+  </main>
+  <footer>
+    <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-zinc-500">
+      &copy; 2025 cat fat. สงวนลิขสิทธิ์.
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      loop: true,
+      autoplay: {
+        delay: 3000,
+        disableOnInteraction: false,
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+    });
+
+    // เปิดกล่องค้นหา
+    const openBtn = document.getElementById("openSearch");
+    const closeBtn = document.getElementById("closeSearch");
+    const overlay = document.getElementById("searchOverlay");
+
+    openBtn.addEventListener("click", () => {
+      overlay.classList.remove("hidden");
+    });
+
+    closeBtn.addEventListener("click", () => {
+      overlay.classList.add("hidden");
+    });
+
+
+    const btn = document.getElementById("profileBtn");
+    const menu = document.getElementById("profileMenu");
+
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!btn.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.add("hidden");
+      }
+    });
+
+  </script>
 </body>
+
 </html>
