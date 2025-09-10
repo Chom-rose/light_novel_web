@@ -227,7 +227,8 @@
       frag.querySelector('#edit-content').value = c.content;
 
       const cont = document.getElementById('chapter-content');
-      cont.replaceWith(frag);
+      cont.innerHTML = "";       // เคลียร์เนื้อหาเดิม
+      cont.appendChild(frag);
 
       document.getElementById('edit-ch').classList.add('hidden');
       document.getElementById('save-ch').classList.remove('hidden');
