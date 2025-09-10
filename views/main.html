@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/nav.css">
 </head>
 
 <body>
@@ -16,8 +17,8 @@
     <nav>
       <div class="nav-header">
         <div class="logo">logo</div>
-        <div><a href="">นิยาย</a></div>
-        <div><a href="">สร้างผลงาน</a></div>
+
+        
         <div class="search-user">
           <button id="openSearch" class="p-2">
             <i class="bx bx-search text-2xl"></i>
@@ -52,8 +53,11 @@
 
 
                 <!-- ปุ่มค้นหา -->
-                <button class="bg-orange-500 text-gray-500 px-5 py-2 rounded-lg hover:text-black">
-                  ค้นหา
+                <button onclick="doSearch()" class="bg-orange-500 text-black px-5 py-2 rounded-lg">
+                  <a href="/light-novel/search"
+                    class="bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-indigo-700">
+                    ค้นหา
+                  </a>
                 </button>
 
                 <!-- ปุ่มปิด -->
@@ -96,8 +100,7 @@
       <div class="nav-body">
         <ul class="nav-links">
           <li><span><a href="">หน้าหลัก</a></span></li>
-          <li><a href="">ติดท็อป</a></li>
-          <li><a href="">หมวดหมู่</a></li>
+          <li><a href="/light-novel/create">สร้างผลงาน</a></li>
         </ul>
         <div class="coin-balance">
           <span>Coin: 100 </span>
@@ -187,44 +190,7 @@
       </div>
     </section>
 
-    <!-- Categories -->
-    <section>
-      <h3 class="text-xl font-bold mb-4">หมวดหมู่ยอดนิยม</h3>
-      <div class="flex flex-wrap gap-2">
-        <span><a href="">#แฟนตาซี</a></span>
-        <span><a href="">#โรแมนซ์</a></span>
-        <span><a href="">#วาย</a></span>
-        <span><a href="">#ไซไฟ</a></span>
-      </div>
-    </section>
-
-    <!-- Ranking -->
-    <section>
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl font-bold">จัดอันดับยอดอ่าน</h3>
-        <a href="#" class="text-sm text-indigo-600 hover:underline">ดูทั้งหมด</a>
-      </div>
-      <ol class="space-y-2">
-        <li class="flex items-center gap-3 bg-white p-3 rounded-lg shadow">
-          <h2>1</h2> 
-          <img src="https://picsum.photos/60/90?random=4" class="rounded-md" alt="">
-          <div>
-            <p class="font-semibold">ดาวเคราะห์หมายเลข 404</p>
-            <p class="text-sm text-zinc-500">Null</p>
-          </div>
-          <span class="ml-auto text-sm text-zinc-600">👁 312,340</span>
-        </li>
-        <li class="flex items-center gap-3 bg-white p-3 rounded-lg shadow">
-          <h2>2</h2>
-          <img src="https://picsum.photos/60/90?random3" class="rounded-md" alt="">
-          <div>
-            <p class="font-semibold">กาลครั้งในอาณาจักรชา</p>
-            <p class="text-sm text-zinc-500">Null</p>
-          </div>
-          <span class="ml-auto text-sm text-zinc-600">👁 312,340</span>
-        </li>
-      </ol>
-    </section>
+    
   </main>
   <footer>
     <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-zinc-500">
@@ -277,6 +243,13 @@
       }
     });
 
+    function doSearch() {
+      const input = document.querySelector('#searchOverlay input[type="text"]');
+      const keyword = input.value.trim();
+      if (keyword) {
+        window.location.href = `/search.html?q=${encodeURIComponent(keyword)}`;
+      }
+    }
   </script>
 </body>
 

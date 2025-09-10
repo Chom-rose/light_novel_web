@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ผลการค้นหา</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+    <header class="bg-white shadow p-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">ผลการค้นหา</h1>
+            <a href="/light-novel" class="text-indigo-600">← กลับหน้าหลัก</a>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto p-6">
+        <h2 class="text-lg mb-4">
+            ค้นหา: <span id="keyword" class="font-bold text-indigo-600"></span>
+        </h2>
+
+        <!-- รายการผลลัพธ์ -->
+        <div id="results" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- จะเติมด้วย JS -->
+        </div>
+    </main>
+
+    <script>
+        // ดึง keyword จาก query string
+        const params = new URLSearchParams(window.location.search);
+        const q = params.get("q") || "";
+        document.getElementById("keyword").textContent = q;
+
+        // mock ข้อมูลนิยาย
+        const novels = [
+            { id: 1, title: "หอคอยกระจก", author: "Mina K.", cover: "https://picsum.photos/200/300?random=11" },
+            { id: 2, title: "แชตลับฉบับรัก", author: "tenten", cover: "https://picsum.photos/200/300?random=12" },
+            { id: 3, title: "กาลครั้งในอาณาจักรชา", author: "Sora", cover: "https://picsum.photos/200/300?random=13" },
+            { id: 4, title: "ดาวเคราะห์หมายเลข 404", author: "Null", cover: "https://picsum.photos/200/300?random=14" }
+        ];
+
+        // filter mock ข้อมูลตาม q
+        const filtered = novels.filter(n => n.title.includes(q) || n.author.includes(q));
+
+        const resultsDiv = document.getElementById("results");
+        if (filtered.length === 0) {
+            resultsDiv.innerHTML = `<p class="text-gray-500 col-span-full">ไม่พบนิยายที่ค้นหา</p>`;
+        } else {
+            filtered.forEach(novel => {
+                const card = document.createElement("div");
+                card.className = "bg-white rounded-xl shadow p-2";
+                card.innerHTML = `
+          <img src="${novel.cover}" alt="${novel.title}" class="rounded-lg w-full">
+          <h4 class="font-semibold mt-2">${novel.title}</h4>
+          <p class="text-sm text-zinc-500">${novel.author}</p>
+        `;
+                resultsDiv.appendChild(card);
+            });
+        }
+    </script>
+</body>
+
+</html>

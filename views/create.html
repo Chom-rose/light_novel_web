@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>หน้าหลัก</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/nav.css">
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="nav-header">
+                <div class="logo">logo</div>
+
+
+                <div class="search-user">
+                    <button id="openSearch" class="p-2">
+                        <i class="bx bx-search text-2xl"></i>
+                    </button>
+
+                    <!-- Overlay กล่องค้นหา (ซ่อนอยู่ก่อน) -->
+                    <div id="searchOverlay"
+                        class="fixed inset-0 bg-black/40 flex items-start justify-center pt-3 hidden z-50">
+                        <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
+                            <div class="flex items-center gap-2">
+
+                                <!-- ประเภท -->
+                                <select class="border rounded-lg px-3 py-2 text-sm">
+                                    <option>นิยายสั้น</option>
+                                    <option>นิยายยาว</option>
+                                </select>
+
+                                <!-- หมวดหมู่ -->
+                                <select class="border rounded-lg px-3 py-2 text-sm">
+                                    <option>ทุกหมวด</option>
+                                    <option>แฟนตาซี</option>
+                                    <option>ระทึกขวัญ</option>
+                                    <option>โรแมนซ์</option>
+                                    <option>แอ๊คชั่น</option>
+                                    <option>ดราม่า</option>
+                                    <option>ไซไฟ</option>
+                                    <option>ตลก</option>
+                                </select>
+
+                                <!-- Input -->
+                                <input type="text" placeholder="ค้นหานิยาย ชื่อเรื่อง หรือผู้เขียน"
+                                    class="flex-1 border rounded-lg px-3 py-2 text-sm">
+
+
+                                <!-- ปุ่มค้นหา -->
+                                <button onclick="doSearch()" class="bg-orange-500 text-black px-5 py-2 rounded-lg">
+                                    <a href="/light-novel/search"
+                                        class="bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-indigo-700">
+                                        ค้นหา
+                                    </a>
+                                </button>
+
+                                <!-- ปุ่มปิด -->
+                                <button id="closeSearch" class="ml-2 text-gray-500 hover:text-black">
+                                    ✕
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="profile">
+                        <button id="profileBtn" class="p-2">
+                            <i class="bx bx-user text-2xl"></i>
+                        </button>
+
+                        <!-- เมนู dropdown -->
+                        <div id="profileMenu" class="dropdown hidden">
+                            <div class="dropdown-header">
+                                <strong>สมาชิก</strong><br>
+                                <small>guest</small>
+                            </div>
+                            <ul>
+                                <li>
+                                    โหมดการแสดงผล
+                                    <label class="switch">
+                                        <input type="checkbox">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </li>
+                                <li><a href="#">สร้างผลงาน</a></li>
+                                <li><a href="#">การตั้งค่า</a></li>
+                                <li><a href="#">วิธีใช้ / ช่วยเหลือ</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nav-body">
+                <ul class="nav-links">
+                    <li><span><a href="/light-novel">หน้าหลัก</a></span></li>
+                    <li><a href="/light-novel/create">สร้างผลงาน</a></li>
+                </ul>
+                <div class="coin-balance">
+                    <span>Coin: 100 </span>
+                    <button><a href="">เติมcoin </a></button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 py-8">
+        <h1 class="text-2xl font-bold mb-6">สร้างนิยายใหม่</h1>
+        <form id="novel-form" class="space-y-6 bg-white p-6 rounded-xl shadow">
+            <label class="block">
+                <span class="text-sm">ประเภท</span>
+                <select id="novelType" name="type" required class="mt-1 w-full border p-2 rounded-md">
+                    <option value="">-- เลือกประเภท --</option>
+                    <option value="long">เรื่องยาว</option>
+                    <option value="short">เรื่องสั้น</option>
+                </select>
+            </label>
+
+            <label class="block">
+                <span class="text-sm">ชื่อเรื่อง *</span>
+                <input name="name" required class="mt-1 w-full border p-2 rounded-md" />
+            </label>
+
+            <label class="block">
+                <span class="text-sm">หมวดหมู่ *</span>
+                <select name="category" required class="mt-1 w-full border p-2 rounded-md">
+                    <option value="">-- เลือกหมวดหมู่ --</option>
+                    <option value="แฟนตาซี">แฟนตาซี</option>
+                    <option value="ระทึกขวัญ">ระทึกขวัญ</option>
+                    <option value="โรแมนซ์">โรแมนซ์</option>
+                    <option value="แอ๊คชั่น">แอ๊คชั่น</option>
+                    <option value="ดราม่า">ดราม่า</option>
+                    <option value="ไซไฟ">ไซไฟ</option>
+                    <option value="ตลก">ตลก</option>
+                </select>
+            </label>
+
+            </label>
+
+            <label class="block">
+                <span class="text-sm">นามปากกา *</span>
+                <input name="author" class="mt-1 w-full border p-2 rounded-md" required />
+            </label>
+            <label class="block">
+                <span class="text-sm">ระดับเนื้อหา *</span>
+                <select name="category" required class="mt-1 w-full border p-2 rounded-md">
+                    <option value="">-- เลือกระดับเนื้อหา --</option>
+                    <option value="ทั่วไป">เหมาะกับบุคคลทั่วไป</option>
+                    <option value="เรท">เหมาะสมกับอายุ 18 ปีขึ้นไป</option>
+                </select>
+            </label>
+
+            <label class="block md:col-span-2">
+                <span class="text-sm">ภาพหน้าปก (ลิงก์รูปภาพ)</span>
+                <input type="url" name="coverImage" placeholder="https://..."
+                    class="mt-1 w-full border p-2 rounded-md" />
+            </label>
+            </div>
+            <div class="flex justify-end mt-4">
+                <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+                    ถัดไป
+                </button>
+            </div>
+        </form>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        var swiper = new Swiper(".mySwiper", {
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+
+        // เปิดกล่องค้นหา
+        const openBtn = document.getElementById("openSearch");
+        const closeBtn = document.getElementById("closeSearch");
+        const overlay = document.getElementById("searchOverlay");
+
+        openBtn.addEventListener("click", () => {
+            overlay.classList.remove("hidden");
+        });
+
+        closeBtn.addEventListener("click", () => {
+            overlay.classList.add("hidden");
+        });
+
+
+        const btn = document.getElementById("profileBtn");
+        const menu = document.getElementById("profileMenu");
+
+        btn.addEventListener("click", () => {
+            menu.classList.toggle("hidden");
+        });
+
+        document.addEventListener("click", (e) => {
+            if (!btn.contains(e.target) && !menu.contains(e.target)) {
+                menu.classList.add("hidden");
+            }
+        });
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("novel-form");
+
+            form.addEventListener("submit", function (e) {
+                e.preventDefault(); // กัน reload หน้า
+
+                const type = document.getElementById("novelType").value;
+
+                if (type === "long") {
+                    window.location.href = "/light-novel/write_chapter";
+                } else if (type === "short") {
+                    window.location.href = "/light-novel/write";
+                } else {
+                    alert("กรุณาเลือกประเภทก่อนค่ะ 💡");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
