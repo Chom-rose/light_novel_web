@@ -1,21 +1,32 @@
 {
-"name": "light-novel-web",
-"version": "1.0.0",
-"main": "server.js",
-"scripts": {
-"dev": "nodemon server.js",
-"start": "node server.js"
-},
-"keywords": [],
-"author": "",
-"license": "ISC",
-"description": "Light novel CRUD demo (Express)",
-"type": "commonjs",
-"dependencies": {
-"express": "^5.1.0"
-},
-"devDependencies": {
-"nodemon": "^3.1.10"
+  "name": "light-novel-web",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Light novel CRUD demo (Express + SQLite + Auth)",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chom-rose/light_novel_web.git"
+  },
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Chom-rose/light_novel_web/issues"
+  },
+  "homepage": "https://github.com/Chom-rose/light_novel_web#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
 }
-}
-

@@ -7,6 +7,8 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// app.use("/admin", adminRouter);
+
 const adminRouter = require("./router/admin");
 const lightNovelRouter = require("./router/novel");
 
@@ -18,5 +20,6 @@ res.redirect("/light-novel");
 });
 
 app.listen(port, () => {
-console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running at http://localhost:${port}`);
+
 });
