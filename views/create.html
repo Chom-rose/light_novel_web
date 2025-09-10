@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>นิยาย</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-50">
+  <header class="bg-white border-b">
+    <nav class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/light-novel" class="font-bold text-xl">logo</a>
+      <div class="flex items-center gap-3">
+        <a href="/light-novel/create" class="px-3 py-1.5 bg-indigo-600 text-white rounded-md">+ สร้างนิยาย</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    <div id="info" class="bg-white rounded-xl shadow p-5 mb-6"></div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <aside class="md:col-span-1 bg-white rounded-xl shadow p-4">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="font-semibold">ตอนทั้งหมด</h2>
+          <button id="add-chapter" class="text-sm text-indigo-600">+ เพิ่มตอน</button>
+        </div>
+        <ol id="chapter-list" class="space-y-2"></ol>
+      </aside>
+
+      <section class="md:col-span-2 bg-white rounded-xl shadow p-4">
+        <div id="reader-empty" class="text-zinc-500">เลือกตอนเพื่อเริ่มอ่าน</div>
+        <article id="reader" class="hidden">
+          <header class="mb-3">
+            <h3 id="chapter-title" class="text-xl font-bold"></h3>
+            <div class="text-sm text-zinc-500" id="chapter-index"></div>
+          </header>
+          <div id="chapter-content" class="prose max-w-none whitespace-pre-wrap"></div>
+
+          <div class="flex items-center justify-between mt-6">
+            <button id="prev-ch" class="px-3 py-1.5 border rounded-md">← ก่อนหน้า</button>
+            <div class="flex items-center gap-2">
+              <button id="edit-ch" class="px-3 py-1.5 border rounded-md">แก้ไขตอน</button>
+              <button id="save-ch" class="px-3 py-1.5 bg-green-600 text-white rounded-md hidden">บันทึก</button>
+              <button id="cancel-edit" class="px-3 py-1.5 bg-zinc-200 rounded-md hidden">ยกเลิก</button>
+            </div>
+            <button id="next-ch" class="px-3 py-1.5 border rounded-md">ถัดไป →</button>
+          </div>
+        </article>
+      </section>
+    </div>
+  </main>
+
+  <template id="chapter-edit-tpl">
+    <div class="space-y-2">
+      <input id="edit-title" class="w-full border p-2 rounded-md" />
+      <textarea id="edit-content" rows="10" class="w-full border p-2 rounded-md"></textarea>
+    </div>
+  </template>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const novelId = Number(params.get('id'));
+    let novel = null;
+    let currentIndex = -1; // 0-based
+
+    async function loadNovel() {
+      const res = await fetch(`/light-novel/api/novels/${novelId}`);
+      if (!res.ok) return alert('ไม่พบนิยาย');
+      novel = await res.json();
+      renderInfo();
+      renderChapters();
+    }
+
+    function renderInfo() {
+      const el = document.getElementById('info');
+      el.innerHTML = `
+        <div class="flex gap-4">
+          <img src="${novel.coverImage}" class="w-32 h-44 object-cover rounded-md" />
+          <div class="flex-1">
+            <h1 class="text-2xl font-bold">${novel.name}</h1>
+            <p class="text-sm text-zinc-500">${novel.author} • ${novel.category}</p>
+            <p class="mt-3 text-zinc-700">${novel.description}</p>
+            <div class="mt-3 flex gap-2">
+              <button id="edit-novel" class="px-3 py-1.5 border rounded-md">แก้ไขรายละเอียด</button>
+              <button id="save-novel" class="px-3 py-1.5 bg-green-600 text-white rounded-md hidden">บันทึก</button>
+              <button id="cancel-novel" class="px-3 py-1.5 bg-zinc-200 rounded-md hidden">ยกเลิก</button>
+              <button id="delete-novel" class="px-3 py-1.5 bg-red-600 text-white rounded-md">ลบเรื่องนี้</button>
+            </div>
+          </div>
+        </div>`;
+
+      document.getElementById('edit-novel').onclick = startEditNovel;
+      document.getElementById('save-novel').onclick = saveEditNovel;
+      document.getElementById('cancel-novel').onclick = renderInfo;
+      document.getElementById('delete-novel').onclick = deleteNovel;
+    }
+
+    function startEditNovel() {
+      const box = document.getElementById('info');
+      box.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <label class="block">
+            <span class="text-sm">ชื่อเรื่อง</span>
+            <input id="n-name" class="mt-1 w-full border p-2 rounded-md" value="${novel.name}" />
+          </label>
+          <label class="block">
+            <span class="text-sm">หมวดหมู่</span>
+            <input id="n-category" class="mt-1 w-full border p-2 rounded-md" value="${novel.category}" />
+          </label>
+          <label class="block">
+            <span class="text-sm">ผู้เขียน</span>
+            <input id="n-author" class="mt-1 w-full border p-2 rounded-md" value="${novel.author}" />
+          </label>
+          <label class="block md:col-span-2">
+            <span class="text-sm">ภาพหน้าปก (ลิงก์รูปภาพ)</span>
+            <input id="n-cover" class="mt-1 w-full border p-2 rounded-md" value="${novel.coverImage}" />
+          </label>
+          <label class="block md:col-span-2">
+            <span class="text-sm">เรื่องย่อ</span>
+            <textarea id="n-desc" rows="4" class="mt-1 w-full border p-2 rounded-md">${novel.description}</textarea>
+          </label>
+        </div>
+        <div class="mt-3 flex gap-2">
+          <button id="save-novel" class="px-3 py-1.5 bg-green-600 text-white rounded-md">บันทึก</button>
+          <button id="cancel-novel" class="px-3 py-1.5 bg-zinc-200 rounded-md">ยกเลิก</button>
+        </div>`;
+      document.getElementById('save-novel').onclick = saveEditNovel;
+      document.getElementById('cancel-novel').onclick = renderInfo;
+    }
+
+    async function saveEditNovel() {
+      const payload = {
+        name: document.getElementById('n-name').value.trim(),
+        category: document.getElementById('n-category').value.trim(),
+        author: document.getElementById('n-author').value.trim(),
+        coverImage: document.getElementById('n-cover').value.trim(),
+        description: document.getElementById('n-desc').value.trim(),
+      };
+      const res = await fetch(`/light-novel/api/novels/${novel.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const out = await res.json();
+      if (res.ok) {
+        novel = out.data;
+        renderInfo();
+      } else {
+        alert(out.error || 'แก้ไขไม่สำเร็จ');
+      }
+    }
+
+    async function deleteNovel() {
+      if (!confirm('ยืนยันการลบเรื่องนี้?')) return;
+      const res = await fetch(`/light-novel/api/novels/${novel.id}`, { method: 'DELETE' });
+      if (res.ok) location.href = '/light-novel';
+      else alert('ลบไม่สำเร็จ');
+    }
+
+    function renderChapters() {
+      const list = document.getElementById('chapter-list');
+      list.innerHTML = (novel.chapters || []).map((c, i) => `
+        <li class="flex items-center justify-between gap-2">
+          <button class="text-left hover:underline flex-1" data-index="${i}">#${c.id} ${c.title}</button>
+          <button class="text-xs text-red-600" data-del="${c.id}">ลบ</button>
+        </li>`).join('');
+
+      list.querySelectorAll('button[data-index]').forEach(b => b.onclick = () => openChapter(Number(b.dataset.index)));
+      list.querySelectorAll('button[data-del]').forEach(b => b.onclick = () => deleteChapter(Number(b.dataset.del)));
+
+      document.getElementById('add-chapter').onclick = async () => {
+        const title = prompt('ชื่อตอน');
+        if (!title) return;
+        const content = prompt('เนื้อหา (แก้ไขได้ภายหลัง)') || '';
+        const res = await fetch(`/light-novel/api/novels/${novel.id}/chapters`, {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ title, content })
+        });
+        const out = await res.json();
+        if (res.ok) { novel.chapters.push(out.data); renderChapters(); }
+        else alert(out.error || 'เพิ่มตอนไม่สำเร็จ');
+      }
+    }
+
+    async function deleteChapter(chId) {
+      if (!confirm('ลบตอนนี้?')) return;
+      const res = await fetch(`/light-novel/api/novels/${novel.id}/chapters/${chId}`, { method: 'DELETE' });
+      const out = await res.json();
+      if (res.ok) {
+        novel.chapters = novel.chapters.filter(c => c.id !== chId);
+        renderChapters();
+        if (currentIndex !== -1 && novel.chapters[currentIndex]?.id === chId) {
+          currentIndex = -1;
+          document.getElementById('reader').classList.add('hidden');
+          document.getElementById('reader-empty').classList.remove('hidden');
+        }
+      } else alert(out.error || 'ลบไม่สำเร็จ');
+    }
+
+    function openChapter(index) {
+      currentIndex = index;
+      const c = novel.chapters[index];
+      if (!c) return;
+
+      document.getElementById('reader-empty').classList.add('hidden');
+      document.getElementById('reader').classList.remove('hidden');
+
+      document.getElementById('chapter-title').textContent = c.title;
+      document.getElementById('chapter-index').textContent = `ตอนที่ ${index + 1} / ${novel.chapters.length}`;
+      document.getElementById('chapter-content').textContent = c.content || '';
+
+      document.getElementById('prev-ch').disabled = index <= 0;
+      document.getElementById('next-ch').disabled = index >= novel.chapters.length - 1;
+    }
+
+    document.getElementById('prev-ch').onclick = () => { if (currentIndex > 0) openChapter(currentIndex - 1); };
+    document.getElementById('next-ch').onclick = () => { if (currentIndex < novel.chapters.length - 1) openChapter(currentIndex + 1); };
+
+    document.getElementById('edit-ch').onclick = () => {
+      if (currentIndex === -1) return;
+      const c = novel.chapters[currentIndex];
+
+      const tpl = document.getElementById('chapter-edit-tpl');
+      const frag = tpl.content.cloneNode(true);
+      frag.querySelector('#edit-title').value = c.title;
+      frag.querySelector('#edit-content').value = c.content;
+
+      const cont = document.getElementById('chapter-content');
+      cont.replaceWith(frag);
+
+      document.getElementById('edit-ch').classList.add('hidden');
+      document.getElementById('save-ch').classList.remove('hidden');
+      document.getElementById('cancel-edit').classList.remove('hidden');
+    };
+
+    document.getElementById('cancel-edit').onclick = () => {
+      openChapter(currentIndex);
+      document.getElementById('edit-ch').classList.remove('hidden');
+      document.getElementById('save-ch').classList.add('hidden');
+      document.getElementById('cancel-edit').classList.add('hidden');
+    };
+
+    document.getElementById('save-ch').onclick = async () => {
+      const title = document.getElementById('edit-title').value.trim();
+      const content = document.getElementById('edit-content').value;
+      const ch = novel.chapters[currentIndex];
+      const res = await fetch(`/light-novel/api/novels/${novel.id}/chapters/${ch.id}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, content })
+      });
+      const out = await res.json();
+      if (res.ok) {
+        novel.chapters[currentIndex] = out.data;
+        openChapter(currentIndex);
+        document.getElementById('edit-ch').classList.remove('hidden');
+        document.getElementById('save-ch').classList.add('hidden');
+        document.getElementById('cancel-edit').classList.add('hidden');
+      } else alert(out.error || 'บันทึกไม่สำเร็จ');
+    };
+
+    loadNovel();
+  </script>
+</body>
+</html>

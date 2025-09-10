@@ -1,5 +1,6 @@
 const path = require("path");
 
+
 exports.read = async (req, res) => {
   try {
     res.sendFile(path.join(__dirname, "../views/main.html"));
