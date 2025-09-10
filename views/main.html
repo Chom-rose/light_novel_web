@@ -9,10 +9,10 @@
     rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
   />
-  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />  
+  <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
 </head>
 <style>
-  body {
+    body {
         font-family: 'Arial', sans-serif;
         background-color: #f9f9f9;
         margin: 0;
@@ -100,18 +100,9 @@
     }
     .coin-balance span {
         font-weight: bold;
-        margin-right: 10px; 
+        margin-right: 10px;
+        
     }
-    .coin-balance button {
-        background-color: #4f46e5;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.875em; 
-    }
-    
     footer {
         background-color: #ffffff;
         border-top: 1px solid #e5e7eb;
@@ -140,68 +131,12 @@
                 <div class="logo">logo</div>
                 <div><a href="">นิยาย</a></div>
                 <div><a href="">สร้างผลงาน</a></div>
-                <button id="openSearch" class="p-2">
-                  <i class="bx bx-search text-2xl"></i>
-                </button>
-                
-                <!-- Overlay กล่องค้นหา (ซ่อนอยู่ก่อน) -->
-                <div id="searchOverlay" 
-                     class="fixed inset-0 bg-black/40 flex items-start justify-center pt-20 hidden z-50">
-                  <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
-                    <div class="flex items-center gap-2">
-                      
-                      <!-- ประเภท -->
-                      <select class="border rounded-lg px-3 py-2 text-sm">
-                        <option>นิยาย</option>
-                        <option>การ์ตูน</option>
-                      </select>
-                
-                      <!-- หมวดหมู่ -->
-                      <select class="border rounded-lg px-3 py-2 text-sm">
-                        <option>ทุกหมวด</option>
-                        <option>แฟนตาซี</option>
-                        <option>โรแมนซ์</option>
-                      </select>
-                
-                      <!-- Input -->
-                      <input type="text" placeholder="ค้นหานิยาย ชื่อเรื่อง หรือผู้เขียน"
-                             class="flex-1 border rounded-lg px-3 py-2 text-sm">
-                
-                      <!-- ปุ่มค้นหา -->
-                      <button class="bg-orange-500 text-white px-5 py-2 rounded-lg">
-                        ค้นหา
-                      </button>
-                
-                      <!-- ปุ่มปิด -->
-                      <button id="closeSearch" class="ml-2 text-gray-500 hover:text-black">
-                        ✕
-                      </button>
-                    </div>
-                  </div>
+                <div><button>Search</button></div>
+                <div class="user">
+                  <a href=""><i class='bxr  bx-user'  ></i> </a>
                 </div>
-
-                <button id="profileBtn" class="relative p-2">
-                  <i class="bx bx-user text-2xl"></i>
-                </button>
-
-                <!-- เมนู dropdown -->
-<div id="profileMenu" 
-class="absolute right-4 mt-2 w-56 bg-white rounded-lg shadow-lg border hidden">
-<ul class="py-2 text-sm text-gray-700">
-<li><a href="#" class="block px-4 py-2 hover:bg-gray-100">เข้าสู่ระบบ / สมัครสมาชิก</a></li>
-<li class="px-4 py-2 flex items-center justify-between">
- โหมดการแสดงผล
- <label class="inline-flex items-center cursor-pointer">
-   <input type="checkbox" class="sr-only peer">
-   <div class="w-10 h-5 bg-gray-200 rounded-full peer peer-checked:bg-indigo-500 relative after:content-[''] after:absolute after:top-0.5 after:left-0.5 after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-5"></div>
- </label>
-</li>
-<li><a href="#" class="block px-4 py-2 hover:bg-gray-100">สร้างผลงาน</a></li>
-<li><a href="#" class="block px-4 py-2 hover:bg-gray-100">การตั้งค่า</a></li>
-<li><a href="#" class="block px-4 py-2 hover:bg-gray-100">วิธีใช้ / ช่วยเหลือ</a></li>
-</ul>
-</div>
-
+                
+                
             </div>
             <div>
                 <ul class="nav-links">
@@ -362,32 +297,6 @@ class="absolute right-4 mt-2 w-56 bg-white rounded-lg shadow-lg border hidden">
           prevEl: ".swiper-button-prev",
         },
       });
-
-      // เปิดกล่องค้นหา
-      const openBtn = document.getElementById("openSearch");
-  const closeBtn = document.getElementById("closeSearch");
-  const overlay = document.getElementById("searchOverlay");
-
-  openBtn.addEventListener("click", () => {
-    overlay.classList.remove("hidden");
-  });
-
-  closeBtn.addEventListener("click", () => {
-    overlay.classList.add("hidden");
-  });
-  const btn = document.getElementById("profileBtn");
-  const menu = document.getElementById("profileMenu");
-
-  btn.addEventListener("click", () => {
-    menu.classList.toggle("hidden");
-  });
-
-  // ปิดเมนูเมื่อคลิกข้างนอก
-  document.addEventListener("click", (e) => {
-    if (!btn.contains(e.target) && !menu.contains(e.target)) {
-      menu.classList.add("hidden");
-    }
-  });
     </script>
 </body>
 </html>
