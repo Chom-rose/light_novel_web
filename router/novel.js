@@ -1,20 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const path = require("path");
-// controller
-<<<<<<< HEAD
-const { read, create } = require("../controller/novel");
+const { read, list, create, detail, update, remove } = require("../controller/novel");
 
-// routes
+// หน้าเว็บหลัก
 router.get("/", read);
+
+// RESTful API
+router.get("/list", list);
 router.post("/create", create);
-=======
-const { read } = require("../controller/novel");
-
-// routes
-router.get("/", read);
->>>>>>> 626a386e48e7e1c81cc649e0acae38601e8e38fb
- 
-
+router.get("/:id", detail);
+router.put("/:id", update);
+router.delete("/:id", remove);
 
 module.exports = router;
