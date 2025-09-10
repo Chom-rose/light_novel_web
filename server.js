@@ -11,9 +11,13 @@ app.use(express.urlencoded({ extended: true }));
 
 const adminRouter = require("./router/admin");
 const lightNovelRouter = require("./router/novel");
+const registerRouter = require("./router/register");
+const authRouter = require("./router/auth");
 
 app.use("/admin", adminRouter);
+app.use("/register", registerRouter);
 app.use("/light-novel", lightNovelRouter);
+app.use("/auth", authRouter);
 
 // พาไปยังหน้า light-novel
 app.get("/", (_req, res) => {
