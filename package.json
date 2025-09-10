@@ -12,7 +12,10 @@
   "license": "ISC",
   "description": "ติดตั้ง package.json: ```bash npm init -y ```",
   "dependencies": {
-    "express": "^5.1.0"
+    "bcryptjs": "^3.0.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7"
   },
   "repository": {
     "type": "git",
