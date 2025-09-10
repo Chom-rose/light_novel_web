@@ -12,10 +12,16 @@ exports.login = (req, res) => {
 
   db.get("SELECT * FROM users WHERE username = ?", [username], (err, user) => {
     if (err) return res.status(500).json({ error: err.message });
-    if (!user) return res.status(401).json({ error: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
+    if (!user)
+      return res
+        .status(401)
+        .json({ error: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
 
     const ok = bcrypt.compareSync(password, user.password);
-    if (!ok) return res.status(401).json({ error: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
+    if (!ok)
+      return res
+        .status(401)
+        .json({ error: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
 
     const token = jwt.sign(
       { uid: user.id, username: user.username },
@@ -26,7 +32,12 @@ exports.login = (req, res) => {
     return res.json({
       message: "ล็อกอินสำเร็จ",
       token,
-      user: { id: user.id, username: user.username, email: user.email, age: user.age || null },
+      user: {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        age: user.age || null,
+      },
     });
   });
 };
@@ -49,9 +60,13 @@ exports.authRequired = (req, res, next) => {
 // GET /api/auth/me  (โปรไฟล์ตัวเองจาก token)
 exports.me = (req, res) => {
   // ดึงข้อมูลสดจาก DB เพื่อความชัวร์
-  db.get("SELECT id, username, email, age FROM users WHERE id = ?", [req.user.uid], (err, row) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!row) return res.status(404).json({ error: "ไม่พบผู้ใช้" });
-    return res.json({ user: row });
-  });
+  db.get(
+    "SELECT id, username, email, age FROM users WHERE id = ?",
+    [req.user.uid],
+    (err, row) => {
+      if (err) return res.status(500).json({ error: err.message });
+      if (!row) return res.status(404).json({ error: "ไม่พบผู้ใช้" });
+      return res.json({ user: row });
+    }
+  );
 };

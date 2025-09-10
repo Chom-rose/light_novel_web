@@ -12,19 +12,20 @@ app.use(express.urlencoded({ extended: true }));
 const adminRouter = require("./router/admin");
 const lightNovelRouter = require("./router/novel");
 const registerRouter = require("./router/register");
+const chapterRouter = require("./router/chapter");
 const authRouter = require("./router/auth");
 
 app.use("/admin", adminRouter);
 app.use("/register", registerRouter);
 app.use("/light-novel", lightNovelRouter);
+app.use("/chapter", chapterRouter);
 app.use("/auth", authRouter);
 
 // พาไปยังหน้า light-novel
 app.get("/", (_req, res) => {
-res.redirect("/light-novel");
+  res.redirect("/light-novel");
 });
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
-
 });

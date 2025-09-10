@@ -14,6 +14,7 @@ const db = new sqlite3.Database(db_path, (err) => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         content TEXT,
+        author TEXT,
         image BLOB,
         category TEXT NOT NULL,
         user_id INTEGER,        

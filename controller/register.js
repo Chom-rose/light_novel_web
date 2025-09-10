@@ -18,7 +18,7 @@ exports.register = (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     res.status(201).json({
       message: "สร้างผู้ใช้สำเร็จ",
-      data: { id: this.lastID, username, email, age }
+      data: { id: this.lastID, username, email, age },
     });
   });
 };

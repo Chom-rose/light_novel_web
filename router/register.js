@@ -3,7 +3,6 @@ const router = express.Router();
 const { register } = require("../controller/register");
 
 // api
-router.post("/register", register);
-
+router.post("/", register);
 
 module.exports = router;
