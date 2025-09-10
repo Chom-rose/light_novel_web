@@ -268,6 +268,53 @@
                 </li>
               </ol>
             </section>
+            <!-- CRUD Playground -->
+            <section class="max-w-7xl mx-auto px-4 py-10">
+              <h3 class="text-xl font-bold mb-4">จัดการนิยาย (CRUD Demo)</h3>
+            
+              <!-- Create / Update Form -->
+              <form id="novelForm" class="bg-white rounded-xl shadow p-4 space-y-3">
+                <input type="hidden" id="novelId" />
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div>
+                    <label class="text-sm font-semibold">ชื่อนิยาย *</label>
+                    <input id="name" class="w-full border rounded px-3 py-2" placeholder="เช่น หอคอยกระจก" required />
+                  </div>
+                  <div>
+                    <label class="text-sm font-semibold">หมวดหมู่ *</label>
+                    <input id="category" class="w-full border rounded px-3 py-2" placeholder="แฟนตาซี / โรแมนซ์" required />
+                  </div>
+                  <div>
+                    <label class="text-sm font-semibold">ผู้เขียน</label>
+                    <input id="author" class="w-full border rounded px-3 py-2" placeholder="เช่น Mina K." />
+                  </div>
+                  <div class="md:col-span-2">
+                    <label class="text-sm font-semibold">คำอธิบาย</label>
+                    <textarea id="description" class="w-full border rounded px-3 py-2" rows="3" placeholder="คำโปรยสั้น ๆ"></textarea>
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded">บันทึก</button>
+                  <button type="button" id="resetBtn" class="border px-4 py-2 rounded">ล้างฟอร์ม</button>
+                </div>
+              </form>
+            
+              <!-- Table -->
+              <div class="mt-6 bg-white rounded-xl shadow overflow-auto">
+                <table class="min-w-full text-sm">
+                  <thead class="bg-zinc-50">
+                    <tr>
+                      <th class="text-left p-3">ชื่อ</th>
+                      <th class="text-left p-3">หมวดหมู่</th>
+                      <th class="text-left p-3">ผู้เขียน</th>
+                      <th class="text-left p-3">อัปเดตล่าสุด</th>
+                      <th class="text-right p-3">จัดการ</th>
+                    </tr>
+                  </thead>
+                  <tbody id="novelTableBody"></tbody>
+                </table>
+              </div>
+            </section>
     </main>
     <footer>
         <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-zinc-500">
@@ -292,6 +339,137 @@
           prevEl: ".swiper-button-prev",
         },
       });
+    </script>
+    <script>
+      const API = {
+        LIST: "/light-novel/list",
+        CREATE: "/light-novel/create",
+        ITEM: (id) => `/light-novel/${id}`,
+      };
+    
+      const form = document.getElementById("novelForm");
+      const resetBtn = document.getElementById("resetBtn");
+      const tableBody = document.getElementById("novelTableBody");
+    
+      const $ = (id) => document.getElementById(id);
+    
+      async function loadList() {
+        const res = await fetch(API.LIST);
+        const json = await res.json();
+        renderTable(json.data || []);
+      }
+    
+      function renderTable(items) {
+        tableBody.innerHTML = "";
+        items.forEach((it) => {
+          const tr = document.createElement("tr");
+          tr.className = "border-t";
+          tr.innerHTML = `
+            <td class="p-3">${escapeHTML(it.name)}</td>
+            <td class="p-3">${escapeHTML(it.category)}</td>
+            <td class="p-3">${escapeHTML(it.author || "")}</td>
+            <td class="p-3">${formatDate(it.updatedAt)}</td>
+            <td class="p-3 text-right space-x-2">
+              <button class="px-3 py-1 border rounded" data-edit="${it.id}">แก้ไข</button>
+              <button class="px-3 py-1 border rounded text-red-600" data-del="${it.id}">ลบ</button>
+            </td>
+          `;
+          tableBody.appendChild(tr);
+        });
+      }
+    
+      function fillForm(it) {
+        $("novelId").value = it.id || "";
+        $("name").value = it.name || "";
+        $("category").value = it.category || "";
+        $("author").value = it.author || "";
+        $("description").value = it.description || "";
+      }
+    
+      function clearForm() {
+        $("novelId").value = "";
+        $("name").value = "";
+        $("category").value = "";
+        $("author").value = "";
+        $("description").value = "";
+      }
+    
+      function formatDate(s) {
+        if (!s) return "-";
+        const d = new Date(s);
+        return d.toLocaleString();
+      }
+    
+      function escapeHTML(s) {
+        return String(s || "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+    
+      // Submit (Create / Update)
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const id = $("novelId").value.trim();
+        const payload = {
+          name: $("name").value.trim(),
+          category: $("category").value.trim(),
+          author: $("author").value.trim(),
+          description: $("description").value.trim(),
+        };
+        if (!payload.name || !payload.category) {
+          alert("กรุณากรอกชื่อนิยายและหมวดหมู่");
+          return;
+        }
+    
+        if (!id) {
+          // CREATE
+          const res = await fetch(API.CREATE, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const out = await res.json();
+          if (!res.ok) return alert(out.error || "สร้างไม่สำเร็จ");
+        } else {
+          // UPDATE
+          const res = await fetch(API.ITEM(id), {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+          const out = await res.json();
+          if (!res.ok) return alert(out.error || "อัปเดตไม่สำเร็จ");
+        }
+        clearForm();
+        await loadList();
+      });
+    
+      resetBtn.addEventListener("click", clearForm);
+    
+      // Edit / Delete (Event delegation)
+      tableBody.addEventListener("click", async (e) => {
+        const editId = e.target.getAttribute("data-edit");
+        const delId = e.target.getAttribute("data-del");
+    
+        if (editId) {
+          const res = await fetch(API.ITEM(editId));
+          const json = await res.json();
+          if (!res.ok) return alert(json.error || "ดึงข้อมูลไม่สำเร็จ");
+          fillForm(json.data);
+        } else if (delId) {
+          if (!confirm("ยืนยันการลบ?")) return;
+          const res = await fetch(API.ITEM(delId), { method: "DELETE" });
+          const out = await res.json();
+          if (!res.ok) return alert(out.error || "ลบไม่สำเร็จ");
+          await loadList();
+        }
+      });
+    
+      // init
+      loadList();
     </script>
 </body>
 </html>
