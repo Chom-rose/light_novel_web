@@ -15,6 +15,7 @@ const lightNovelRouter = require("./router/novel");
 app.use("/admin", adminRouter);
 app.use("/light-novel", lightNovelRouter);
 
+// พาไปยังหน้า light-novel
 app.get("/", (_req, res) => {
 res.redirect("/light-novel");
 });
