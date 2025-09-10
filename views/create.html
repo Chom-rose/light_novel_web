@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>สร้างนิยาย</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-zinc-50">
+  <header class="bg-white border-b">
+    <nav class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/light-novel" class="font-bold text-xl">logo</a>
+      <a href="/light-novel" class="text-sm text-indigo-600">← กลับหน้าหลัก</a>
+    </nav>
+  </header>
+
+  <main class="max-w-5xl mx-auto px-4 py-8">
+    <h1 class="text-2xl font-bold mb-6">สร้างนิยายใหม่</h1>
+
+    <form id="novel-form" class="space-y-6 bg-white p-6 rounded-xl shadow">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <label class="block">
+          <span class="text-sm">ชื่อเรื่อง *</span>
+          <input name="name" required class="mt-1 w-full border p-2 rounded-md" />
+        </label>
+
+        <label class="block">
+          <span class="text-sm">หมวดหมู่ *</span>
+          <input name="category" required class="mt-1 w-full border p-2 rounded-md" />
+        </label>
+
+        <label class="block">
+          <span class="text-sm">ผู้เขียน *</span>
+          <input name="author" required class="mt-1 w-full border p-2 rounded-md" />
+        </label>
+
+        <label class="block md:col-span-2">
+          <span class="text-sm">ภาพหน้าปก (ลิงก์รูปภาพ)</span>
+          <input type="url" name="coverImage" placeholder="https://..." class="mt-1 w-full border p-2 rounded-md" />
+        </label>
+
+        <label class="block md:col-span-2">
+          <span class="text-sm">เรื่องย่อ *</span>
+          <textarea name="description" required rows="4" class="mt-1 w-full border p-2 rounded-md"></textarea>
+        </label>
+      </div>
+
+      <div class="border-t pt-4">
+        <div class="flex items-center justify-between">
+          <h2 class="font-semibold">ตอน (Chapters)</h2>
+          <button type="button" id="add-chapter" class="px-3 py-1.5 bg-indigo-600 text-white rounded-md">+ เพิ่มตอน</button>
+        </div>
+        <div id="chapters" class="mt-3 space-y-3"></div>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md">บันทึกนิยาย</button>
+        <a href="/light-novel" class="text-sm text-zinc-600">ยกเลิก</a>
+      </div>
+    </form>
+  </main>
+
+  <script>
+    const chaptersEl = document.getElementById('chapters');
+    const addBtn = document.getElementById('add-chapter');
+
+    function addChapterRow(title = '', content = '') {
+      const wrap = document.createElement('div');
+      wrap.className = 'bg-zinc-50 border rounded-md p-3';
+      wrap.innerHTML = `
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-2">
+          <div class="md:col-span-2">
+            <label class="text-sm">ชื่อตอน</label>
+            <input class="mt-1 w-full border p-2 rounded-md chapter-title" value="${title}" />
+          </div>
+          <div class="md:col-span-3">
+            <label class="text-sm">เนื้อหา</label>
+            <textarea rows="3" class="mt-1 w-full border p-2 rounded-md chapter-content">${content}</textarea>
+          </div>
+        </div>`;
+      chaptersEl.appendChild(wrap);
+    }
+
+    addBtn.addEventListener('click', () => addChapterRow());
+
+    document.getElementById('novel-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.currentTarget);
+
+      const chapters = Array.from(document.querySelectorAll('#chapters > div'))
+        .map(el => ({
+          title: el.querySelector('.chapter-title').value.trim(),
+          content: el.querySelector('.chapter-content').value.trim()
+        }))
+        .filter(c => c.title || c.content);
+
+      const payload = {
+        name: fd.get('name').trim(),
+        category: fd.get('category').trim(),
+        author: fd.get('author').trim(),
+        coverImage: fd.get('coverImage').trim(),
+        description: fd.get('description').trim(),
+        chapters
+      };
+
+      const res = await fetch('/light-novel/api/novels', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const out = await res.json();
+      if (res.ok) {
+        location.href = `/light-novel/novel?id=${out.data.id}`;
+      } else {
+        alert(out.error || 'เกิดข้อผิดพลาด');
+      }
+    });
+
+    document.getElementById('novel-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+
+    const chapters = Array.from(document.querySelectorAll('#chapters > div'))
+      .map(el => ({
+        title: el.querySelector('.chapter-title').value.trim(),
+        content: el.querySelector('.chapter-content').value.trim()
+      }))
+      .filter(c => c.title || c.content);
+
+    const payload = {
+      name: fd.get('name').trim(),
+      category: fd.get('category').trim(),
+      author: fd.get('author').trim(),
+      coverImage: fd.get('coverImage').trim(),
+      description: fd.get('description').trim(),
+      chapters
+    };
+
+    let res, out;
+    try {
+      res = await fetch('/light-novel/api/novels', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      // กัน response ไม่ใช่ JSON
+      const text = await res.text();
+      try { out = JSON.parse(text); } catch { out = { error: text || 'Invalid response' }; }
+    } catch (err) {
+      alert('เชื่อมต่อเซิร์ฟเวอร์ไม่ได้');
+      return;
+    }
+
+    if (res.ok && out?.data?.id) {
+      location.href = `/light-novel/novel?id=${out.data.id}`;
+    } else {
+      alert(out?.error || 'เกิดข้อผิดพลาด');
+    }
+  });
+  </script>
+  
+</body>
+</html>
