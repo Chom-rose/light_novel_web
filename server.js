@@ -8,12 +8,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // app.use("/admin", adminRouter);
+
 const adminRouter = require("./router/admin");
 const lightNovelRouter = require("./router/novel");
 
 app.use("/admin", adminRouter);
 app.use("/light-novel", lightNovelRouter);
 
+app.get("/", (_req, res) => {
+res.redirect("/light-novel");
+});
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
+
 });
