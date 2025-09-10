@@ -1,15 +1,34 @@
 const express = require("express");
 const router = express.Router();
-const { read, list, create, detail, update, remove } = require("../controller/novel");
+const {
+mainPage,
+createPage,
+novelPage,
+listNovels,
+getNovel,
+createNovel,
+updateNovel,
+deleteNovel,
+addChapter,
+updateChapter,
+deleteChapter,
+getChapter
+} = require("../controller/novel");
 
-// หน้าเว็บหลัก
-router.get("/", read);
+// Pages
+router.get("/", mainPage);
+router.get("/create", createPage);
+router.get("/novel", novelPage); // expects ?id=xxx (novel id)
 
-// RESTful API
-router.get("/list", list);
-router.post("/create", create);
-router.get("/:id", detail);
-router.put("/:id", update);
-router.delete("/:id", remove);
+// API
+router.get("/api/novels", listNovels);
+router.get("/api/novels/:id", getNovel);
+router.post("/api/novels", createNovel);
+router.put("/api/novels/:id", updateNovel);
+router.delete("/api/novels/:id", deleteNovel);
+router.get("/api/novels/:id/chapters/:chapterId", getChapter);
+router.post("/api/novels/:id/chapters", addChapter);
+router.put("/api/novels/:id/chapters/:chapterId", updateChapter);
+router.delete("/api/novels/:id/chapters/:chapterId", deleteChapter);
 
 module.exports = router;
