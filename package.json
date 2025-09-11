@@ -1,7 +1,7 @@
 {
-  "name": "llght-novel-web",
+  "name": "light-novel-web",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon server.js",
@@ -10,9 +10,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "ติดตั้ง package.json: ```bash npm init -y ```",
+  "description": "Light novel CRUD demo (Express + SQLite + Auth)",
   "dependencies": {
-    "express": "^5.1.0"
+    "bcryptjs": "^3.0.2",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "sqlite3": "^5.1.7"
   },
   "repository": {
     "type": "git",
