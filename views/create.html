@@ -171,69 +171,9 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script>
-        var swiper = new Swiper(".mySwiper", {
-            loop: true,
-            autoplay: {
-                delay: 3000,
-                disableOnInteraction: false,
-            },
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-        });
-
-        // เปิดกล่องค้นหา
-        const openBtn = document.getElementById("openSearch");
-        const closeBtn = document.getElementById("closeSearch");
-        const overlay = document.getElementById("searchOverlay");
-
-        openBtn.addEventListener("click", () => {
-            overlay.classList.remove("hidden");
-        });
-
-        closeBtn.addEventListener("click", () => {
-            overlay.classList.add("hidden");
-        });
-
-
-        const btn = document.getElementById("profileBtn");
-        const menu = document.getElementById("profileMenu");
-
-        btn.addEventListener("click", () => {
-            menu.classList.toggle("hidden");
-        });
-
-        document.addEventListener("click", (e) => {
-            if (!btn.contains(e.target) && !menu.contains(e.target)) {
-                menu.classList.add("hidden");
-            }
-        });
-
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const form = document.getElementById("novel-form");
-
-            form.addEventListener("submit", function (e) {
-                e.preventDefault(); // กัน reload หน้า
-
-                const type = document.getElementById("novelType").value;
-
-                if (type === "long") {
-                    window.location.href = "/light-novel/write_chapter";
-                } else if (type === "short") {
-                    window.location.href = "/light-novel/write";
-                } else {
-                    alert("กรุณาเลือกประเภทก่อนค่ะ 💡");
-                }
-            });
-        });
-    </script>
+    
 </body>
+<script src="/js/main.js"></script>
+
 
 </html>

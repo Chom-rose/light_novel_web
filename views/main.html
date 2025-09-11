@@ -18,7 +18,7 @@
       <div class="nav-header">
         <div class="logo">logo</div>
 
-        
+
         <div class="search-user">
           <button id="openSearch" class="p-2">
             <i class="bx bx-search text-2xl"></i>
@@ -67,31 +67,14 @@
               </div>
             </div>
           </div>
-
-
           <div class="profile">
             <button id="profileBtn" class="p-2">
               <i class="bx bx-user text-2xl"></i>
             </button>
-
+          
             <!-- เมนู dropdown -->
             <div id="profileMenu" class="dropdown hidden">
-              <div class="dropdown-header">
-                <strong>สมาชิก</strong><br>
-                <small>guest</small>
-              </div>
-              <ul>
-                <li>
-                  โหมดการแสดงผล
-                  <label class="switch">
-                    <input type="checkbox">
-                    <span class="slider round"></span>
-                  </label>
-                </li>
-                <li><a href="/light-novel/create">สร้างผลงาน</a></li>
-                <li><a href="#">การตั้งค่า</a></li>
-                <li><a href="#">วิธีใช้ / ช่วยเหลือ</a></li>
-              </ul>
+              <div id="profileContent"></div>
             </div>
           </div>
         </div>
@@ -190,7 +173,7 @@
       </div>
     </section>
 
-    
+
   </main>
   <footer>
     <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-zinc-500">
@@ -199,58 +182,10 @@
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script>
-    var swiper = new Swiper(".mySwiper", {
-      loop: true,
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-      },
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-    });
+  
 
-    // เปิดกล่องค้นหา
-    const openBtn = document.getElementById("openSearch");
-    const closeBtn = document.getElementById("closeSearch");
-    const overlay = document.getElementById("searchOverlay");
-
-    openBtn.addEventListener("click", () => {
-      overlay.classList.remove("hidden");
-    });
-
-    closeBtn.addEventListener("click", () => {
-      overlay.classList.add("hidden");
-    });
-
-
-    const btn = document.getElementById("profileBtn");
-    const menu = document.getElementById("profileMenu");
-
-    btn.addEventListener("click", () => {
-      menu.classList.toggle("hidden");
-    });
-
-    document.addEventListener("click", (e) => {
-      if (!btn.contains(e.target) && !menu.contains(e.target)) {
-        menu.classList.add("hidden");
-      }
-    });
-
-    function doSearch() {
-      const input = document.querySelector('#searchOverlay input[type="text"]');
-      const keyword = input.value.trim();
-      if (keyword) {
-        window.location.href = `/search.html?q=${encodeURIComponent(keyword)}`;
-      }
-    }
-  </script>
 </body>
+
+<script src="/js/main.js"></script>
 
 </html>

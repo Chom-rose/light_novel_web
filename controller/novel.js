@@ -40,6 +40,20 @@ exports.read_search = async (req, res) => {
     }
 };
 
+exports.read_login = async (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "../views/login.html"));
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+exports.read_register = async (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "../views/register.html"));
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
 
 exports.create = async (req, res) => {
     try {
