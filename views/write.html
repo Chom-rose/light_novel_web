@@ -4,50 +4,8 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>ตัวเขียนนิยาย</title>
-<style>
-  :root{--bg:#f6f7f9;--panel:#fff;--ink:#111;--muted:#6b7280;--brand:#f59e0b;}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 system-ui,-apple-system,Segoe UI,Roboto}
-  header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #e5e7eb}
-  .topbar{max-width:1200px;margin:auto;display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 16px}
-  .topbar .title{font-weight:700}
-  .actions{display:flex;gap:8px}
-  .btn{border:1px solid #d1d5db;background:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
-  .btn.primary{background:var(--brand);color:#fff;border-color:#d97706}
-  .wrap {
-  max-width:1200px;
-  margin:12px auto;
-  padding:0 16px;
-  display:grid;
-  grid-template-columns: 1fr;  /* 👈 มีแค่ editor อย่างเดียว */
-  gap:16px;
-}
-  .side{background:var(--panel);border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 110px)}
-  .head{padding:12px 14px;border-bottom:1px solid #eee;font-weight:600;display:flex;gap:6px;align-items:center}
-  .select{width:100%}
-  .tabs{display:flex;border-bottom:1px solid #eee}
-  .tab{flex:1;text-align:center;padding:8px 0;cursor:pointer;color:var(--muted)}
-  .tab.active{color:#111;border-bottom:2px solid #111}
-  .list{overflow:auto;padding:8px}
-  .chapter{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;cursor:pointer}
-  .chapter:hover{background:#f3f4f6}
-  .chapter.active{background:#eef2ff;border:1px solid #c7d2fe}
-  .ch-num{font-weight:700;width:34px;text-align:right}
-  .ch-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .tools{display:flex;gap:6px}
-  .ghost{border:none;background:transparent;padding:4px;cursor:pointer;color:#6b7280}
-  .addrow{padding:10px}
-  .addbtn{width:100%;padding:8px;border:1px dashed #cbd5e1;border-radius:8px;background:#fafafa;cursor:pointer}
-  /* editor */
-  .main{background:var(--panel);border:1px solid #e5e7eb;border-radius:10px;padding:18px}
-  .novel-title{font-size:20px;font-weight:700;margin:0 0 4px}
-  .chapter-title{font-size:18px;font-weight:700;margin:2px 0 14px;border:none;width:100%}
-  .toolbar{display:flex;flex-wrap:wrap;gap:6px;border:1px solid #e5e7eb;border-radius:8px;padding:6px;margin-bottom:10px;background:#fafafa}
-  .tbtn{padding:6px 8px;border:1px solid #d1d5db;background:#fff;border-radius:6px;cursor:pointer}
-  .editor{min-height:55vh;border:1px solid #e5e7eb;border-radius:8px;padding:16px;outline:none;background:#fff}
-  .hint{color:var(--muted);font-size:12px;margin-top:8px}
-  @media (max-width:900px){.wrap{grid-template-columns:1fr}.side{height:auto}}
-</style>
+<link rel="stylesheet" href="/css/write.css" />
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
 <header>
