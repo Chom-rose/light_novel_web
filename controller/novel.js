@@ -6,7 +6,7 @@ exports.mainPage = async (req, res) => {
   res.sendFile(path.join(__dirname, "../views/main.html"));
 };
 
-exports.read_create = async (req, res) => {
+exports.createPage = async (req, res) => {
     try {
         res.sendFile(path.join(__dirname, "../views/create.html"));
     } catch (error) {
