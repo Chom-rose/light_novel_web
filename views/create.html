@@ -13,102 +13,84 @@
 
 <body>
     <header>
-        <nav>
-            <div class="nav-header">
-                <div class="logo">logo</div>
+    <nav>
+      <div class="nav-header">
+        <div class="logo">logo</div>
 
 
-                <div class="search-user">
-                    <button id="openSearch" class="p-2">
-                        <i class="bx bx-search text-2xl"></i>
-                    </button>
+        <div class="search-user">
+          <button id="openSearch" class="p-2">
+            <i class="bx bx-search text-2xl"></i>
+          </button>
 
-                    <!-- Overlay กล่องค้นหา (ซ่อนอยู่ก่อน) -->
-                    <div id="searchOverlay"
-                        class="fixed inset-0 bg-black/40 flex items-start justify-center pt-3 hidden z-50">
-                        <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
-                            <div class="flex items-center gap-2">
+          <!-- Overlay กล่องค้นหา (ซ่อนอยู่ก่อน) -->
+          <div id="searchOverlay" class="fixed inset-0 bg-black/40 flex items-start justify-center pt-3 hidden z-50">
+            <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
+              <div class="flex items-center gap-2">
 
-                                <!-- ประเภท -->
-                                <select class="border rounded-lg px-3 py-2 text-sm">
-                                    <option>นิยายสั้น</option>
-                                    <option>นิยายยาว</option>
-                                </select>
+                <!-- ประเภท -->
+                <select class="border rounded-lg px-3 py-2 text-sm">
+                  <option>นิยายสั้น</option>
+                  <option>นิยายยาว</option>
+                </select>
 
-                                <!-- หมวดหมู่ -->
-                                <select class="border rounded-lg px-3 py-2 text-sm">
-                                    <option>ทุกหมวด</option>
-                                    <option>แฟนตาซี</option>
-                                    <option>ระทึกขวัญ</option>
-                                    <option>โรแมนซ์</option>
-                                    <option>แอ๊คชั่น</option>
-                                    <option>ดราม่า</option>
-                                    <option>ไซไฟ</option>
-                                    <option>ตลก</option>
-                                </select>
+                <!-- หมวดหมู่ -->
+                <select class="border rounded-lg px-3 py-2 text-sm">
+                  <option>ทุกหมวด</option>
+                  <option>แฟนตาซี</option>
+                  <option>ระทึกขวัญ</option>
+                  <option>โรแมนซ์</option>
+                  <option>แอ๊คชั่น</option>
+                  <option>ดราม่า</option>
+                  <option>ไซไฟ</option>
+                  <option>ตลก</option>
+                </select>
 
-                                <!-- Input -->
-                                <input type="text" placeholder="ค้นหานิยาย ชื่อเรื่อง หรือผู้เขียน"
-                                    class="flex-1 border rounded-lg px-3 py-2 text-sm">
-
-
-                                <!-- ปุ่มค้นหา -->
-                                <button onclick="doSearch()" class="bg-orange-500 text-black px-5 py-2 rounded-lg">
-                                    <a href="/light-novel/search"
-                                        class="bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-indigo-700">
-                                        ค้นหา
-                                    </a>
-                                </button>
-
-                                <!-- ปุ่มปิด -->
-                                <button id="closeSearch" class="ml-2 text-gray-500 hover:text-black">
-                                    ✕
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Input -->
+                <input type="text" placeholder="ค้นหานิยาย ชื่อเรื่อง หรือผู้เขียน"
+                  class="flex-1 border rounded-lg px-3 py-2 text-sm">
 
 
-                    <div class="profile">
-                        <button id="profileBtn" class="p-2">
-                            <i class="bx bx-user text-2xl"></i>
-                        </button>
+                <!-- ปุ่มค้นหา -->
+                <button onclick="doSearch()" class="bg-orange-500 text-black px-5 py-2 rounded-lg">
+                  <a href="/light-novel/search"
+                    class="bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-indigo-700">
+                    ค้นหา
+                  </a>
+                </button>
 
-                        <!-- เมนู dropdown -->
-                        <div id="profileMenu" class="dropdown hidden">
-                            <div class="dropdown-header">
-                                <strong>สมาชิก</strong><br>
-                                <small>guest</small>
-                            </div>
-                            <ul>
-                                <li>
-                                    โหมดการแสดงผล
-                                    <label class="switch">
-                                        <input type="checkbox">
-                                        <span class="slider round"></span>
-                                    </label>
-                                </li>
-                                <li><a href="#">สร้างผลงาน</a></li>
-                                <li><a href="#">การตั้งค่า</a></li>
-                                <li><a href="#">วิธีใช้ / ช่วยเหลือ</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                <!-- ปุ่มปิด -->
+                <button id="closeSearch" class="ml-2 text-gray-500 hover:text-black">
+                  ✕
+                </button>
+              </div>
             </div>
-
-            <div class="nav-body">
-                <ul class="nav-links">
-                    <li><span><a href="/light-novel">หน้าหลัก</a></span></li>
-                    <li><a href="/light-novel/create">สร้างผลงาน</a></li>
-                </ul>
-                <div class="coin-balance">
-                    <span>Coin: 100 </span>
-                    <button><a href="">เติมcoin </a></button>
-                </div>
+          </div>
+          <div class="profile">
+            <button id="profileBtn" class="p-2">
+              <i class="bx bx-user text-2xl"></i>
+            </button>
+          
+            <!-- เมนู dropdown -->
+            <div id="profileMenu" class="dropdown hidden">
+              <div id="profileContent"></div>
             </div>
-        </nav>
-    </header>
+          </div>
+        </div>
+      </div>
+
+      <div class="nav-body">
+        <ul class="nav-links">
+          <li><span><a href="">หน้าหลัก</a></span></li>
+          <li><a href="/light-novel/create">สร้างผลงาน</a></li>
+        </ul>
+        <div class="coin-balance">
+          <span>Coin: 100 </span>
+          <button><a href="">เติมcoin </a></button>
+        </div>
+      </div>
+    </nav>
+  </header>
 
     <main class="max-w-5xl mx-auto px-4 py-8">
         <h1 class="text-2xl font-bold mb-6">สร้างนิยายใหม่</h1>
