@@ -17,7 +17,8 @@ const db = new sqlite3.Database(db_path, (err) => {
         author TEXT,
         image BLOB,
         category TEXT NOT NULL,
-        user_id INTEGER,        
+        type TEXT,
+        user_id INTEGER,
         FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
       )`,
       (err) => {
@@ -32,7 +33,7 @@ const db = new sqlite3.Database(db_path, (err) => {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         username TEXT NOT NULL,
         password TEXT NOT NULL,
-        age INTEGER,
+        birthdate TEXT, -- YYYY-MM-DD แทน age
         email TEXT NOT NULL,
         is_admin INTEGER DEFAULT 0
       )`,

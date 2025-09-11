@@ -1,41 +1,59 @@
 // ========== main.html ==========
-var swiper = new Swiper(".mySwiper", {
-    loop: true,
-    autoplay: { delay: 3000, disableOnInteraction: false },
-    pagination: { el: ".swiper-pagination", clickable: true },
-    navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
-  });
-  
-  // เปิดกล่องค้นหา
-  const openBtn = document.getElementById("openSearch");
-  const closeBtn = document.getElementById("closeSearch");
-  const overlay = document.getElementById("searchOverlay");
-  
-  if (openBtn && closeBtn && overlay) {
-    openBtn.addEventListener("click", () => overlay.classList.remove("hidden"));
-    closeBtn.addEventListener("click", () => overlay.classList.add("hidden"));
-  }
-  
-  // ====== โปรไฟล์ ======
-  const btn = document.getElementById("profileBtn");
-  const menu = document.getElementById("profileMenu");
-  const content = document.getElementById("profileContent");
-  
-  if (btn && menu) {
-    btn.addEventListener("click", () => menu.classList.toggle("hidden"));
-    document.addEventListener("click", (e) => {
-      if (!btn.contains(e.target) && !menu.contains(e.target)) {
-        menu.classList.add("hidden");
+const novelList = document.getElementById("novelList");
+if (novelList) {
+  fetch("/light-novel/api/novels")
+    .then(res => res.json())
+    .then(novels => {
+      if (novels.length === 0) {
+        novelList.innerHTML = `<p class="text-gray-500 col-span-full">ยังไม่มีนิยาย</p>`;
+      } else {
+        novels.forEach(novel => {
+          const card = document.createElement("article");
+          card.className = "bg-white rounded-xl shadow p-2";
+          card.innerHTML = `
+            <img src="${novel.image || 'https://picsum.photos/200/300'}" class="rounded-lg w-full">
+            <h4 class="font-semibold mt-2">${novel.name}</h4>
+            <p class="text-sm text-zinc-500">${novel.author || 'ไม่ระบุผู้แต่ง'}</p>
+          `;
+          novelList.appendChild(card);
+        });
       }
+    })
+    .catch(() => {
+      novelList.innerHTML = `<p class="text-red-500 col-span-full">โหลดข้อมูลผิดพลาด</p>`;
     });
-  }
-  
-  function renderProfileMenu() {
-    if (!content) return;
-    const isLoggedIn = localStorage.getItem("isLoggedIn");
-  
-    if (isLoggedIn) {
-      content.innerHTML = `
+}
+
+// เปิดกล่องค้นหา
+const openBtn = document.getElementById("openSearch");
+const closeBtn = document.getElementById("closeSearch");
+const overlay = document.getElementById("searchOverlay");
+
+if (openBtn && closeBtn && overlay) {
+  openBtn.addEventListener("click", () => overlay.classList.remove("hidden"));
+  closeBtn.addEventListener("click", () => overlay.classList.add("hidden"));
+}
+
+// ====== โปรไฟล์ ======
+const btn = document.getElementById("profileBtn");
+const menu = document.getElementById("profileMenu");
+const content = document.getElementById("profileContent");
+
+if (btn && menu) {
+  btn.addEventListener("click", () => menu.classList.toggle("hidden"));
+  document.addEventListener("click", (e) => {
+    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+      menu.classList.add("hidden");
+    }
+  });
+}
+
+function renderProfileMenu() {
+  if (!content) return;
+  const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+  if (isLoggedIn) {
+    content.innerHTML = `
         <div class="dropdown-header border-b p-3">
           <strong>สมาชิก</strong><br>
           <small>${localStorage.getItem("username") || "guest"}</small>
@@ -45,124 +63,176 @@ var swiper = new Swiper(".mySwiper", {
           <li><button onclick="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-100">ออกจากระบบ</button></li>
         </ul>
       `;
-    } else {
-        content.innerHTML = `
+  } else {
+    content.innerHTML = `
         <ul>
           <li><a href="/light-novel/login" class="block px-4 py-2 hover:bg-gray-100">เข้าสู่ระบบ</a></li>
           <li><a href="/light-novel/register" class="block px-4 py-2 hover:bg-gray-100">สมัครสมาชิก</a></li>
         </ul>
       `;
-      
-    }
-  }
-  
-  function logout() {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("username");
-    renderProfileMenu();
-    alert("ออกจากระบบแล้ว");
-  }
-  
-  if (content) renderProfileMenu();
-  
-  // ========== search.html ==========
-  const params = new URLSearchParams(window.location.search);
-  const q = params.get("q") || "";
-  const keywordEl = document.getElementById("keyword");
-  if (keywordEl) keywordEl.textContent = q;
-  
-  const novels = [
-    { id: 1, title: "หอคอยกระจก", author: "Mina K.", cover: "https://picsum.photos/200/300?random=11" },
-    { id: 2, title: "แชตลับฉบับรัก", author: "tenten", cover: "https://picsum.photos/200/300?random=12" },
-    { id: 3, title: "กาลครั้งในอาณาจักรชา", author: "Sora", cover: "https://picsum.photos/200/300?random=13" },
-    { id: 4, title: "ดาวเคราะห์หมายเลข 404", author: "Null", cover: "https://picsum.photos/200/300?random=14" }
-  ];
-  
-  const resultsDiv = document.getElementById("results");
-  if (resultsDiv) {
-    const filtered = novels.filter(n => n.title.includes(q) || n.author.includes(q));
-    if (filtered.length === 0) {
-      resultsDiv.innerHTML = `<p class="text-gray-500 col-span-full">ไม่พบนิยายที่ค้นหา</p>`;
-    } else {
-      filtered.forEach(novel => {
-        const card = document.createElement("div");
-        card.className = "bg-white rounded-xl shadow p-2";
-        card.innerHTML = `
-          <img src="${novel.cover}" alt="${novel.title}" class="rounded-lg w-full">
-          <h4 class="font-semibold mt-2">${novel.title}</h4>
-          <p class="text-sm text-zinc-500">${novel.author}</p>
-        `;
-        resultsDiv.appendChild(card);
-      });
-    }
-  }
-  
-  // ========== create.html ==========
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("novel-form");
-    if (form) {
-      form.addEventListener("submit", function (e) {
-        e.preventDefault();
-        const type = document.getElementById("novelType").value;
-        if (type === "long") {
-          window.location.href = "/light-novel/write_chapter";
-        } else if (type === "short") {
-          window.location.href = "/light-novel/write";
-        } else {
-          alert("กรุณาเลือกประเภทก่อนค่ะ 💡");
-        }
-      });
-    }
-  });
 
-  // ========== login.html ==========
+  }
+}
+
+function logout() {
+  localStorage.removeItem("isLoggedIn");
+  localStorage.removeItem("username");
+  renderProfileMenu();
+  alert("ออกจากระบบแล้ว");
+}
+
+if (content) renderProfileMenu();
+
+// ========== search.html ==========
+const params = new URLSearchParams(window.location.search);
+const q = params.get("q") || "";
+const keywordEl = document.getElementById("keyword");
+if (keywordEl) keywordEl.textContent = q;
+
+const resultsDiv = document.getElementById("results");
+if (resultsDiv) {
+  fetch("/light-novel/api/novels")
+    .then(res => res.json())
+    .then(novels => {
+      const filtered = novels.filter(n => n.title.includes(q) || n.author.includes(q));
+      if (filtered.length === 0) {
+        resultsDiv.innerHTML = `<p class="text-gray-500 col-span-full">ไม่พบนิยายที่ค้นหา</p>`;
+      } else {
+        filtered.forEach(novel => {
+          const card = document.createElement("div");
+          card.className = "bg-white rounded-xl shadow p-2";
+          card.innerHTML = `
+            <img src="${novel.image || 'https://picsum.photos/200/300'}" alt="${novel.name}" class="rounded-lg w-full">
+            <h4 class="font-semibold mt-2">${novel.name}</h4>
+            <p class="text-sm text-zinc-500">${novel.author}</p>
+          `;
+          resultsDiv.appendChild(card);
+        });
+      }
+    });
+}
+
+// ========== create.html ==========
 document.addEventListener("DOMContentLoaded", () => {
-    const loginForm = document.getElementById("login-form");
-    if (loginForm) {
-      loginForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-  
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value.trim();
-  
-        if (!username || !password) {
-          alert("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
-          return;
-        }
-  
-        // mock login
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("username", username);
-  
-        alert("เข้าสู่ระบบสำเร็จ 🎉");
-        window.location.href = "/light-novel"; // กลับหน้าหลัก
-      });
-    }
-  });
-  
-  // ========== register.html ==========
-  document.addEventListener("DOMContentLoaded", () => {
-    const registerForm = document.getElementById("register-form");
-    if (registerForm) {
-      registerForm.addEventListener("submit", (e) => {
-        e.preventDefault();
-  
-        const username = document.getElementById("reg-username").value.trim();
-        const password = document.getElementById("reg-password").value.trim();
-  
-        if (!username || !password) {
-          alert("กรุณากรอกข้อมูลให้ครบ");
-          return;
-        }
-  
-        // mock register
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("username", username);
-  
-        alert("สมัครสมาชิกสำเร็จ 🎉");
-        window.location.href = "/light-novel"; // กลับหน้าหลัก
-      });
-    }
-  });
-  
-  
+  const form = document.getElementById("novel-form");
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const token = localStorage.getItem("token");
+      const name = form.elements["name"].value.trim();
+      const category = form.elements["category"].value;
+      const author = form.elements["author"].value.trim();
+      const description = form.elements["description"]?.value || "";
+      const coverImage = form.elements["coverImage"]?.value || "";
+      const type = form.elements["type"]?.value || "short";
+
+      if (!name || !category || !author) {
+        alert("กรุณากรอกข้อมูลให้ครบ");
+        return;
+      }
+
+      fetch("/light-novel/api/novels", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify({ name, category, author, description, coverImage, type })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            alert("สร้างนิยายสำเร็จ!");
+            if (type === "short") {
+              // นิยายสั้น → ไปหน้า write.html
+              window.location.href = "/light-novel/novel";
+            } else if (type === "long") {
+              // นิยายยาว → ไปหน้า write_chapter.html พร้อม id ของนิยาย
+              window.location.href = "/light-novel/novel/" + data.data.id;
+            } else {
+              window.location.href = "/light-novel";
+            }
+          }
+        })
+        .catch(() => alert("เกิดข้อผิดพลาด"));
+    });
+  }
+});
+
+// ========== login.html ==========
+document.addEventListener("DOMContentLoaded", () => {
+  const loginForm = document.getElementById("loginForm");
+  if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (!username || !password) {
+        alert("กรุณากรอกชื่อผู้ใช้และรหัสผ่าน");
+        return;
+      }
+
+      fetch("/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("isLoggedIn", "true");
+            localStorage.setItem("username", data.user.username);
+            alert("เข้าสู่ระบบสำเร็จ 🎉");
+            window.location.href = "/light-novel";
+          }
+        })
+        .catch(() => alert("เกิดข้อผิดพลาด"));
+    });
+  }
+});
+
+// ========== register.html ==========
+document.addEventListener("DOMContentLoaded", () => {
+  const regForm = document.getElementById("register-form");
+  if (regForm) {
+    regForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const username = document.getElementById("reg-username").value.trim();
+      const password = document.getElementById("reg-password").value.trim();
+      const email = document.getElementById("reg-email").value.trim();
+      const birthdate = document.getElementById("reg-birthdate").value.trim();
+
+      if (!username || !password || !email) {
+        alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบ");
+        return;
+      }
+
+      fetch("/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password, email, birthdate })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            alert("สมัครไม่สำเร็จ: " + data.error);
+          } else {
+            alert("สมัครสมาชิกสำเร็จ 🎉 กรุณาเข้าสู่ระบบ");
+            window.location.href = "/light-novel/login";
+          }
+        })
+        .catch(() => {
+          alert("เกิดข้อผิดพลาดในการเชื่อมต่อเซิร์ฟเวอร์");
+        });
+    });
+  }
+});

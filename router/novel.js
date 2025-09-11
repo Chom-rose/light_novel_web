@@ -5,7 +5,11 @@ const router = express.Router();
 const {
   mainPage,
   createPage,
-  novelPage,
+  writePage,
+  write_chapterPage,
+  searchPage,
+  loginPage,
+  registerPage,
   listNovels,
   getNovel,
   createNovel,
@@ -18,7 +22,11 @@ const { authRequired } = require("../controller/auth");
 // Pages แก้ตรงนี้ด้วย
 router.get("/", mainPage);
 router.get("/create", createPage);
-router.get("/novel", novelPage); // expects ?id=xxx (novel id)
+router.get("/novel", writePage);
+router.get("/novel/:id", write_chapterPage);
+router.get("/search", searchPage);
+router.get("/login", loginPage);
+router.get("/register", registerPage);
 
 // API Novels
 router.get("/api/novels", listNovels);

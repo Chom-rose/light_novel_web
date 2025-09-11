@@ -97,7 +97,7 @@
         <form id="novel-form" class="space-y-6 bg-white p-6 rounded-xl shadow">
             <label class="block">
                 <span class="text-sm">ประเภท</span>
-                <select id="novelType" name="type" required class="mt-1 w-full border p-2 rounded-md">
+                <select id="type" name="type" required class="mt-1 w-full border p-2 rounded-md">
                     <option value="">-- เลือกประเภท --</option>
                     <option value="long">เรื่องยาว</option>
                     <option value="short">เรื่องสั้น</option>
@@ -129,9 +129,10 @@
                 <span class="text-sm">นามปากกา *</span>
                 <input name="author" class="mt-1 w-full border p-2 rounded-md" required />
             </label>
+
             <label class="block">
                 <span class="text-sm">ระดับเนื้อหา *</span>
-                <select name="category" required class="mt-1 w-full border p-2 rounded-md">
+                <select name="rating" required class="mt-1 w-full border p-2 rounded-md">
                     <option value="">-- เลือกระดับเนื้อหา --</option>
                     <option value="ทั่วไป">เหมาะกับบุคคลทั่วไป</option>
                     <option value="เรท">เหมาะสมกับอายุ 18 ปีขึ้นไป</option>
@@ -143,6 +144,13 @@
                 <input type="url" name="coverImage" placeholder="https://..."
                     class="mt-1 w-full border p-2 rounded-md" />
             </label>
+
+            <label class="block">
+              <span class="text-sm">เรื่องย่อ *</span>
+              <textarea name="description" required class="mt-1 w-full border p-2 rounded-md"></textarea>
+            </label>
+            <div class="text-sm text-gray-500">
+                * หมายถึงข้อมูลที่จำเป็นต้องกรอก
             </div>
             <div class="flex justify-end mt-4">
                 <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">

@@ -1,56 +1,57 @@
 const path = require("path");
 const db = require("../db/db");
+const { type } = require("os");
 
 // ---------- Page senders ----------
 exports.mainPage = async (req, res) => {
   res.sendFile(path.join(__dirname, "../views/main.html"));
 };
 
-exports.read_create = async (req, res) => {
-    try {
-        res.sendFile(path.join(__dirname, "../views/create.html"));
-    } catch (error) {
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+exports.createPage = async (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, "../views/create.html"));
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
-exports.read_write = async (req, res) => {
-    try {
-        res.sendFile(path.join(__dirname, "../views/write.html"));
-    } catch (error) {
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+exports.writePage = async (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, "../views/write.html"));
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
-exports.read_write_chapter = async (req, res) => {
-    try {
-        res.sendFile(path.join(__dirname, "../views/write_chapter.html"));
-    } catch (error) {
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+exports.write_chapterPage = async (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, "../views/write_chapter.html"));
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
-exports.read_search = async (req, res) => {
-    try {
-        res.sendFile(path.join(__dirname, "../views/search.html"));
-    } catch (error) {
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+exports.searchPage = async (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, "../views/search.html"));
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
-exports.read_login = async (req, res) => {
-    try {
-        res.sendFile(path.join(__dirname, "../views/login.html"));
-    } catch (error) {
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+exports.loginPage = async (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, "../views/login.html"));
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
-exports.read_register = async (req, res) => {
-    try {
-        res.sendFile(path.join(__dirname, "../views/register.html"));
-    } catch (error) {
-        res.status(500).json({ error: "Internal Server Error" });
-    }
+exports.registerPage = async (req, res) => {
+  try {
+    res.sendFile(path.join(__dirname, "../views/register.html"));
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 // ---------- API: Novels ----------
@@ -87,21 +88,21 @@ exports.createNovel = (req, res) => {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
-  const sql = `INSERT INTO novels (name, content, author, image, category, user_id)
-                 VALUES (?, ?, ?, ?, ?)`;
+  const sql = `INSERT INTO novels (name, content, author, image, category, type, user_id)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`;
+
   const params = [
-    name,
-    description,
-    coverImage || "https://picsum.photos/400/600?grayscale",
-    category,
-    req.user.uid, // 👈 ผูก novel กับ user ที่ล็อกอิน
+    name,           // name
+    description,    // content
+    author,         // author
+    coverImage || "https://picsum.photos/400/600?grayscale", // image
+    category,       // category
+    req.body.type,  // type (short/long จากฟอร์ม)
+    req.user.uid    // user_id
   ];
 
   db.run(sql, params, function (err) {
     if (err) return res.status(500).json({ error: err.message });
-
-
-
 
     const novelId = this.lastID;
 
@@ -129,6 +130,7 @@ exports.createNovel = (req, res) => {
         author,
         description,
         coverImage,
+        type: req.body.type,
         user_id: req.user.uid,
       },
     });

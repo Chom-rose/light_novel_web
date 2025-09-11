@@ -1,95 +1,300 @@
 <!doctype html>
 <html lang="th">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>ตัวเขียนนิยาย</title>
-<style>
-  :root{--bg:#f6f7f9;--panel:#fff;--ink:#111;--muted:#6b7280;--brand:#f59e0b;}
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.6 system-ui,-apple-system,Segoe UI,Roboto}
-  header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid #e5e7eb}
-  .topbar{max-width:1200px;margin:auto;display:flex;gap:12px;align-items:center;justify-content:space-between;padding:10px 16px}
-  .topbar .title{font-weight:700}
-  .actions{display:flex;gap:8px}
-  .btn{border:1px solid #d1d5db;background:#fff;padding:8px 12px;border-radius:8px;cursor:pointer}
-  .btn.primary{background:var(--brand);color:#fff;border-color:#d97706}
-  .wrap{max-width:1200px;margin:12px auto;padding:0 16px;display:grid;grid-template-columns:280px 1fr;gap:16px}
-  /* left */
-  .side{background:var(--panel);border:1px solid #e5e7eb;border-radius:10px;overflow:hidden;display:flex;flex-direction:column;height:calc(100vh - 110px)}
-  .head{padding:12px 14px;border-bottom:1px solid #eee;font-weight:600;display:flex;gap:6px;align-items:center}
-  .select{width:100%}
-  .tabs{display:flex;border-bottom:1px solid #eee}
-  .tab{flex:1;text-align:center;padding:8px 0;cursor:pointer;color:var(--muted)}
-  .tab.active{color:#111;border-bottom:2px solid #111}
-  .list{overflow:auto;padding:8px}
-  .chapter{display:flex;align-items:center;gap:8px;padding:8px;border-radius:8px;cursor:pointer}
-  .chapter:hover{background:#f3f4f6}
-  .chapter.active{background:#eef2ff;border:1px solid #c7d2fe}
-  .ch-num{font-weight:700;width:34px;text-align:right}
-  .ch-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .tools{display:flex;gap:6px}
-  .ghost{border:none;background:transparent;padding:4px;cursor:pointer;color:#6b7280}
-  .addrow{padding:10px}
-  .addbtn{width:100%;padding:8px;border:1px dashed #cbd5e1;border-radius:8px;background:#fafafa;cursor:pointer}
-  /* editor */
-  .main{background:var(--panel);border:1px solid #e5e7eb;border-radius:10px;padding:18px}
-  .novel-title{font-size:20px;font-weight:700;margin:0 0 4px}
-  .chapter-title{font-size:18px;font-weight:700;margin:2px 0 14px;border:none;width:100%}
-  .toolbar{display:flex;flex-wrap:wrap;gap:6px;border:1px solid #e5e7eb;border-radius:8px;padding:6px;margin-bottom:10px;background:#fafafa}
-  .tbtn{padding:6px 8px;border:1px solid #d1d5db;background:#fff;border-radius:6px;cursor:pointer}
-  .editor{min-height:55vh;border:1px solid #e5e7eb;border-radius:8px;padding:16px;outline:none;background:#fff}
-  .hint{color:var(--muted);font-size:12px;margin-top:8px}
-  @media (max-width:900px){.wrap{grid-template-columns:1fr}.side{height:auto}}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ตัวเขียนนิยาย</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --panel: #fff;
+      --ink: #111;
+      --muted: #6b7280;
+      --brand: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 14px/1.6 system-ui, -apple-system, Segoe UI, Roboto
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb
+    }
+
+    .topbar {
+      max-width: 1200px;
+      margin: auto;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px
+    }
+
+    .topbar .title {
+      font-weight: 700
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px
+    }
+
+    .btn {
+      border: 1px solid #d1d5db;
+      background: #fff;
+      padding: 8px 12px;
+      border-radius: 8px;
+      cursor: pointer
+    }
+
+    .btn.primary {
+      background: var(--brand);
+      color: #fff;
+      border-color: #d97706
+    }
+
+    .wrap {
+      max-width: 1200px;
+      margin: 12px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 16px
+    }
+
+    /* left */
+    .side {
+      background: var(--panel);
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: calc(100vh - 110px)
+    }
+
+    .head {
+      padding: 12px 14px;
+      border-bottom: 1px solid #eee;
+      font-weight: 600;
+      display: flex;
+      gap: 6px;
+      align-items: center
+    }
+
+    .select {
+      width: 100%
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid #eee
+    }
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px 0;
+      cursor: pointer;
+      color: var(--muted)
+    }
+
+    .tab.active {
+      color: #111;
+      border-bottom: 2px solid #111
+    }
+
+    .list {
+      overflow: auto;
+      padding: 8px
+    }
+
+    .chapter {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer
+    }
+
+    .chapter:hover {
+      background: #f3f4f6
+    }
+
+    .chapter.active {
+      background: #eef2ff;
+      border: 1px solid #c7d2fe
+    }
+
+    .ch-num {
+      font-weight: 700;
+      width: 34px;
+      text-align: right
+    }
+
+    .ch-name {
+      flex: 1;
+      min-width: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .tools {
+      display: flex;
+      gap: 6px
+    }
+
+    .ghost {
+      border: none;
+      background: transparent;
+      padding: 4px;
+      cursor: pointer;
+      color: #6b7280
+    }
+
+    .addrow {
+      padding: 10px
+    }
+
+    .addbtn {
+      width: 100%;
+      padding: 8px;
+      border: 1px dashed #cbd5e1;
+      border-radius: 8px;
+      background: #fafafa;
+      cursor: pointer
+    }
+
+    /* editor */
+    .main {
+      background: var(--panel);
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 18px
+    }
+
+    .novel-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 4px
+    }
+
+    .chapter-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 2px 0 14px;
+      border: none;
+      width: 100%
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 6px;
+      margin-bottom: 10px;
+      background: #fafafa
+    }
+
+    .tbtn {
+      padding: 6px 8px;
+      border: 1px solid #d1d5db;
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer
+    }
+
+    .editor {
+      min-height: 55vh;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 16px;
+      outline: none;
+      background: #fff
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 8px
+    }
+
+    @media (max-width:900px) {
+      .wrap {
+        grid-template-columns: 1fr
+      }
+
+      .side {
+        height: auto
+      }
+    }
+  </style>
 </head>
+
 <body>
-<header>
-  <div class="topbar">
-    <div class="title">หน้าจัดการเรื่อง</div>
-    <div class="actions">
-      <button class="btn" id="btnDraft">บันทึกแบบร่าง</button>
-      <button class="btn primary" id="btnPublish">บันทึกและเผยแพร่</button>
+  <header>
+    <div class="topbar">
+      <div class="title">หน้าจัดการเรื่อง</div>
+      <div class="actions">
+        <button class="btn" id="btnDraft">บันทึกแบบร่าง</button>
+        <button class="btn primary" id="btnPublish">บันทึกและเผยแพร่</button>
+      </div>
     </div>
+  </header>
+
+  <div class="wrap">
+    <!-- LEFT -->
+    <aside class="side">
+      <div class="head">
+        เรื่องยาว
+      </div>
+      <div class="tabs">
+        <div class="tab active" id="tabCh">ทั้งหมด</div>
+      </div>
+
+      <!-- chapter list -->
+      <div class="list" id="chapterList"></div>
+      <div class="addrow"><button class="addbtn" id="addChapter">+ เพิ่มตอน</button></div>
+    </aside>
+
+    <!-- RIGHT -->
+    <section class="main">
+      <h1 class="novel-title" id="novelName" contenteditable="true">ตัวอย่างเรื่อง</h1>
+      <input id="chapterTitle" class="chapter-title" placeholder="ตั้งชื่อตอน" />
+      <div class="toolbar">
+        <button class="tbtn" data-cmd="bold"><b>B</b></button>
+        <button class="tbtn" data-cmd="italic"><i>I</i></button>
+        <button class="tbtn" data-cmd="underline"><u>U</u></button>
+        <button class="tbtn" data-cmd="insertUnorderedList">• List</button>
+        <button class="tbtn" data-cmd="insertOrderedList">1. List</button>
+        <button class="tbtn" id="btnH1">หัวเรื่อง</button>
+        <button class="tbtn" id="btnQuote">อ้างอิง</button>
+      </div>
+      <div id="editor" class="editor" contenteditable="true" placeholder="พิมพ์เนื้อหาตรงนี้"></div>
+    </section>
   </div>
-</header>
 
-<div class="wrap">
-  <!-- LEFT -->
-  <aside class="side">
-    <div class="head">
-      เรื่องยาว 
-    </div>
-    <div class="tabs">
-      <div class="tab active" id="tabCh">ทั้งหมด</div>
-    </div>
-
-    <!-- chapter list -->
-    <div class="list" id="chapterList"></div>
-    <div class="addrow"><button class="addbtn" id="addChapter">+ เพิ่มตอน</button></div>
-  </aside>
-
-  <!-- RIGHT -->
-  <section class="main">
-    <h1 class="novel-title" id="novelName" contenteditable="true">ตัวอย่างเรื่อง</h1>
-    <input id="chapterTitle" class="chapter-title" placeholder="ตั้งชื่อตอน" />
-    <div class="toolbar">
-      <button class="tbtn" data-cmd="bold"><b>B</b></button>
-      <button class="tbtn" data-cmd="italic"><i>I</i></button>
-      <button class="tbtn" data-cmd="underline"><u>U</u></button>
-      <button class="tbtn" data-cmd="insertUnorderedList">• List</button>
-      <button class="tbtn" data-cmd="insertOrderedList">1. List</button>
-      <button class="tbtn" id="btnH1">หัวเรื่อง</button>
-      <button class="tbtn" id="btnQuote">อ้างอิง</button>
-    </div>
-    <div id="editor" class="editor" contenteditable="true" placeholder="พิมพ์เนื้อหาตรงนี้"></div>
-  </section>
-</div>
-
-<script>
-/* --- dummy store in localStorage --- */
-const KEY = "novel-editor-demo";
-const state = JSON.parse(localStorage.getItem(KEY) || `{
+  <script>
+    /* --- dummy store in localStorage --- */
+    const KEY = "novel-editor-demo";
+    const state = JSON.parse(localStorage.getItem(KEY) || `{
   "novelName":"ตัวอย่างเรื่อง",
   "chapters":[
     {"id":"c1","name":"ตอนที่ 1","content":"<p>พิมพ์เนื้อหาตอนที่ 1</p>"},
@@ -99,113 +304,114 @@ const state = JSON.parse(localStorage.getItem(KEY) || `{
   "active":"c1"
 }`);
 
-const title = document.getElementById("novelName");
+    const title = document.getElementById("novelName");
 
-  // โหลดค่าที่บันทึกไว้
-  title.textContent = localStorage.getItem("novelName") || title.textContent;
+    // โหลดค่าที่บันทึกไว้
+    title.textContent = localStorage.getItem("novelName") || title.textContent;
 
-  // บันทึกเมื่อแก้ไข
-  title.addEventListener("input", () => {
-    localStorage.setItem("novelName", title.textContent);
-  });
+    // บันทึกเมื่อแก้ไข
+    title.addEventListener("input", () => {
+      localStorage.setItem("novelName", title.textContent);
+    });
 
-const els = {
-  list: document.getElementById('chapterList'),
-  title: document.getElementById('chapterTitle'),
-  editor: document.getElementById('editor'),
-  novelName: document.getElementById('novelName'),
-  add: document.getElementById('addChapter'),
-  btnDraft: document.getElementById('btnDraft'),
-  btnPublish: document.getElementById('btnPublish')
-};
+    const els = {
+      list: document.getElementById('chapterList'),
+      title: document.getElementById('chapterTitle'),
+      editor: document.getElementById('editor'),
+      novelName: document.getElementById('novelName'),
+      add: document.getElementById('addChapter'),
+      btnDraft: document.getElementById('btnDraft'),
+      btnPublish: document.getElementById('btnPublish')
+    };
 
-function saveLocal() {
-  localStorage.setItem(KEY, JSON.stringify(state));
-}
+    function saveLocal() {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    }
 
-function renderList() {
-  els.list.innerHTML = "";
-  state.chapters.forEach((ch, idx) => {
-    const row = document.createElement('div');
-    row.className = 'chapter' + (ch.id === state.active ? ' active':'');
-    row.onclick = () => activate(ch.id);
-    row.innerHTML = `
-      <div class="ch-num">#${idx+1}</div>
+    function renderList() {
+      els.list.innerHTML = "";
+      state.chapters.forEach((ch, idx) => {
+        const row = document.createElement('div');
+        row.className = 'chapter' + (ch.id === state.active ? ' active' : '');
+        row.onclick = () => activate(ch.id);
+        row.innerHTML = `
+      <div class="ch-num">#${idx + 1}</div>
       <div class="ch-name" title="${ch.name}">${ch.name || "ตอนนี้ยังไม่ได้ตั้งชื่อ"}</div>
       <div class="tools">
         <button class="ghost" title="เปลี่ยนชื่อ" onclick="event.stopPropagation(); renameChapter('${ch.id}')">✎</button>
         <button class="ghost" title="ลบ" onclick="event.stopPropagation(); deleteChapter('${ch.id}')">🗑</button>
       </div>`;
-    els.list.appendChild(row);
-  });
-}
+        els.list.appendChild(row);
+      });
+    }
 
-function activate(id){
-  const ch = state.chapters.find(c=>c.id===id);
-  state.active = id;
-  els.title.value = ch.name || "";
-  els.editor.innerHTML = ch.content || "";
-  renderList();
-  saveLocal();
-}
+    function activate(id) {
+      const ch = state.chapters.find(c => c.id === id);
+      state.active = id;
+      els.title.value = ch.name || "";
+      els.editor.innerHTML = ch.content || "";
+      renderList();
+      saveLocal();
+    }
 
-function renameChapter(id){
-  const ch = state.chapters.find(c=>c.id===id);
-  const name = prompt("ตั้งชื่อตอน", ch.name || "");
-  if(name!==null){ ch.name = name.trim(); saveLocal(); renderList(); if(id===state.active) els.title.value = ch.name; }
-}
+    function renameChapter(id) {
+      const ch = state.chapters.find(c => c.id === id);
+      const name = prompt("ตั้งชื่อตอน", ch.name || "");
+      if (name !== null) { ch.name = name.trim(); saveLocal(); renderList(); if (id === state.active) els.title.value = ch.name; }
+    }
 
-function deleteChapter(id){
-  if(!confirm("ลบตอนนี้?")) return;
-  const i = state.chapters.findIndex(c=>c.id===id);
-  if(i>-1){ state.chapters.splice(i,1); if(state.active===id && state.chapters[0]) state.active = state.chapters[0].id; saveLocal(); renderList(); activate(state.active); }
-}
+    function deleteChapter(id) {
+      if (!confirm("ลบตอนนี้?")) return;
+      const i = state.chapters.findIndex(c => c.id === id);
+      if (i > -1) { state.chapters.splice(i, 1); if (state.active === id && state.chapters[0]) state.active = state.chapters[0].id; saveLocal(); renderList(); activate(state.active); }
+    }
 
-els.add.onclick = () => {
-  const nid = 'c'+Math.random().toString(36).slice(2,7);
-  state.chapters.push({id:nid,name:"ตอนใหม่",content:""});
-  saveLocal(); renderList(); activate(nid);
-};
+    els.add.onclick = () => {
+      const nid = 'c' + Math.random().toString(36).slice(2, 7);
+      state.chapters.push({ id: nid, name: "ตอนใหม่", content: "" });
+      saveLocal(); renderList(); activate(nid);
+    };
 
-els.title.addEventListener('input', () => {
-  const ch = state.chapters.find(c=>c.id===state.active);
-  ch.name = els.title.value;
-  renderList(); saveLocal();
-});
+    els.title.addEventListener('input', () => {
+      const ch = state.chapters.find(c => c.id === state.active);
+      ch.name = els.title.value;
+      renderList(); saveLocal();
+    });
 
-function autoSave() {
-  const ch = state.chapters.find(c=>c.id===state.active);
-  ch.content = els.editor.innerHTML;
-  saveLocal();
-}
-setInterval(autoSave, 3000);
+    function autoSave() {
+      const ch = state.chapters.find(c => c.id === state.active);
+      ch.content = els.editor.innerHTML;
+      saveLocal();
+    }
+    setInterval(autoSave, 3000);
 
-document.querySelectorAll('[data-cmd]').forEach(b=>{
-  b.onclick = ()=> document.execCommand(b.dataset.cmd,false,null);
-});
-document.getElementById('btnH1').onclick = ()=> document.execCommand('formatBlock', false, 'h2');
-document.getElementById('btnQuote').onclick = ()=> document.execCommand('formatBlock', false, 'blockquote');
+    document.querySelectorAll('[data-cmd]').forEach(b => {
+      b.onclick = () => document.execCommand(b.dataset.cmd, false, null);
+    });
+    document.getElementById('btnH1').onclick = () => document.execCommand('formatBlock', false, 'h2');
+    document.getElementById('btnQuote').onclick = () => document.execCommand('formatBlock', false, 'blockquote');
 
-els.btnDraft.onclick = ()=> { autoSave(); alert('บันทึกแบบร่างแล้ว (localStorage)'); };
-els.btnPublish.onclick = ()=> { autoSave(); alert('เผยแพร่เดโม: ส่งข้อมูลไป backend จริงในโปรเจกต์ของคุณ'); };
+    els.btnDraft.onclick = () => { autoSave(); alert('บันทึกแบบร่างแล้ว (localStorage)'); };
+    els.btnPublish.onclick = () => { autoSave(); alert('เผยแพร่เดโม: ส่งข้อมูลไป backend จริงในโปรเจกต์ของคุณ'); };
 
-window.addEventListener('load', ()=>{
-  els.novelName.textContent = state.novelName;
-  renderList();
-  activate(state.active || state.chapters[0].id);
-});
- const novelName = document.getElementById("novelName");
+    window.addEventListener('load', () => {
+      els.novelName.textContent = state.novelName;
+      renderList();
+      activate(state.active || state.chapters[0].id);
+    });
+    const novelName = document.getElementById("novelName");
 
-  // โหลดค่าที่เคยบันทึก
-  const savedTitle = localStorage.getItem("novelName");
-  if (savedTitle) {
-    novelName.textContent = savedTitle;
-  }
+    // โหลดค่าที่เคยบันทึก
+    const savedTitle = localStorage.getItem("novelName");
+    if (savedTitle) {
+      novelName.textContent = savedTitle;
+    }
 
-  // เวลาแก้ไข h1 → บันทึกลง localStorage
-  novelName.addEventListener("input", () => {
-    localStorage.setItem("novelName", novelName.textContent.trim());
-  });
-</script>
+    // เวลาแก้ไข h1 → บันทึกลง localStorage
+    novelName.addEventListener("input", () => {
+      localStorage.setItem("novelName", novelName.textContent.trim());
+    });
+  </script>
 </body>
+
 </html>
