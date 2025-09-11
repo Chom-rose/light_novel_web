@@ -6,12 +6,51 @@ exports.mainPage = async (req, res) => {
   res.sendFile(path.join(__dirname, "../views/main.html"));
 };
 
-exports.createPage = async (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/create.html"));
+exports.read_create = async (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "../views/create.html"));
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 };
 
-exports.novelPage = async (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/novel.html"));
+exports.read_write = async (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "../views/write.html"));
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+exports.read_write_chapter = async (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "../views/write_chapter.html"));
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+exports.read_search = async (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "../views/search.html"));
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+exports.read_login = async (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "../views/login.html"));
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+exports.read_register = async (req, res) => {
+    try {
+        res.sendFile(path.join(__dirname, "../views/register.html"));
+    } catch (error) {
+        res.status(500).json({ error: "Internal Server Error" });
+    }
 };
 
 // ---------- API: Novels ----------
@@ -22,6 +61,7 @@ exports.listNovels = (req, res) => {
     res.json(rows);
   });
 };
+
 
 exports.getNovel = (req, res) => {
   const { id } = req.params;
@@ -59,6 +99,9 @@ exports.createNovel = (req, res) => {
 
   db.run(sql, params, function (err) {
     if (err) return res.status(500).json({ error: err.message });
+
+
+
 
     const novelId = this.lastID;
 

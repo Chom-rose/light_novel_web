@@ -1,112 +1,191 @@
 <!DOCTYPE html>
-<html lang="th">
-<head>
+<html lang="en">
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>หน้าหลัก</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-  <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/nav.css">
 </head>
-<body class="bg-zinc-50">
-  <header class="bg-white border-b">
-    <nav class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div class="flex items-center gap-4">
-        <a href="/light-novel" class="font-bold text-xl">logo</a>
-        <a href="/light-novel" class="hover:underline">นิยาย</a>
-        <a href="/light-novel/create" class="hover:underline">สร้างผลงาน</a>
+
+<body>
+  <header>
+    <nav>
+      <div class="nav-header">
+        <div class="logo">logo</div>
+
+
+        <div class="search-user">
+          <button id="openSearch" class="p-2">
+            <i class="bx bx-search text-2xl"></i>
+          </button>
+
+          <!-- Overlay กล่องค้นหา (ซ่อนอยู่ก่อน) -->
+          <div id="searchOverlay" class="fixed inset-0 bg-black/40 flex items-start justify-center pt-3 hidden z-50">
+            <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl">
+              <div class="flex items-center gap-2">
+
+                <!-- ประเภท -->
+                <select class="border rounded-lg px-3 py-2 text-sm">
+                  <option>นิยายสั้น</option>
+                  <option>นิยายยาว</option>
+                </select>
+
+                <!-- หมวดหมู่ -->
+                <select class="border rounded-lg px-3 py-2 text-sm">
+                  <option>ทุกหมวด</option>
+                  <option>แฟนตาซี</option>
+                  <option>ระทึกขวัญ</option>
+                  <option>โรแมนซ์</option>
+                  <option>แอ๊คชั่น</option>
+                  <option>ดราม่า</option>
+                  <option>ไซไฟ</option>
+                  <option>ตลก</option>
+                </select>
+
+                <!-- Input -->
+                <input type="text" placeholder="ค้นหานิยาย ชื่อเรื่อง หรือผู้เขียน"
+                  class="flex-1 border rounded-lg px-3 py-2 text-sm">
+
+
+                <!-- ปุ่มค้นหา -->
+                <button onclick="doSearch()" class="bg-orange-500 text-black px-5 py-2 rounded-lg">
+                  <a href="/light-novel/search"
+                    class="bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-indigo-700">
+                    ค้นหา
+                  </a>
+                </button>
+
+                <!-- ปุ่มปิด -->
+                <button id="closeSearch" class="ml-2 text-gray-500 hover:text-black">
+                  ✕
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="profile">
+            <button id="profileBtn" class="p-2">
+              <i class="bx bx-user text-2xl"></i>
+            </button>
+          
+            <!-- เมนู dropdown -->
+            <div id="profileMenu" class="dropdown hidden">
+              <div id="profileContent"></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="flex items-center gap-3">
-        <a href="/light-novel/create" class="px-3 py-1.5 bg-indigo-600 text-white rounded-md">+ สร้างนิยาย</a>
-        <div class="px-3 py-1.5 bg-zinc-100 rounded-md">user</div>
+
+      <div class="nav-body">
+        <ul class="nav-links">
+          <li><span><a href="">หน้าหลัก</a></span></li>
+          <li><a href="/light-novel/create">สร้างผลงาน</a></li>
+        </ul>
+        <div class="coin-balance">
+          <span>Coin: 100 </span>
+          <button><a href="">เติมcoin </a></button>
+        </div>
       </div>
     </nav>
   </header>
 
-  <main class="max-w-7xl mx-auto px-4 py-8">
-    <section class="mb-10">
+  <main>
+    <section class="max-w-7xl mx-auto px-4 py-6">
       <h2 class="text-xl font-bold mb-4">นิยายยอดนิยม</h2>
       <div class="swiper mySwiper">
-        <div class="swiper-wrapper" id="top-swiper">
-          <!-- dynamic slides -->
+        <div class="swiper-wrapper">
+          <!-- Slide 1 -->
+          <div class="swiper-slide">
+            <div class="relative">
+              <img src="https://picsum.photos/800/400?random=1" class="w-full rounded-xl" alt="Novel 1">
+              <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">
+                หอคอยกระจก
+              </div>
+            </div>
+          </div>
+          <!-- Slide 2 -->
+          <div class="swiper-slide">
+            <div class="relative">
+              <img src="https://picsum.photos/800/400?random=2" class="w-full rounded-xl" alt="Novel 2">
+              <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">
+                แชตลับฉบับรัก
+              </div>
+            </div>
+          </div>
+          <!-- Slide 3 -->
+          <div class="swiper-slide">
+            <div class="relative">
+              <img src="https://picsum.photos/800/400?random=3" class="w-full rounded-xl" alt="Novel 3">
+              <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">
+                กาลครั้งในอาณาจักรชา
+              </div>
+            </div>
+          </div>
         </div>
+        <!-- Navigation -->
         <div class="swiper-button-next"></div>
         <div class="swiper-button-prev"></div>
+        <!-- Pagination -->
         <div class="swiper-pagination"></div>
       </div>
     </section>
 
-    <section class="mb-10">
+
+
+    <!-- Latest Updates -->
+    <section class="max-w-7xl mx-auto px-4 py-10 space-y-12">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-xl font-bold">นิยายมาใหม่</h3>
-        <a href="#" class="text-sm text-indigo-600 hover:underline" id="see-all-link">ดูทั้งหมด</a>
+        <a href="#" class="text-sm text-indigo-600 hover:underline">ดูทั้งหมด</a>
       </div>
-      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4" id="latest-grid"></div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <article class="bg-white rounded-xl shadow p-2">
+          <img src="https://picsum.photos/200/300?random=1" alt="" class="rounded-lg">
+          <h4 class="font-semibold mt-2">หอคอยกระจก</h4>
+          <p class="text-sm text-zinc-500">Mina K.</p>
+        </article>
+        <article class="bg-white rounded-xl shadow p-2">
+          <img src="https://picsum.photos/200/300?random=2" alt="" class="rounded-lg">
+          <h4 class="font-semibold mt-2">แชตลับฉบับรัก</h4>
+          <p class="text-sm text-zinc-500">tenten</p>
+        </article>
+        <!-- เพิ่มการ์ดต่อได้ -->
+      </div>
     </section>
+
+    <!-- Trending -->
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-bold">กำลังมาแรง</h3>
+        <a href="#" class="text-sm text-indigo-600 hover:underline">ดูอันดับ</a>
+      </div>
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        <article class="bg-white rounded-xl shadow p-2">
+          <img src="https://picsum.photos/200/300?random=3" alt="" class="rounded-lg">
+          <h4 class="font-semibold mt-2">กาลครั้งในอาณาจักรชา</h4>
+          <p class="text-sm text-zinc-500">Sora</p>
+        </article>
+        <!-- เพิ่มการ์ดต่อได้ -->
+      </div>
+    </section>
+
+
   </main>
-
-
-  <footer class="bg-white border-t">
+  <footer>
     <div class="max-w-7xl mx-auto px-4 py-6 text-center text-sm text-zinc-500">
       &copy; 2025 cat fat. สงวนลิขสิทธิ์.
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-  <script>
-    async function loadNovels() {
-      try {
-        const res = await fetch('/light-novel/api/novels');
-        if (!res.ok) throw new Error('Fetch failed');
-        const novels = await res.json();
-
-        // Swiper slides
-        const swiperWrap = document.getElementById('top-swiper');
-        swiperWrap.innerHTML = novels.slice(0, 5).map(n => `
-          <div class="swiper-slide">
-            <div class="relative">
-              <img src="${n.coverImage}" class="w-full h-64 object-cover rounded-xl" alt="${n.name}">
-              <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">${n.name}</div>
-            </div>
-          </div>`).join('');
-
-        new Swiper('.mySwiper', {
-          loop: true,
-          autoplay: { delay: 3000, disableOnInteraction: false },
-          pagination: { el: '.swiper-pagination', clickable: true },
-          navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }
-        });
-
-        // Latest grid
-        const grid = document.getElementById('latest-grid');
-        grid.innerHTML = novels.slice(-10).reverse().map(n => `
-          <article class="bg-white rounded-xl shadow p-2">
-            <img src="${n.coverImage}" alt="" class="rounded-lg w-full h-48 object-cover">
-            <h4 class="font-semibold mt-2 truncate" title="${n.name}">${n.name}</h4>
-            <p class="text-sm text-zinc-500">${n.author}</p>
-            <a href="/light-novel/novel?id=${n.id}" class="mt-2 inline-block text-indigo-600 text-sm">อ่านเลย →</a>
-          </article>`).join('');
-
-        // Scroll to grid
-        document.getElementById('see-all-link').addEventListener('click', (e) => {
-          e.preventDefault();
-          window.scrollTo({ top: document.getElementById('latest-grid').offsetTop - 60, behavior: 'smooth' });
-        });
-      } catch (err) {
-        console.error(err);
-        // เผื่อไม่มีข้อมูล/เออเรอร์
-        document.getElementById('top-swiper').innerHTML = `
-          <div class="swiper-slide">
-            <div class="p-6 text-center text-zinc-500">โหลดข้อมูลไม่สำเร็จ</div>
-          </div>`;
-      }
-    }
-
-    loadNovels();
-  </script>
+  
 
 </body>
-</html>
 
+<script src="/js/main.js"></script>
+
+</html>
