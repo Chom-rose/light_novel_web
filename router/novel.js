@@ -18,7 +18,7 @@ const { authRequired } = require("../controller/auth");
 // Pages แก้ตรงนี้ด้วย
 router.get("/", mainPage);
 router.get("/create", createPage);
-router.get("/novel", novelPage); // expects ?id=xxx (novel id)
+// router.get("/novel", novelPage); // expects ?id=xxx (novel id)
 
 // API Novels
 router.get("/api/novels", listNovels);
