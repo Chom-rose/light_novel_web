@@ -17,11 +17,10 @@
 
 ## Tech Stack
 
-- [Express.js](https://expressjs.com/) – Web framework
-- [SQLite Viewer](https://marketplace.visualstudio.com/items?itemName=qwtel.sqlite-viewer) – ตัวดูฐานข้อมูล SQLite
-- [bcryptjs](https://www.npmjs.com/package/bcryptjs) – Hash password
-- [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) – JWT Auth
-- [Nodemon](https://www.npmjs.com/package/nodemon) – Dev auto reload
+- [Express.js](https://expressjs.com/)
+- [SQLite Viewer](https://marketplace.visualstudio.com/items?itemName=qwtel.sqlite-viewer)
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+- [Nodemon](https://www.npmjs.com/package/nodemon)
 
 ---
 
