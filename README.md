@@ -14,12 +14,12 @@
 - กรองหมวดหมู่ หรือ ประเภท นิยาย
 ---
 
-## Tech Stack
+## 🚀 Tech Stack  
 
-- [Express.js](https://expressjs.com/)
-- [SQLite Viewer](https://marketplace.visualstudio.com/items?itemName=qwtel.sqlite-viewer)
-- [bcryptjs](https://www.npmjs.com/package/bcryptjs)
-- [Nodemon](https://www.npmjs.com/package/nodemon)
+![Express.js](https://img.shields.io/badge/Express.js-000000?style=for-the-badge&logo=express&logoColor=white)  
+![SQLite Viewer](https://img.shields.io/badge/SQLite%20Viewer-003B57?style=for-the-badge&logo=sqlite&logoColor=white)  
+![bcryptjs](https://img.shields.io/badge/bcryptjs-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)  
+![Nodemon](https://img.shields.io/badge/Nodemon-76D04B?style=for-the-badge&logo=nodemon&logoColor=black)
 
 ---
 
