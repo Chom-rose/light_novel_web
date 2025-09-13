@@ -24,9 +24,68 @@ app.use("/light-novel", lightNovelRouter);
 app.use("/chapter", chapterRouter);
 app.use("/auth", authRouter);
 
-// พาไปยังหน้า light-novel
-app.get("/", (_req, res) => {
-  res.redirect("/light-novel");
+// ---------- Page render ----------
+app.get("/", (req, res) => {
+  try {
+    //res.sendFile(path.join(__dirname, "../views/main.html"));
+    res.render("main");
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/create", (req, res) => {
+  try {
+    //res.sendFile(path.join(__dirname, "../views/create.html"));
+    res.render("create");
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/writePage", (req, res) => {
+  try {
+    //res.sendFile(path.join(__dirname, "../views/write.html"));
+    res.render("write");
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/write_chapterPage", (req, res) => {
+  try {
+    //res.sendFile(path.join(__dirname, "../views/write_chapter.html"));
+    res.render("write_chapter");
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/searchPage", (req, res) => {
+  try {
+    //res.sendFile(path.join(__dirname, "../views/search.html"));
+    res.render("search");
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/loginPage", (req, res) => {
+  try {
+    //res.sendFile(path.join(__dirname, "../views/login.html"));
+    res.render("login");
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+app.get("/registerPage", (req, res) => {
+  try {
+    //res.sendFile(path.join(__dirname, "../views/register.html"));
+    res.render("register");
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 });
 
 app.listen(port, () => {
