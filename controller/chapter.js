@@ -1,6 +1,6 @@
 const db = require("../db/db");
 
-// อ่านตอน
+// ====================== GET ======================
 exports.getchapter = (req, res) => {
   const { id, chapterId } = req.params;
   db.get(
@@ -10,7 +10,7 @@ exports.getchapter = (req, res) => {
       if (err) return res.status(500).json({ error: err.message });
       if (!row) return res.status(404).json({ error: "Chapter not found" });
 
-      // ถ้าเป็นตอนพรีเมียม → ต้องตรวจสิทธิ์
+      // ✅ เช็ค premium: ถ้าเป็นตอนพรีเมียม ต้องตรวจสิทธิ์ผู้ใช้
       if (row.is_premium === 1) {
         if (!req.user) {
           return res.status(401).json({ error: "กรุณาล็อกอินเพื่ออ่านตอนพรีเมียม" });
@@ -30,14 +30,16 @@ exports.getchapter = (req, res) => {
   );
 };
 
-// เพิ่มตอน
+// ====================== CREATE ======================
 exports.addchapter = (req, res) => {
   const { id } = req.params;
   const { title, content, is_premium } = req.body;
+
   if (!title || typeof content === "undefined") {
     return res.status(400).json({ error: "Missing chapter title/content" });
   }
 
+  // ✅ Normalize ค่า is_premium (กัน user ส่ง string/boolean มา)
   const premiumFlag = is_premium === 1 || is_premium === "1" ? 1 : 0;
 
   db.get("SELECT user_id, name FROM novels WHERE id = ?", [id], (err, novel) => {
@@ -48,7 +50,8 @@ exports.addchapter = (req, res) => {
       return res.status(403).json({ error: "Forbidden: เพิ่มตอนเฉพาะเจ้าของ" });
     }
 
-    const sql = "INSERT INTO chapters (novel_id, title, content, is_premium) VALUES (?, ?, ?, ?)";
+    const sql =
+      "INSERT INTO chapters (novel_id, title, content, is_premium) VALUES (?, ?, ?, ?)";
     db.run(sql, [id, title, content, premiumFlag], function (err2) {
       if (err2) return res.status(500).json({ error: err2.message });
       res.status(201).json({
@@ -59,18 +62,19 @@ exports.addchapter = (req, res) => {
           novel_name: novel.name,
           title,
           content,
-          is_premium: premiumFlag
+          is_premium: premiumFlag,
         },
       });
     });
   });
 };
 
-// อัปเดตตอน
+// ====================== UPDATE ======================
 exports.updatechapter = (req, res) => {
   const { id, chapterId } = req.params;
   const { title, content, is_premium } = req.body;
 
+  // ✅ ถ้าไม่ได้ส่ง is_premium มา → null (จะไม่แก้ค่า)
   const premiumFlag =
     is_premium === undefined ? null : (is_premium === 1 || is_premium === "1" ? 1 : 0);
 
@@ -101,14 +105,14 @@ exports.updatechapter = (req, res) => {
           novel_name: novel.name,
           title,
           content,
-          is_premium: premiumFlag
+          is_premium: premiumFlag,
         },
       });
     });
   });
 };
 
-// ลบตอน
+// ====================== DELETE ======================
 exports.deletechapter = (req, res) => {
   const { id, chapterId } = req.params;
 
