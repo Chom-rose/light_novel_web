@@ -10,18 +10,30 @@ exports.getchapter = (req, res) => {
       if (err) return res.status(500).json({ error: err.message });
       if (!row) return res.status(404).json({ error: "Chapter not found" });
 
-      // ✅ เช็ค premium: ถ้าเป็นตอนพรีเมียม ต้องตรวจสิทธิ์ผู้ใช้
+      // ✅ ถ้าเป็นตอนพรีเมียม ต้องเช็คสิทธิ์
       if (row.is_premium === 1) {
         if (!req.user) {
           return res.status(401).json({ error: "กรุณาล็อกอินเพื่ออ่านตอนพรีเมียม" });
         }
 
-        db.get("SELECT is_premium FROM users WHERE id = ?", [req.user.uid], (err2, user) => {
+        // ดึง novel มาเช็คว่าใครเป็นเจ้าของ
+        db.get("SELECT user_id FROM novels WHERE id = ?", [id], (err2, novel) => {
           if (err2) return res.status(500).json({ error: err2.message });
-          if (!user || user.is_premium !== 1) {
-            return res.status(403).json({ error: "ตอนนี้สำหรับสมาชิกพรีเมียมเท่านั้น" });
+          if (!novel) return res.status(404).json({ error: "Novel not found" });
+
+          // ✅ เจ้าของอ่านได้เสมอ
+          if (novel.user_id === req.user.uid) {
+            return res.json(row);
           }
-          return res.json(row);
+
+          // ✅ ถ้าไม่ใช่เจ้าของ ต้องเป็นพรีเมียม
+          db.get("SELECT is_premium FROM users WHERE id = ?", [req.user.uid], (err3, user) => {
+            if (err3) return res.status(500).json({ error: err3.message });
+            if (!user || user.is_premium !== 1) {
+              return res.status(403).json({ error: "ตอนนี้สำหรับสมาชิกพรีเมียมเท่านั้น" });
+            }
+            return res.json(row);
+          });
         });
       } else {
         return res.json(row); // ตอนฟรี
@@ -39,7 +51,6 @@ exports.addchapter = (req, res) => {
     return res.status(400).json({ error: "Missing chapter title/content" });
   }
 
-  // ✅ Normalize ค่า is_premium (กัน user ส่ง string/boolean มา)
   const premiumFlag = is_premium === 1 || is_premium === "1" ? 1 : 0;
 
   db.get("SELECT user_id, name FROM novels WHERE id = ?", [id], (err, novel) => {
@@ -74,7 +85,6 @@ exports.updatechapter = (req, res) => {
   const { id, chapterId } = req.params;
   const { title, content, is_premium } = req.body;
 
-  // ✅ ถ้าไม่ได้ส่ง is_premium มา → null (จะไม่แก้ค่า)
   const premiumFlag =
     is_premium === undefined ? null : (is_premium === 1 || is_premium === "1" ? 1 : 0);
 

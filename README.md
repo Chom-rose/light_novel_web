@@ -15,9 +15,8 @@
 - [Nodemon](https://www.npmjs.com/package/nodemon) – Dev auto reload
 
 ---
-
-```bash
 ติดตั้ง package.json:
+```bash
 npm init -y
 ```
 
