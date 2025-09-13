@@ -17,6 +17,6 @@ router.delete(
   authRequired,
   deletechapter
 );
-router.get("/api/novels/:id/chapters/:chapterId", getchapter);
+router.get("/api/novels/:id/chapters/:chapterId", authRequired, getchapter);
 
 module.exports = router;
