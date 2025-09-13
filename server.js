@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const express = require("express");
 const path = require("path");
 const app = express();
@@ -16,6 +18,7 @@ const registerRouter = require("./router/register");
 const chapterRouter = require("./router/chapter");
 const authRouter = require("./router/auth");
 const premiumRouter = require("./router/premium");
+const paymentRouter = require("./router/payment");
 
 app.use("/admin", adminRouter);
 app.use("/register", registerRouter);
@@ -23,6 +26,7 @@ app.use("/light-novel", lightNovelRouter);
 app.use("/chapter", chapterRouter);
 app.use("/auth", authRouter);
 app.use("/premium", premiumRouter);
+app.use("/payment", paymentRouter);
 
 // ---------- Page render ----------
 app.get("/", (req, res) => {

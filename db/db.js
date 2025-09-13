@@ -60,6 +60,25 @@ const db = new sqlite3.Database(db_path, (err) => {
         else console.log("Table 'chapters' is ready.");
       }
     );
+
+    // payments
+    db.run(
+      `CREATE TABLE IF NOT EXISTS payments (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    charge_id TEXT NOT NULL,
+    amount INTEGER NOT NULL,
+    currency TEXT NOT NULL,
+    status TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  )`,
+      (err) => {
+        if (err) console.error("Error creating payments:", err.message);
+        else console.log("Table 'payments' is ready.");
+      }
+    );
+
   }
 });
 
