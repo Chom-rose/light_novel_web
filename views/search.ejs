@@ -1,0 +1,22 @@
+<%- include('includes/head') %>
+</head>
+<body>
+    <%- include('includes/nav') %>
+    <main class="max-w-6xl mx-auto p-6">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold">ผลการค้นหา</h1>
+            <a href="/light-novel" class="text-indigo-600">← กลับหน้าหลัก</a>
+        </div>
+        <h2 class="text-lg mb-4">
+            ค้นหา: <span id="keyword" class="font-bold text-indigo-600"></span>
+        </h2>
+
+        <!-- รายการผลลัพธ์ -->
+        <div id="results" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            <!-- จะเติมด้วย JS -->
+        </div>
+    </main>
+    <%- include('includes/footer') %>
+    <script src="/js/main.js"></script>
+</body>
+</html>

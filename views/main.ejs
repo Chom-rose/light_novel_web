@@ -1,0 +1,69 @@
+<%- include('includes/head') %>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <%- include('includes/nav') %>
+    <main>
+        <!-- Slider -->
+        <section class="max-w-7xl mx-auto px-4 py-6">
+          <h2 class="text-xl font-bold mb-4">นิยายยอดนิยม</h2>
+          <div class="swiper mySwiper">
+            <div class="swiper-wrapper">
+              <!-- mock slide -->
+              <div class="swiper-slide">
+                <div class="relative">
+                  <img src="https://picsum.photos/800/400?random=1" class="w-full rounded-xl" alt="Novel 1">
+                  <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">หอคอยกระจก</div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="relative">
+                  <img src="https://picsum.photos/800/400?random=2" class="w-full rounded-xl" alt="Novel 2">
+                  <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">แชตลับฉบับรัก</div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="relative">
+                  <img src="https://picsum.photos/800/400?random=3" class="w-full rounded-xl" alt="Novel 3">
+                  <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">กาลครั้งในอาณาจักรชา</div>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+          </div>
+        </section>
+    
+        <!-- Latest Updates -->
+        <section class="max-w-7xl mx-auto px-4 py-10 space-y-12">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold">นิยายมาใหม่</h3>
+            <a href="/light-novel/search" class="text-sm text-indigo-600 hover:underline">ดูทั้งหมด</a>
+          </div>
+          <!-- 👇 JS จะเติมนิยายจริงตรงนี้ -->
+          <div id="novelList" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"></div>
+        </section>
+    
+        <!-- Trending -->
+        <section>
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-xl font-bold">กำลังมาแรง</h3>
+            <a href="#" class="text-sm text-indigo-600 hover:underline">ดูอันดับ</a>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            <article class="bg-white rounded-xl shadow p-2">
+              <img src="https://picsum.photos/200/300?random=3" alt="" class="rounded-lg">
+              <h4 class="font-semibold mt-2">กาลครั้งในอาณาจักรชา</h4>
+              <p class="text-sm text-zinc-500">Sora</p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <%- include('includes/footer') %>
+
+      <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+      <script src="/js/main.js"></script>
+</body>
+</html>

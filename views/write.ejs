@@ -1,0 +1,23 @@
+<%- include('includes/head') %>
+</head>
+<body>
+    <%- include('includes/nav_write') %>
+    <div class="wrap">
+
+
+        <!-- RIGHT -->
+        <section class="main">
+          <h1 class="novel-title" id="novelName" contenteditable="true">ตัวอย่างเรื่อง</h1>
+          <div class="toolbar">
+            <button class="tbtn" data-cmd="bold"><b>B</b></button>
+            <button class="tbtn" data-cmd="italic"><i>I</i></button>
+            <button class="tbtn" data-cmd="underline"><u>U</u></button>
+            <button class="tbtn" data-cmd="insertUnorderedList">• List</button>
+            <button class="tbtn" data-cmd="insertOrderedList">1. List</button>
+            <button class="tbtn" id="btnH1">หัวเรื่อง</button>
+            <button class="tbtn" id="btnQuote">อ้างอิง</button>
+          </div>
+          <div id="editor" class="editor" contenteditable="true" placeholder="พิมพ์เนื้อหาตรงนี้"></div>
+        </section>
+      </div>
+</body>

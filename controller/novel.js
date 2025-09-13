@@ -1,15 +1,16 @@
 const path = require("path");
 const db = require("../db/db");
-const { type } = require("os");
 
 // ---------- Page senders ----------
 exports.mainPage = async (req, res) => {
-  res.sendFile(path.join(__dirname, "../views/main.html"));
+  //res.sendFile(path.join(__dirname, "../views/main.html"));
+  res.render("main");
 };
 
 exports.createPage = async (req, res) => {
   try {
-    res.sendFile(path.join(__dirname, "../views/create.html"));
+    //res.sendFile(path.join(__dirname, "../views/create.html"));
+    res.render("create");
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -17,7 +18,8 @@ exports.createPage = async (req, res) => {
 
 exports.writePage = async (req, res) => {
   try {
-    res.sendFile(path.join(__dirname, "../views/write.html"));
+    //res.sendFile(path.join(__dirname, "../views/write.html"));
+    res.render("write");
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -25,7 +27,8 @@ exports.writePage = async (req, res) => {
 
 exports.write_chapterPage = async (req, res) => {
   try {
-    res.sendFile(path.join(__dirname, "../views/write_chapter.html"));
+    //res.sendFile(path.join(__dirname, "../views/write_chapter.html"));
+    res.render("write_chapter");
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -33,7 +36,8 @@ exports.write_chapterPage = async (req, res) => {
 
 exports.searchPage = async (req, res) => {
   try {
-    res.sendFile(path.join(__dirname, "../views/search.html"));
+    //res.sendFile(path.join(__dirname, "../views/search.html"));
+    res.render("search");
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -41,14 +45,16 @@ exports.searchPage = async (req, res) => {
 
 exports.loginPage = async (req, res) => {
   try {
-    res.sendFile(path.join(__dirname, "../views/login.html"));
+    //res.sendFile(path.join(__dirname, "../views/login.html"));
+    res.render("login");
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 exports.registerPage = async (req, res) => {
   try {
-    res.sendFile(path.join(__dirname, "../views/register.html"));
+    //res.sendFile(path.join(__dirname, "../views/register.html"));
+    res.render("register");
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
