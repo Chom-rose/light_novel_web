@@ -1,40 +1,43 @@
 <%- include('includes/head') %>
-</head>
-<body>
-    <%- include('includes/nav_login') %>
-    <main class="bg-gray-100 py-12">
-        <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md mx-auto">
-            <h1 class="text-2xl font-bold mb-6 text-center">สมัครสมาชิก</h1>
-            <form id="register-form" class="space-y-4">
-                <div>
-                    <label class="block text-sm">ชื่อผู้ใช้</label>
-                    <input id="reg-username" type="text" required class="w-full border p-2 rounded-md">
-                </div>
-                <div>
-                    <label class="block text-sm">รหัสผ่าน</label>
-                    <input id="reg-password" type="password" required class="w-full border p-2 rounded-md">
-                </div>
-                <div>
-                    <label class="block text-sm">อีเมล</label>
-                    <input id="reg-email" type="email" required class="w-full border p-2 rounded-md">
-                </div>
-                <div>
-                    <label class="block text-sm">วันเดือนปีเกิด</label>
-                    <input id="reg-birthdate" type="date" class="w-full border p-2 rounded-md"
-                        max="<?= new Date().toISOString().split('T')[0] ?>">
+    </head>
 
-                </div>
-                <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700">
-                    สมัครสมาชิก
-                </button>
-            </form>
-            <p class="text-sm mt-4 text-center">
-                มีบัญชีแล้ว? <a href="/light-novel/login" class="text-indigo-600 hover:underline">เข้าสู่ระบบ</a>
-            </p>
-        </div>
-    </main>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="/js/main.js"></script>
-</body>
+    <body>
+        <%- include('includes/nav_login') %>
+            <main class="bg-gray-100 py-12">
+                <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md mx-auto">
+                    <h1 class="text-2xl font-bold mb-6 text-center">สมัครสมาชิก</h1>
+                    <form id="register-form" class="space-y-4">
+                        <div>
+                            <label class="block text-sm">ชื่อผู้ใช้</label>
+                            <input id="reg-username" type="text" required class="w-full border p-2 rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm">รหัสผ่าน</label>
+                            <input id="reg-password" type="password" required class="w-full border p-2 rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm">อีเมล</label>
+                            <input id="reg-email" type="email" required class="w-full border p-2 rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm">วันเดือนปีเกิด</label>
+                            <input id="reg-birthdate" type="date" class="w-full border p-2 rounded-md"
+                                max="<?= new Date().toISOString().split('T')[0] ?>">
 
-</html>
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700">
+                            สมัครสมาชิก
+                        </button>
+                    </form>
+                    <p class="text-sm mt-4 text-center">
+                        มีบัญชีแล้ว? <a href="/light-novel/login"
+                            class="text-indigo-600 hover:underline">เข้าสู่ระบบ</a>
+                    </p>
+                </div>
+            </main>
+            <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+            <script src="/js/main.js"></script>
+    </body>
+
+    </html>

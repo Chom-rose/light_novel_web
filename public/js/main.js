@@ -59,15 +59,15 @@ function renderProfileMenu() {
           <small>${localStorage.getItem("username") || "guest"}</small>
         </div>
         <ul>
-          <li><a href="/light-novel/create" class="block px-4 py-2 hover:bg-gray-100">สร้างผลงาน</a></li>
+          <li><a href="/create" class="block px-4 py-2 hover:bg-gray-100">สร้างผลงาน</a></li>
           <li><button onclick="logout()" class="w-full text-left px-4 py-2 hover:bg-gray-100">ออกจากระบบ</button></li>
         </ul>
       `;
   } else {
     content.innerHTML = `
         <ul>
-          <li><a href="/light-novel/login" class="block px-4 py-2 hover:bg-gray-100">เข้าสู่ระบบ</a></li>
-          <li><a href="/light-novel/register" class="block px-4 py-2 hover:bg-gray-100">สมัครสมาชิก</a></li>
+          <li><a href="/login" class="block px-4 py-2 hover:bg-gray-100">เข้าสู่ระบบ</a></li>
+          <li><a href="/register" class="block px-4 py-2 hover:bg-gray-100">สมัครสมาชิก</a></li>
         </ul>
       `;
 
@@ -148,12 +148,12 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("สร้างนิยายสำเร็จ!");
             if (type === "short") {
               // นิยายสั้น → ไปหน้า write.html
-              window.location.href = "/light-novel/novel";
+              window.location.href = "/novel";
             } else if (type === "long") {
               // นิยายยาว → ไปหน้า write_chapter.html พร้อม id ของนิยาย
-              window.location.href = "/light-novel/novel/" + data.data.id;
+              window.location.href = "/novel/" + data.data.id;
             } else {
-              window.location.href = "/light-novel";
+              window.location.href = "/";
             }
           }
         })
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("isLoggedIn", "true");
             localStorage.setItem("username", data.user.username);
             alert("เข้าสู่ระบบสำเร็จ 🎉");
-            window.location.href = "/light-novel";
+            window.location.href = "/";
           }
         })
         .catch(() => alert("เกิดข้อผิดพลาด"));
@@ -227,7 +227,7 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("สมัครไม่สำเร็จ: " + data.error);
           } else {
             alert("สมัครสมาชิกสำเร็จ 🎉 กรุณาเข้าสู่ระบบ");
-            window.location.href = "/light-novel/login";
+            window.location.href = "/login";
           }
         })
         .catch(() => {

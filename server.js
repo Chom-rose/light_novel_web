@@ -43,7 +43,7 @@ app.get("/create", (req, res) => {
   }
 });
 
-app.get("/writePage", (req, res) => {
+app.get("/write", (req, res) => {
   try {
     //res.sendFile(path.join(__dirname, "../views/write.html"));
     res.render("write");
@@ -52,7 +52,7 @@ app.get("/writePage", (req, res) => {
   }
 });
 
-app.get("/write_chapterPage", (req, res) => {
+app.get("/write_chapter", (req, res) => {
   try {
     //res.sendFile(path.join(__dirname, "../views/write_chapter.html"));
     res.render("write_chapter");
@@ -61,7 +61,7 @@ app.get("/write_chapterPage", (req, res) => {
   }
 });
 
-app.get("/searchPage", (req, res) => {
+app.get("/search", (req, res) => {
   try {
     //res.sendFile(path.join(__dirname, "../views/search.html"));
     res.render("search");
@@ -70,7 +70,7 @@ app.get("/searchPage", (req, res) => {
   }
 });
 
-app.get("/loginPage", (req, res) => {
+app.get("/login", (req, res) => {
   try {
     //res.sendFile(path.join(__dirname, "../views/login.html"));
     res.render("login");
@@ -79,7 +79,7 @@ app.get("/loginPage", (req, res) => {
   }
 });
 
-app.get("/registerPage", (req, res) => {
+app.get("/register", (req, res) => {
   try {
     //res.sendFile(path.join(__dirname, "../views/register.html"));
     res.render("register");

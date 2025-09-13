@@ -4,13 +4,13 @@ main {
   padding: 0 20px;
 }
 
-main > div {
+main>div {
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
 
-main > div button {
+main>div button {
   background-color: #4f46e5;
   color: white;
   border: none;
