@@ -1,146 +1,144 @@
-const path = require("path");
 const db = require("../db/db");
 
-// ---------- API: Novels ----------
-exports.listNovels = (req, res) => {
-  const sql = "SELECT * FROM novels";
-  db.all(sql, [], (err, rows) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(rows);
-  });
-};
-
-
-exports.getNovel = (req, res) => {
-  const { id } = req.params;
-  const sqlNovel = "SELECT * FROM novels WHERE id = ?";
-  const sqlChapters = "SELECT * FROM chapters WHERE novel_id = ? ORDER BY id";
-
-  db.get(sqlNovel, [id], (err, novel) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!novel) return res.status(404).json({ error: "Not found" });
-
-    db.all(sqlChapters, [id], (err, chapters) => {
+// ====================== GET ======================
+exports.getchapter = (req, res) => {
+  const { id, chapterId } = req.params;
+  db.get(
+    "SELECT * FROM chapters WHERE novel_id = ? AND id = ?",
+    [id, chapterId],
+    (err, row) => {
       if (err) return res.status(500).json({ error: err.message });
-      novel.chapters = chapters;
-      res.json(novel);
-    });
-  });
-};
+      if (!row) return res.status(404).json({ error: "Chapter not found" });
 
-exports.createNovel = (req, res) => {
-  const { name, category, author, description, coverImage, chapters } =
-    req.body;
-  if (!name || !category || !author || !description) {
-    return res.status(400).json({ error: "Missing required fields" });
-  }
-
-  const sql = `INSERT INTO novels (name, content, author, image, category, type, user_id)
-             VALUES (?, ?, ?, ?, ?, ?, ?)`;
-
-  const params = [
-    name,           // name
-    description,    // content
-    author,         // author
-    coverImage || "https://picsum.photos/400/600?grayscale", // image
-    category,       // category
-    req.body.type,  // type (short/long จากฟอร์ม)
-    req.user.uid    // user_id
-  ];
-
-  db.run(sql, params, function (err) {
-    if (err) return res.status(500).json({ error: err.message });
-
-    const novelId = this.lastID;
-
-    // insert chapters ถ้ามี
-    if (Array.isArray(chapters)) {
-      const chSql =
-        "INSERT INTO chapters (novel_id, title, content) VALUES (?, ?, ?)";
-      chapters.forEach((c) => {
-        db.run(
-          chSql,
-          [novelId, c.title || "Untitled", c.content || ""],
-          (err2) => {
-            if (err2) console.error(err2.message);
-          }
-        );
-      });
-    }
-
-    res.status(201).json({
-      message: "สร้างนิยายสำเร็จ",
-      data: {
-        id: novelId,
-        name,
-        category,
-        author,
-        description,
-        coverImage,
-        type: req.body.type,
-        user_id: req.user.uid,
-      },
-    });
-  });
-};
-
-exports.updateNovel = (req, res) => {
-  const { id } = req.params;
-  const { name, category, description, coverImage } = req.body;
-
-  // 1) ดึง novel มาเพื่อตรวจว่าใครเป็นเจ้าของ
-  db.get("SELECT * FROM novels WHERE id = ?", [id], (err, novel) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!novel) return res.status(404).json({ error: "Not found" });
-
-    // 2) ตรวจสิทธิ์ → ต้องเป็นเจ้าของเท่านั้น
-    if (novel.user_id !== req.user.uid) {
-      return res.status(403).json({ error: "Forbidden: แก้ไขได้เฉพาะเจ้าของ" });
-    }
-
-    // 3) ถ้าใช่เจ้าของ → อัปเดตได้
-    const sql = `UPDATE novels
-                   SET name = COALESCE(?, name),
-                       content = COALESCE(?, content),
-                       image = COALESCE(?, image),
-                       category = COALESCE(?, category)
-                   WHERE id = ?`;
-
-    db.run(sql, [name, description, coverImage, category, id], function (err2) {
-      if (err2) return res.status(500).json({ error: err2.message });
-      res.json({ message: "อัปเดตนิยายสำเร็จ" });
-    });
-  });
-};
-
-exports.deleteNovel = (req, res) => {
-  const { id } = req.params;
-
-  // ดึง novel + เจ้าของ
-  db.get("SELECT * FROM novels WHERE id = ?", [id], (err, novel) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!novel) return res.status(404).json({ error: "Not found" });
-
-    // ดึง user เพื่อตรวจ is_admin
-    db.get(
-      "SELECT is_admin FROM users WHERE id = ?",
-      [req.user.uid],
-      (err2, user) => {
-        if (err2) return res.status(500).json({ error: err2.message });
-
-        const isOwner = novel.user_id === req.user.uid;
-        const isAdmin = user?.is_admin === 1;
-
-        if (!isOwner && !isAdmin) {
-          return res
-            .status(403)
-            .json({ error: "Forbidden: ไม่ใช่เจ้าของหรือ admin" });
+      // ✅ เช็ค premium: ถ้าเป็นตอนพรีเมียม ต้องตรวจสิทธิ์ผู้ใช้
+      if (row.is_premium === 1) {
+        if (!req.user) {
+          return res.status(401).json({ error: "กรุณาล็อกอินเพื่ออ่านตอนพรีเมียม" });
         }
 
-        // ✅ ผ่านเงื่อนไข ลบได้
-        db.run("DELETE FROM novels WHERE id = ?", [id], function (err3) {
-          if (err3) return res.status(500).json({ error: err3.message });
-          res.json({ message: "ลบนิยายสำเร็จ" });
+        db.get("SELECT is_premium FROM users WHERE id = ?", [req.user.uid], (err2, user) => {
+          if (err2) return res.status(500).json({ error: err2.message });
+          if (!user || user.is_premium !== 1) {
+            return res.status(403).json({ error: "ตอนนี้สำหรับสมาชิกพรีเมียมเท่านั้น" });
+          }
+          return res.json(row);
+        });
+      } else {
+        return res.json(row); // ตอนฟรี
+      }
+    }
+  );
+};
+
+// ====================== CREATE ======================
+exports.addchapter = (req, res) => {
+  const { id } = req.params;
+  const { title, content, is_premium } = req.body;
+
+  if (!title || typeof content === "undefined") {
+    return res.status(400).json({ error: "Missing chapter title/content" });
+  }
+
+  // ✅ Normalize ค่า is_premium (กัน user ส่ง string/boolean มา)
+  const premiumFlag = is_premium === 1 || is_premium === "1" ? 1 : 0;
+
+  db.get("SELECT user_id, name FROM novels WHERE id = ?", [id], (err, novel) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!novel) return res.status(404).json({ error: "Novel not found" });
+
+    if (novel.user_id !== req.user.uid) {
+      return res.status(403).json({ error: "Forbidden: เพิ่มตอนเฉพาะเจ้าของ" });
+    }
+
+    const sql =
+      "INSERT INTO chapters (novel_id, title, content, is_premium) VALUES (?, ?, ?, ?)";
+    db.run(sql, [id, title, content, premiumFlag], function (err2) {
+      if (err2) return res.status(500).json({ error: err2.message });
+      res.status(201).json({
+        message: "เพิ่มตอนสำเร็จ",
+        data: {
+          id: this.lastID,
+          novel_id: id,
+          novel_name: novel.name,
+          title,
+          content,
+          is_premium: premiumFlag,
+        },
+      });
+    });
+  });
+};
+
+// ====================== UPDATE ======================
+exports.updatechapter = (req, res) => {
+  const { id, chapterId } = req.params;
+  const { title, content, is_premium } = req.body;
+
+  // ✅ ถ้าไม่ได้ส่ง is_premium มา → null (จะไม่แก้ค่า)
+  const premiumFlag =
+    is_premium === undefined ? null : (is_premium === 1 || is_premium === "1" ? 1 : 0);
+
+  db.get("SELECT user_id, name FROM novels WHERE id = ?", [id], (err, novel) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!novel) return res.status(404).json({ error: "Novel not found" });
+
+    if (novel.user_id !== req.user.uid) {
+      return res.status(403).json({ error: "Forbidden: อัปเดตได้เฉพาะเจ้าของ" });
+    }
+
+    const sql = `UPDATE chapters
+                 SET title = COALESCE(?, title),
+                     content = COALESCE(?, content),
+                     is_premium = COALESCE(?, is_premium)
+                 WHERE id = ? AND novel_id = ?`;
+
+    db.run(sql, [title, content, premiumFlag, chapterId, id], function (err2) {
+      if (err2) return res.status(500).json({ error: err2.message });
+      if (this.changes === 0)
+        return res.status(404).json({ error: "Chapter not found" });
+
+      res.json({
+        message: "อัปเดตตอนสำเร็จ",
+        data: {
+          id: chapterId,
+          novel_id: id,
+          novel_name: novel.name,
+          title,
+          content,
+          is_premium: premiumFlag,
+        },
+      });
+    });
+  });
+};
+
+// ====================== DELETE ======================
+exports.deletechapter = (req, res) => {
+  const { id, chapterId } = req.params;
+
+  db.get("SELECT user_id, name FROM novels WHERE id = ?", [id], (err, novel) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (!novel) return res.status(404).json({ error: "Novel not found" });
+
+    if (novel.user_id !== req.user.uid) {
+      return res.status(403).json({ error: "Forbidden: ลบได้เฉพาะเจ้าของ" });
+    }
+
+    db.run(
+      "DELETE FROM chapters WHERE id = ? AND novel_id = ?",
+      [chapterId, id],
+      function (err2) {
+        if (err2) return res.status(500).json({ error: err2.message });
+        if (this.changes === 0)
+          return res.status(404).json({ error: "Chapter not found" });
+
+        res.json({
+          message: "ลบตอนสำเร็จ",
+          data: {
+            id: chapterId,
+            novel_id: id,
+            novel_name: novel.name,
+          },
         });
       }
     );

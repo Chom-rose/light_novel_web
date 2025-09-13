@@ -10,19 +10,19 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// app.use("/admin", adminRouter);
-
 const adminRouter = require("./router/admin");
 const lightNovelRouter = require("./router/novel");
 const registerRouter = require("./router/register");
 const chapterRouter = require("./router/chapter");
 const authRouter = require("./router/auth");
+const premiumRouter = require("./router/premium");
 
 app.use("/admin", adminRouter);
 app.use("/register", registerRouter);
 app.use("/light-novel", lightNovelRouter);
 app.use("/chapter", chapterRouter);
 app.use("/auth", authRouter);
+app.use("/premium", premiumRouter);
 
 // ---------- Page render ----------
 app.get("/", (req, res) => {

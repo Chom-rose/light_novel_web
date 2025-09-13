@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me";
 
-// POST /api/auth/login  (ล็อกอิน)
+// ====================== LOGIN ======================
 exports.login = (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
@@ -23,8 +23,14 @@ exports.login = (req, res) => {
         .status(401)
         .json({ error: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
 
+    // ✅ เพิ่ม is_admin และ is_premium ใน payload เฉพาะตอนออก token
     const token = jwt.sign(
-      { uid: user.id, username: user.username },
+      {
+        uid: user.id,
+        username: user.username,
+        is_admin: user.is_admin,
+        is_premium: user.is_premium,
+      },
       JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -36,13 +42,15 @@ exports.login = (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        age: user.age || null,
+        birthdate: user.birthdate || null,
+        is_admin: user.is_admin,
+        is_premium: user.is_premium, // ✅ ส่งสถานะพรีเมียมกลับไป
       },
     });
   });
 };
 
-// Middleware ตรวจ token
+// ====================== AUTH MIDDLEWARE ======================
 exports.authRequired = (req, res, next) => {
   const h = req.headers.authorization || "";
   const token = h.startsWith("Bearer ") ? h.slice(7) : null;
@@ -50,18 +58,18 @@ exports.authRequired = (req, res, next) => {
 
   try {
     const payload = jwt.verify(token, JWT_SECRET);
-    req.user = payload; // { uid, username, iat, exp }
+    req.user = payload; // { uid, username, is_admin, is_premium, iat, exp }
     next();
   } catch (e) {
     return res.status(401).json({ error: "Invalid/expired token" });
   }
 };
 
-// GET /api/auth/me  (โปรไฟล์ตัวเองจาก token)
+// ====================== ME ======================
 exports.me = (req, res) => {
   // ดึงข้อมูลสดจาก DB เพื่อความชัวร์
   db.get(
-    "SELECT id, username, email, age FROM users WHERE id = ?",
+    "SELECT id, username, email, birthdate, is_admin, is_premium FROM users WHERE id = ?",
     [req.user.uid],
     (err, row) => {
       if (err) return res.status(500).json({ error: err.message });

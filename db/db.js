@@ -35,7 +35,8 @@ const db = new sqlite3.Database(db_path, (err) => {
         password TEXT NOT NULL,
         birthdate TEXT, -- YYYY-MM-DD แทน age
         email TEXT NOT NULL,
-        is_admin INTEGER DEFAULT 0
+        is_admin INTEGER DEFAULT 0,
+        is_premium INTEGER DEFAULT 0 -- 0 = ฟรี, 1 = พรีเมียม
       )`,
       (err) => {
         if (err) console.error("Error creating users:", err.message);
@@ -50,6 +51,7 @@ const db = new sqlite3.Database(db_path, (err) => {
         novel_id INTEGER NOT NULL,
         title TEXT NOT NULL,
         content TEXT,
+        is_premium INTEGER DEFAULT 0, -- 0 = ฟรี, 1 = พรีเมียม
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (novel_id) REFERENCES novels(id) ON DELETE CASCADE
       )`,
