@@ -1,0 +1,41 @@
+<%- include('includes/head') %>
+    <link rel="stylesheet" href="/css/write.css">
+    </head>
+
+    <body>
+        <%- include('includes/nav_write') %>
+            <div class="wrap">
+                <!-- LEFT -->
+                <aside class="side">
+                    <div class="head">
+                        เรื่องยาว
+                    </div>
+                    <div class="tabs">
+                        <div class="tab active" id="tabCh">ทั้งหมด</div>
+                    </div>
+
+                    <!-- chapter list -->
+                    <div class="list" id="chapterList"></div>
+                    <div class="addrow"><button class="addbtn" id="addChapter">+ เพิ่มตอน</button></div>
+                </aside>
+
+                <!-- RIGHT -->
+                <section class="main">
+                    <h1 class="novel-title" id="novelName" contenteditable="true">ตัวอย่างเรื่อง</h1>
+                    <input id="chapterTitle" class="chapter-title" placeholder="ตั้งชื่อตอน" />
+                    <div class="toolbar">
+                        <button class="tbtn" data-cmd="bold"><b>B</b></button>
+                        <button class="tbtn" data-cmd="italic"><i>I</i></button>
+                        <button class="tbtn" data-cmd="underline"><u>U</u></button>
+                        <button class="tbtn" data-cmd="insertUnorderedList">• List</button>
+                        <button class="tbtn" data-cmd="insertOrderedList">1. List</button>
+                        <button class="tbtn" id="btnH1">หัวเรื่อง</button>
+                        <button class="tbtn" id="btnQuote">อ้างอิง</button>
+                    </div>
+                    <div id="editor" class="editor" contenteditable="true" placeholder="พิมพ์เนื้อหาตรงนี้"></div>
+                </section>
+            </div>
+            <script src="/js/write.js"></script>
+    </body>
+
+    </html>
