@@ -66,14 +66,15 @@ exports.authRequired = (req, res, next) => {
 };
 
 // ====================== ME ======================
+// GET /api/auth/me  (โปรไฟล์ตัวเองจาก token)
 exports.me = (req, res) => {
-  // ดึงข้อมูลสดจาก DB เพื่อความชัวร์
   db.get(
     "SELECT id, username, email, birthdate, is_admin, is_premium FROM users WHERE id = ?",
     [req.user.uid],
     (err, row) => {
       if (err) return res.status(500).json({ error: err.message });
       if (!row) return res.status(404).json({ error: "ไม่พบผู้ใช้" });
+
       return res.json({ user: row });
     }
   );

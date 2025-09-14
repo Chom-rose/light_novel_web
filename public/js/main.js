@@ -75,11 +75,20 @@ function renderProfileMenu() {
 }
 
 function logout() {
+  localStorage.removeItem("token");
   localStorage.removeItem("isLoggedIn");
   localStorage.removeItem("username");
+
+  const statusEl = document.getElementById("userStatus");
+  if (statusEl) statusEl.textContent = "ยังไม่ได้เข้าสู่ระบบ";
+
+  const btnPremium = document.getElementById("btnPremium");
+  if (btnPremium) btnPremium.style.display = "inline-block"; // ให้กลับมาแสดง
+
   renderProfileMenu();
   alert("ออกจากระบบแล้ว");
 }
+
 
 if (content) renderProfileMenu();
 
@@ -148,10 +157,10 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("สร้างนิยายสำเร็จ!");
             if (type === "short") {
               // นิยายสั้น → ไปหน้า write.html
-              window.location.href = "/novel";
+              window.location.href = "/write/" + data.data.id;
             } else if (type === "long") {
               // นิยายยาว → ไปหน้า write_chapter.html พร้อม id ของนิยาย
-              window.location.href = "/novel/" + data.data.id;
+              window.location.href = "/write_chapter/" + data.data.id;
             } else {
               window.location.href = "/";
             }
@@ -235,4 +244,53 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
   }
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const statusEl = document.getElementById("userStatus");
+  const btnPremium = document.getElementById("btnPremium");
+  const token = localStorage.getItem("token");
+
+  if (!statusEl) return;
+
+  // กรณีไม่มี token
+  if (!token) {
+    console.log("No token → should show 'ยังไม่ได้เข้าสู่ระบบ'");
+    statusEl.textContent = "ยังไม่ได้เข้าสู่ระบบ";
+    if (btnPremium) {
+      btnPremium.addEventListener("click", () => {
+        alert("กรุณาเข้าสู่ระบบก่อน");
+        window.location.href = "/login";
+      });
+    }
+    return;
+  }
+
+  // มี token → ดึงโปรไฟล์
+  fetch("/auth/me", {
+    headers: { Authorization: "Bearer " + token },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.error || !data.user) {
+        statusEl.textContent = "ยังไม่ได้เข้าสู่ระบบ";
+        return;
+      }
+
+      if (data.user.is_premium === 1) {
+        statusEl.textContent = "สมาชิกพรีเมี่ยม";
+        if (btnPremium) btnPremium.style.display = "none"; // ซ่อนปุ่ม
+      } else {
+        statusEl.textContent = "สมาชิกฟรี";
+        if (btnPremium) {
+          btnPremium.addEventListener("click", () => {
+            window.location.href = "/premium";
+          });
+        }
+      }
+    })
+    .catch(() => {
+      statusEl.textContent = "เกิดข้อผิดพลาด";
+    });
 });

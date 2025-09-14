@@ -1,119 +1,153 @@
-/* --- dummy store in localStorage --- */
-const KEY = "novel-editor-demo";
-const state = JSON.parse(localStorage.getItem(KEY) || `{
-"novelName":"ตัวอย่างเรื่อง",
-"chapters":[
-{"id":"c1","name":"ตอนที่ 1","content":"<p>พิมพ์เนื้อหาตอนที่ 1</p>"},
-{"id":"c2","name":"ตอนที่ 2","content":""},
-{"id":"c3","name":"ตอนที่ 3","content":""}
-],
-"active":"c1"
-}`);
+document.addEventListener("DOMContentLoaded", () => {
+  const btnPublish = document.getElementById("btnPublish");
+  const btnDraft = document.getElementById("btnDraft");
+  const btnAdd = document.getElementById("addChapter");
+  const chapterList = document.getElementById("chapterList");
 
-const title = document.getElementById("novelName");
+  const inputTitle = document.getElementById("chapterTitle");
+  const inputContent = document.getElementById("editor");
 
-// โหลดค่าที่บันทึกไว้
-title.textContent = localStorage.getItem("novelName") || title.textContent;
+  const state = {
+    chapters: [],
+    active: null
+  };
 
-// บันทึกเมื่อแก้ไข
-title.addEventListener("input", () => {
-  localStorage.setItem("novelName", title.textContent);
-});
-
-const els = {
-  list: document.getElementById('chapterList'),
-  title: document.getElementById('chapterTitle'),
-  editor: document.getElementById('editor'),
-  novelName: document.getElementById('novelName'),
-  add: document.getElementById('addChapter'),
-  btnDraft: document.getElementById('btnDraft'),
-  btnPublish: document.getElementById('btnPublish')
-};
-
-function saveLocal() {
-  localStorage.setItem(KEY, JSON.stringify(state));
-}
-
-function renderList() {
-  els.list.innerHTML = "";
-  state.chapters.forEach((ch, idx) => {
-    const row = document.createElement('div');
-    row.className = 'chapter' + (ch.id === state.active ? ' active' : '');
-    row.onclick = () => activate(ch.id);
-    row.innerHTML = `
-  <div class="ch-num">#${idx + 1}</div>
-  <div class="ch-name" title="${ch.name}">${ch.name || "ตอนนี้ยังไม่ได้ตั้งชื่อ"}</div>
-  <div class="tools">
-    <button class="ghost" title="เปลี่ยนชื่อ" onclick="event.stopPropagation(); renameChapter('${ch.id}')">✎</button>
-    <button class="ghost" title="ลบ" onclick="event.stopPropagation(); deleteChapter('${ch.id}')">🗑</button>
-  </div>`;
-    els.list.appendChild(row);
+  // ===== Toolbar =====
+  document.querySelectorAll(".tbtn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const cmd = btn.dataset.cmd;
+      if (cmd) {
+        document.execCommand(cmd, false, null);
+      }
+      if (btn.id === "btnH1") {
+        document.execCommand("formatBlock", false, "H1");
+      }
+      if (btn.id === "btnQuote") {
+        document.execCommand("formatBlock", false, "BLOCKQUOTE");
+      }
+      inputContent.focus();
+    });
   });
-}
 
-function activate(id) {
-  const ch = state.chapters.find(c => c.id === id);
-  state.active = id;
-  els.title.value = ch.name || "";
-  els.editor.innerHTML = ch.content || "";
-  renderList();
-  saveLocal();
-}
+  // ===== renderList =====
+  function renderList() {
+    chapterList.innerHTML = "";
+    state.chapters.forEach((ch) => {
+      const row = document.createElement("div");
+      row.className =
+        "chapter-row p-2 border-b cursor-pointer hover:bg-gray-100 flex justify-between items-center" +
+        (state.active === ch.id ? " bg-gray-200" : "");
 
-function renameChapter(id) {
-  const ch = state.chapters.find(c => c.id === id);
-  const name = prompt("ตั้งชื่อตอน", ch.name || "");
-  if (name !== null) { ch.name = name.trim(); saveLocal(); renderList(); if (id === state.active) els.title.value = ch.name; }
-}
+      const titleSpan = document.createElement("span");
+      titleSpan.textContent = ch.title || "ตอนใหม่";
+      if (!ch.title) {
+        titleSpan.classList.add("text-gray-400");
+      }
 
-function deleteChapter(id) {
-  if (!confirm("ลบตอนนี้?")) return;
-  const i = state.chapters.findIndex(c => c.id === id);
-  if (i > -1) { state.chapters.splice(i, 1); if (state.active === id && state.chapters[0]) state.active = state.chapters[0].id; saveLocal(); renderList(); activate(state.active); }
-}
+      const rightBox = document.createElement("div");
+      rightBox.className = "flex items-center gap-2";
 
-els.add.onclick = () => {
-  const nid = 'c' + Math.random().toString(36).slice(2, 7);
-  state.chapters.push({ id: nid, name: "ตอนใหม่", content: "" });
-  saveLocal(); renderList(); activate(nid);
-};
+      if (ch.isPremium) {
+        const badge = document.createElement("span");
+        badge.textContent = "PREMIUM";
+        badge.className =
+          "text-xs bg-yellow-400 text-white px-2 py-0.5 rounded";
+        rightBox.appendChild(badge);
+      }
 
-els.title.addEventListener('input', () => {
-  const ch = state.chapters.find(c => c.id === state.active);
-  ch.name = els.title.value;
-  renderList(); saveLocal();
-});
+      const check = document.createElement("input");
+      check.type = "checkbox";
+      check.checked = !!ch.isPremium;
+      check.className = "form-checkbox h-4 w-4 text-yellow-500 cursor-pointer";
 
-function autoSave() {
-  const ch = state.chapters.find(c => c.id === state.active);
-  ch.content = els.editor.innerHTML;
-  saveLocal();
-}
-setInterval(autoSave, 3000);
+      check.addEventListener("change", (e) => {
+        ch.isPremium = e.target.checked;
+        renderList();
+      });
 
-document.querySelectorAll('[data-cmd]').forEach(b => {
-  b.onclick = () => document.execCommand(b.dataset.cmd, false, null);
-});
-document.getElementById('btnH1').onclick = () => document.execCommand('formatBlock', false, 'h2');
-document.getElementById('btnQuote').onclick = () => document.execCommand('formatBlock', false, 'blockquote');
+      rightBox.appendChild(check);
 
-els.btnDraft.onclick = () => { autoSave(); alert('บันทึกแบบร่างแล้ว (localStorage)'); };
-els.btnPublish.onclick = () => { autoSave(); alert('เผยแพร่เดโม: ส่งข้อมูลไป backend จริงในโปรเจกต์ของคุณ'); };
+      row.appendChild(titleSpan);
+      row.appendChild(rightBox);
+      row.addEventListener("click", () => activate(ch.id));
+      chapterList.appendChild(row);
+    });
+  }
 
-window.addEventListener('load', () => {
-  els.novelName.textContent = state.novelName;
-  renderList();
-  activate(state.active || state.chapters[0].id);
-});
-const novelName = document.getElementById("novelName");
+  // --- activate ตอน ---
+  function activate(id) {
+    const ch = state.chapters.find((c) => c.id === id);
+    if (!ch) return;
+    state.active = id;
+    inputTitle.value = ch.title || "";
+    inputContent.value = ch.content || "";
+  }
 
-// โหลดค่าที่เคยบันทึก
-const savedTitle = localStorage.getItem("novelName");
-if (savedTitle) {
-  novelName.textContent = savedTitle;
-}
+  // --- save draft ---
+  function saveActive() {
+    const ch = state.chapters.find((c) => c.id === state.active);
+    if (ch) {
+      ch.title = inputTitle.value.trim();
+      ch.content = inputContent.value.trim();
+      renderList();
+    }
+  }
 
-// เวลาแก้ไข h1 → บันทึกลง localStorage
-novelName.addEventListener("input", () => {
-  localStorage.setItem("novelName", novelName.textContent.trim());
+  inputTitle.addEventListener("input", saveActive);
+  inputContent.addEventListener("input", saveActive);
+
+  // --- add chapter ---
+  if (btnAdd) {
+    btnAdd.addEventListener("click", () => {
+      const id = "tmp-" + Date.now();
+      state.chapters.push({ id, title: "", content: "", isPremium: 0 });
+      activate(id);
+      renderList();
+    });
+  }
+
+  // --- publish chapter ---
+  if (btnPublish) {
+    btnPublish.addEventListener("click", async () => {
+      const novelId = window.location.pathname.split("/").pop();
+      const token = localStorage.getItem("token");
+      const ch = state.chapters.find((c) => c.id === state.active);
+
+      if (!token) {
+        alert("กรุณาเข้าสู่ระบบก่อน");
+        window.location.href = "/login";
+        return;
+      }
+      if (!ch || !ch.title || !ch.content) {
+        alert("กรุณากรอกข้อมูลให้ครบ");
+        return;
+      }
+
+      try {
+        const res = await fetch(`/api/novels/${novelId}/chapters`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+          },
+          body: JSON.stringify({
+            title: ch.title,
+            content: ch.content,
+            is_premium: ch.isPremium ? 1 : 0
+          })
+        });
+
+        const data = await res.json();
+        if (data.error) {
+          alert("ผิดพลาด: " + data.error);
+        } else {
+          ch.id = data.id;
+          renderList();
+          alert("เผยแพร่ตอนสำเร็จ 🎉");
+        }
+      } catch (err) {
+        alert("เกิดข้อผิดพลาดในการเชื่อมต่อ");
+      }
+    });
+  }
 });

@@ -1,0 +1,62 @@
+<%- include('includes/head') %>
+</head>
+<body class="bg-gray-100">
+  <%- include('includes/nav') %>
+
+  <main class="max-w-3xl mx-auto py-12">
+    <div class="bg-white p-8 rounded-xl shadow text-center">
+      <h1 class="text-2xl font-bold mb-6">สมัครสมาชิก Premium</h1>
+      <p class="mb-4">สแกน QR Code เพื่อชำระเงิน 99 บาท</p>
+
+      <div id="qrBox" class="my-6">
+        <!-- รูป QR จะถูกเติมด้วย JS -->
+      </div>
+
+      <button id="checkStatus" 
+        class="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700">
+        ตรวจสอบสถานะ
+      </button>
+
+      <div id="statusMsg" class="mt-4 text-sm text-gray-600"></div>
+    </div>
+  </main>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("กรุณาเข้าสู่ระบบก่อน");
+        window.location.href = "/login";
+        return;
+      }
+
+      // เริ่มสร้าง QR
+      const res = await fetch("/payment/start", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token }
+      });
+      const data = await res.json();
+      if (data.qrImage) {
+        document.getElementById("qrBox").innerHTML = `
+          <img src="${data.qrImage}" class="mx-auto w-64 h-64 border rounded-lg">
+        `;
+      }
+
+      // ตรวจสอบสถานะ
+      document.getElementById("checkStatus").addEventListener("click", async () => {
+        const meRes = await fetch("/auth/me", {
+          headers: { "Authorization": "Bearer " + token }
+        });
+        const meData = await meRes.json();
+        if (meData.user?.is_premium === 1) {
+          document.getElementById("statusMsg").innerHTML =
+            `<span class="text-green-600 font-semibold">คุณเป็น Premium แล้ว 🎉</span>`;
+        } else {
+          document.getElementById("statusMsg").innerHTML =
+            `<span class="text-red-500">ยังไม่เป็น Premium</span>`;
+        }
+      });
+    });
+  </script>
+</body>
+</html>

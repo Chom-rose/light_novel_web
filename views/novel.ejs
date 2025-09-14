@@ -1,81 +1,52 @@
-<%- include('includes/heade') %>
-  </head>
+<%- include('includes/head') %>
+</head>
+<body>
+  <%- include('includes/nav') %>
 
-  <body class="bg-gray-50">
-    <%- include('includes/nav') %>
+  <main class="max-w-4xl mx-auto p-6">
+    <!-- ข้อมูลนิยาย -->
+    <div class="flex gap-6 mb-8">
+      <img src="<%= novel.image %>" alt="<%= novel.name %>"
+           class="w-40 h-56 object-cover rounded shadow">
+      <div>
+        <h1 class="text-3xl font-bold"><%= novel.name %></h1>
+        <p class="text-gray-600">ผู้เขียน: <%= novel.author %></p>
+        <p class="mt-2 text-gray-800"><%= novel.content %></p>
+        <p class="mt-2 text-sm text-gray-500">หมวดหมู่: <%= novel.category %></p>
+      </div>
+    </div>
 
-      <main class="max-w-6xl mx-auto px-4 py-8">
-        <section class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow mb-6">
-          <div class="flex gap-4">
-            <img src="https://picsum.photos/200/300" alt="cover" class="w-40 rounded-lg">
-            <div>
-              <h1 class="text-2xl font-bold mb-2">แม่เลี้ยง</h1>
-              <p class="text-gray-600 mb-4">จากสาวคนหนึ่งของครอบครัวสู่การเป็นภรรยาของเศรษฐี
-                และกลายเป็นแม่เลี้ยงให้กับลูกๆ ของเขาด้วย</p>
-              <p class="text-sm text-gray-500">ผู้เขียน: ม่านหลังจันทร์</p>
-              <p class="text-sm text-gray-500">หมวดหมู่: จีนย้อนยุค</p>
-            </div>
-          </div>
-        </section>
-
-        <!-- สารบัญ -->
-        <section class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow mb-6">
-          <h2 class="text-xl font-bold mb-4">สารบัญ</h2>
-          <ul id="chapterList" class="space-y-2">
-            <!-- จะใส่ด้วย JS -->
-          </ul>
-        </section>
-
-        <!-- เนื้อหาตอน -->
-        <section class="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow">
-          <h2 id="chapterTitle" class="text-lg font-bold mb-4 text-center">เลือกตอนเพื่ออ่าน</h2>
-          <div id="chapterContent" class="prose max-w-none text-gray-800 leading-relaxed">
-            <!-- แสดงเนื้อหาตอน -->
-          </div>
-        </section>
-      </main>
-      <%- include('includes/footer') %>
-        <!-- Swiper JS -->
-        <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-        <script src="/js/main.js"></script>
-        <script>
-          // mock ข้อมูลนิยาย
-          const chapters = [
-            { id: 1, title: "ตอนที่ 1: สมบัติที่จับได้ด้วยมือ", content: "เนื้อหาตอนที่ 1 ...." },
-            { id: 2, title: "ตอนที่ 2", content: "เนื้อหาตอนที่ 2 ...." },
-            { id: 3, title: "ตอนที่ 3", content: "เนื้อหาตอนที่ 3 ...." }
-          ];
-
-          const listEl = document.getElementById("chapterList");
-          const titleEl = document.getElementById("chapterTitle");
-          const contentEl = document.getElementById("chapterContent");
-
-          function renderChapters() {
-            if (chapters.length === 0) {
-              listEl.innerHTML = `<p class="text-gray-500">ยังไม่มีตอน</p>`;
-              return;
-            }
-            chapters.forEach(ch => {
-              const li = document.createElement("li");
-              li.innerHTML = `
-        <button onclick="openChapter(${ch.id})" 
-          class="w-full text-left px-3 py-2 border rounded hover:bg-gray-100">
-          ${ch.title}
-        </button>`;
-              listEl.appendChild(li);
-            });
-          }
-
-          function openChapter(id) {
-            const chapter = chapters.find(c => c.id === id);
-            if (!chapter) return;
-            titleEl.textContent = chapter.title;
-            contentEl.innerHTML = `<p>${chapter.content}</p>`;
-          }
-
-          renderChapters();
-        </script>
-
-  </body>
-
-  </html>
+    <!-- สารบัญ -->
+    <h2 class="text-xl font-bold mb-4">สารบัญ</h2>
+    <ul class="space-y-2">
+      <% novel.chapters.forEach(ch => { %>
+        <li class="border-b pb-2">
+          <% if (ch.is_premium === 1) { %>
+            <% if (!user) { %>
+              <!-- ยังไม่ล็อกอิน -->
+              <span class="text-gray-400"><%= ch.title %> 🔒 (ล็อกอินเพื่ออ่าน)</span>
+            <% } else if (user.is_premium === 1 || user.id === novel.user_id) { %>
+              <!-- เป็นพรีเมียม หรือ เจ้าของเรื่อง -->
+              <a href="/light-novel/api/novels/<%= novel.id %>/chapters/<%= ch.id %>"
+                 class="text-blue-600 hover:underline">
+                <%= ch.title %> 🔒
+              </a>
+            <% } else { %>
+              <!-- เป็นสมาชิกฟรี -->
+              <span class="text-gray-400"><%= ch.title %> 🔒 (สำหรับพรีเมียมเท่านั้น)</span>
+              <a href="/premium"
+                 class="ml-2 text-sm text-indigo-600 hover:underline">อัปเกรดเป็นพรีเมียม</a>
+            <% } %>
+          <% } else { %>
+            <!-- ตอนฟรี -->
+            <a href="/light-novel/api/novels/<%= novel.id %>/chapters/<%= ch.id %>"
+               class="text-blue-600 hover:underline">
+              <%= ch.title %>
+            </a>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  </main>
+</body>
+</html>

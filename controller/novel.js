@@ -86,19 +86,19 @@ exports.createNovel = (req, res) => {
 
 exports.updateNovel = (req, res) => {
   const { id } = req.params;
-  const { name, category, description, coverImage } = req.body;
+  // เพิ่ม content เข้ามาด้วย
+  const { name, category, description, coverImage, content } = req.body;
 
-  // 1) ดึง novel มาเพื่อตรวจว่าใครเป็นเจ้าของ
   db.get("SELECT * FROM novels WHERE id = ?", [id], (err, novel) => {
     if (err) return res.status(500).json({ error: err.message });
     if (!novel) return res.status(404).json({ error: "Not found" });
 
-    // 2) ตรวจสิทธิ์ → ต้องเป็นเจ้าของเท่านั้น
+    // ตรวจสิทธิ์ → ต้องเป็นเจ้าของ
     if (novel.user_id !== req.user.uid) {
       return res.status(403).json({ error: "Forbidden: แก้ไขได้เฉพาะเจ้าของ" });
     }
 
-    // 3) ถ้าใช่เจ้าของ → อัปเดตได้
+    // อัปเดต content ด้วย (ใช้ content ก่อน ถ้าไม่มีใช้ description)
     const sql = `UPDATE novels
                    SET name = COALESCE(?, name),
                        content = COALESCE(?, content),
@@ -106,12 +106,13 @@ exports.updateNovel = (req, res) => {
                        category = COALESCE(?, category)
                    WHERE id = ?`;
 
-    db.run(sql, [name, description, coverImage, category, id], function (err2) {
+    db.run(sql, [name, content || description, coverImage, category, id], function (err2) {
       if (err2) return res.status(500).json({ error: err2.message });
       res.json({ message: "อัปเดตนิยายสำเร็จ" });
     });
   });
 };
+
 
 exports.deleteNovel = (req, res) => {
   const { id } = req.params;
