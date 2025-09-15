@@ -10,7 +10,7 @@ const crypto = require("crypto");
 // ======================
 exports.startPayment = async (req, res) => {
     try {
-        const userId = req.user.uid; // จาก token
+        const userId = req.user.id; // จาก token
         const amount = 9900; // 99 บาท (หน่วยสตางค์)
 
         const charge = await omise.charges.create({

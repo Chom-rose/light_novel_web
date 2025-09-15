@@ -121,18 +121,25 @@ exports.renderChapter = (req, res) => {
       if (!chapter) return res.status(404).send("ไม่พบตอนนี้");
 
       const user = req.user || null;
-      let canRead = true; // ตั้งค่าเริ่มต้นให้เป็น true
-      
-      // ✅ เพิ่มการตรวจสอบสิทธิ์สำหรับตอนพรีเมี่ยม
+      let canRead = true;
+
       if (Number(chapter.is_premium) === 1) {
         if (!user || (Number(user.is_premium) !== 1 && Number(user.id) !== Number(chapter.novel_owner))) {
           canRead = false;
         }
       }
 
-      // ✅ ส่งตัวแปร canRead ไปที่เทมเพลต
+      // 🟢 debug
+      console.log("=== renderChapter DEBUG ===");
+      console.log("user =", user);
+      console.log("chapter =", {
+        id: chapter.id,
+        is_premium: chapter.is_premium,
+        owner: chapter.novel_owner,
+      });
+      console.log("canRead =", canRead);
+
       res.render("chapter_read", { chapter, user, canRead });
     }
   );
 };
-

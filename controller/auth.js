@@ -23,10 +23,10 @@ exports.login = (req, res) => {
         .status(401)
         .json({ error: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
 
-    // ✅ เพิ่ม is_admin และ is_premium ใน payload เฉพาะตอนออก token
+    // ✅ ใช้ id ตรงกับ DB
     const token = jwt.sign(
       {
-        uid: user.id,
+        id: user.id,
         username: user.username,
         is_admin: user.is_admin,
         is_premium: user.is_premium,
@@ -35,6 +35,15 @@ exports.login = (req, res) => {
       { expiresIn: "7d" }
     );
 
+    // ✅ set cookie ด้วย
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 วัน
+      sameSite: "lax",
+      secure: false, // ถ้าใช้ https ให้เปลี่ยนเป็น true
+    });
+
+    // ✅ ยังคงส่ง JSON กลับเหมือนเดิม (ไม่พังของเก่า)
     return res.json({
       message: "ล็อกอินสำเร็จ",
       token,
@@ -44,7 +53,7 @@ exports.login = (req, res) => {
         email: user.email,
         birthdate: user.birthdate || null,
         is_admin: user.is_admin,
-        is_premium: user.is_premium, // ✅ ส่งสถานะพรีเมียมกลับไป
+        is_premium: user.is_premium,
       },
     });
   });
@@ -52,13 +61,24 @@ exports.login = (req, res) => {
 
 // ====================== AUTH MIDDLEWARE ======================
 exports.authRequired = (req, res, next) => {
+  let token = null;
+
+  // 1) ลองอ่านจาก Authorization header
   const h = req.headers.authorization || "";
-  const token = h.startsWith("Bearer ") ? h.slice(7) : null;
-  if (!token) return res.status(401).json({ error: "Missing Bearer token" });
+  if (h.startsWith("Bearer ")) {
+    token = h.slice(7);
+  }
+
+  // 2) ถ้า header ไม่มี ลองอ่านจาก cookie
+  if (!token && req.cookies && req.cookies.token) {
+    token = req.cookies.token;
+  }
+
+  if (!token) return res.status(401).json({ error: "Missing token" });
 
   try {
     const payload = jwt.verify(token, JWT_SECRET);
-    req.user = payload; // { uid, username, is_admin, is_premium, iat, exp }
+    req.user = payload; // { id, username, is_admin, is_premium, iat, exp }
     next();
   } catch (e) {
     return res.status(401).json({ error: "Invalid/expired token" });
@@ -70,7 +90,7 @@ exports.authRequired = (req, res, next) => {
 exports.me = (req, res) => {
   db.get(
     "SELECT id, username, email, birthdate, is_admin, is_premium FROM users WHERE id = ?",
-    [req.user.uid],
+    [req.user.id],
     (err, row) => {
       if (err) return res.status(500).json({ error: err.message });
       if (!row) return res.status(404).json({ error: "ไม่พบผู้ใช้" });

@@ -45,7 +45,7 @@ exports.createNovel = (req, res) => {
     coverImage || "https://picsum.photos/400/600?grayscale", // image
     category,       // category
     req.body.type,  // type (short/long จากฟอร์ม)
-    req.user.uid    // user_id
+    req.user.id    // user_id
   ];
 
   db.run(sql, params, function (err) {
@@ -78,7 +78,7 @@ exports.createNovel = (req, res) => {
         description,
         coverImage,
         type: req.body.type,
-        user_id: req.user.uid,
+        user_id: req.user.id,
       },
     });
   });
@@ -94,7 +94,7 @@ exports.updateNovel = (req, res) => {
     if (!novel) return res.status(404).json({ error: "Not found" });
 
     // ตรวจสิทธิ์ → ต้องเป็นเจ้าของ
-    if (novel.user_id !== req.user.uid) {
+    if (novel.user_id !== req.user.id) {
       return res.status(403).json({ error: "Forbidden: แก้ไขได้เฉพาะเจ้าของ" });
     }
 
@@ -125,11 +125,11 @@ exports.deleteNovel = (req, res) => {
     // ดึง user เพื่อตรวจ is_admin
     db.get(
       "SELECT is_admin FROM users WHERE id = ?",
-      [req.user.uid],
+      [req.user.id],
       (err2, user) => {
         if (err2) return res.status(500).json({ error: err2.message });
 
-        const isOwner = novel.user_id === req.user.uid;
+        const isOwner = novel.user_id === req.user.id;
         const isAdmin = user?.is_admin === 1;
 
         if (!isOwner && !isAdmin) {

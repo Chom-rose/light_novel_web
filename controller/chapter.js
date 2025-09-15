@@ -25,7 +25,6 @@ exports.getchapter = (req, res) => {
   );
 };
 
-
 // ====================== CREATE ======================
 exports.addchapter = (req, res) => {
   const { id } = req.params;
@@ -41,7 +40,7 @@ exports.addchapter = (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     if (!novel) return res.status(404).json({ error: "Novel not found" });
 
-    if (novel.user_id !== req.user.uid) {
+    if (novel.user_id !== req.user.id) {
       return res.status(403).json({ error: "Forbidden: เพิ่มตอนเฉพาะเจ้าของ" });
     }
 
@@ -76,7 +75,7 @@ exports.updatechapter = (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     if (!novel) return res.status(404).json({ error: "Novel not found" });
 
-    if (novel.user_id !== req.user.uid) {
+    if (novel.user_id !== req.user.id) {
       return res.status(403).json({ error: "Forbidden: อัปเดตได้เฉพาะเจ้าของ" });
     }
 
@@ -114,7 +113,7 @@ exports.deletechapter = (req, res) => {
     if (err) return res.status(500).json({ error: err.message });
     if (!novel) return res.status(404).json({ error: "Novel not found" });
 
-    if (novel.user_id !== req.user.uid) {
+    if (novel.user_id !== req.user.id) {
       return res.status(403).json({ error: "Forbidden: ลบได้เฉพาะเจ้าของ" });
     }
 
@@ -139,7 +138,7 @@ exports.deletechapter = (req, res) => {
   });
 };
 
-
+// ====================== READ (Render Page) ======================
 exports.readChapter = (req, res) => {
   const { id, chapterId } = req.params;
 
@@ -150,27 +149,18 @@ exports.readChapter = (req, res) => {
       if (err) return res.status(500).send("DB error");
       if (!chapter) return res.status(404).send("ไม่พบตอนนี้");
 
-      let user = null;
+      const user = req.user || null;
       let canRead = true;
-      if (req.user) {
-        user = {
-          id: req.user.uid,
-          username: req.user.username,
-          is_admin: req.user.is_admin,
-          is_premium: req.user.is_premium,
-        };
-      }
-      // ถ้าเป็นตอนพรีเมียม → เช็กสิทธิ์
-      const authHeader = req.headers["authorization"];
 
-      if (authHeader && authHeader.startsWith("Bearer ")) {
-        try {
-          const token = authHeader.split(" ")[1];
-          user = jwt.verify(token, SECRET);
-        } catch (e) {
-          user = null;
-        }
-      }
+      // 🟢 เพิ่ม log ตรงนี้
+      console.log("==== DEBUG readChapter ====");
+      console.log("req.user =", user);
+      console.log("chapter =", {
+        id: chapter.id,
+        title: chapter.title,
+        is_premium: chapter.is_premium,
+        owner_id: chapter.owner_id,
+      });
 
       if (Number(chapter.is_premium) === 1) {
         if (!user) {
@@ -184,9 +174,9 @@ exports.readChapter = (req, res) => {
         }
       }
 
-      console.log("readChapter user =", user, "canRead =", canRead);
+      console.log("canRead =", canRead);
 
-      res.render("chapter_read", { chapter, user, canRead, novelId: id, chapterId } );
+      res.render("chapter_read", { chapter, user, canRead, novelId: id, chapterId });
     }
   );
 };
