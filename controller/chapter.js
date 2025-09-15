@@ -150,16 +150,34 @@ exports.readChapter = (req, res) => {
       if (err) return res.status(500).send("DB error");
       if (!chapter) return res.status(404).send("ไม่พบตอนนี้");
 
-      const user = req.user || null;
-
+      let user = null;
       let canRead = true;
+      if (req.user) {
+        user = {
+          id: req.user.uid,
+          username: req.user.username,
+          is_admin: req.user.is_admin,
+          is_premium: req.user.is_premium,
+        };
+      }
+      // ถ้าเป็นตอนพรีเมียม → เช็กสิทธิ์
+      const authHeader = req.headers["authorization"];
+
+      if (authHeader && authHeader.startsWith("Bearer ")) {
+        try {
+          const token = authHeader.split(" ")[1];
+          user = jwt.verify(token, SECRET);
+        } catch (e) {
+          user = null;
+        }
+      }
+
       if (Number(chapter.is_premium) === 1) {
         if (!user) {
           canRead = false;
         } else {
           const isPremiumUser = Number(user.is_premium) === 1;
           const isOwner = Number(user.id) === Number(chapter.owner_id);
-
           if (!isPremiumUser && !isOwner) {
             canRead = false;
           }
@@ -168,7 +186,7 @@ exports.readChapter = (req, res) => {
 
       console.log("readChapter user =", user, "canRead =", canRead);
 
-      res.render("chapter_read", { chapter, user, canRead });
+      res.render("chapter_read", { chapter, user, canRead, novelId: id, chapterId } );
     }
   );
 };

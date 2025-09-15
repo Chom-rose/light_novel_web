@@ -3,29 +3,49 @@
 <body>
   <%- include('includes/nav') %>
 
-  <main class="max-w-3xl mx-auto p-6">
-    <h1 class="text-2xl font-bold mb-4"><%= chapter.title %></h1>
-
-    <% if (Number(chapter.is_premium) === 1 && !canRead) { %>
-      <% if (!user) { %>
-        <p class="text-gray-500">🔒 กรุณาเข้าสู่ระบบเพื่ออ่านตอนนี้</p>
-        <a href="/login" class="text-indigo-600 hover:underline">เข้าสู่ระบบ</a>
-      <% } else { %>
-        <p class="text-gray-500">🔒 ตอนนี้สำหรับสมาชิกพรีเมียมเท่านั้น</p>
-        <a href="/premium" class="text-indigo-600 hover:underline">อัปเกรดเป็นพรีเมียม</a>
-      <% } %>
-    <% } else { %>
-      <article class="prose max-w-none">
-        <%- chapter.content %>
-      </article>
-    <% } %>
-
-    <div class="mt-6">
-      <a href="/novel/<%= chapter.novel_id %>" 
-         class="text-indigo-600 hover:underline">← ย้อนกลับ</a>
-    </div>
+  <main id="chapterBox" class="max-w-3xl mx-auto p-6">
+    <p class="text-gray-500">กำลังโหลดตอน...</p>
   </main>
 
+  <div class="max-w-3xl mx-auto p-6">
+    <a href="/novel/<%= novelId %>" class="text-indigo-600 hover:underline">← ย้อนกลับ</a>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", async () => {
+      const token = localStorage.getItem("token");
+      const novelId = "<%= novelId %>";
+      const chapterId = "<%= chapterId %>";
+
+      const box = document.getElementById("chapterBox");
+
+      try {
+        const res = await fetch(`/chapter/api/novels/${novelId}/chapters/${chapterId}`, {
+          headers: token ? { "Authorization": "Bearer " + token } : {}
+        });
+        const data = await res.json();
+
+        if (!res.ok || data.error) {
+          box.innerHTML = `<p class="text-red-500">${data.error || "โหลดไม่สำเร็จ"}</p>`;
+          return;
+        }
+
+        if (Number(data.chapter.is_premium) === 1 && !data.canRead) {
+          if (!data.user) {
+            box.innerHTML = `<p class="text-gray-500">🔒 กรุณาเข้าสู่ระบบเพื่ออ่านตอนนี้</p>
+                             <a href="/login" class="text-indigo-600 hover:underline">เข้าสู่ระบบ</a>`;
+          } else {
+            box.innerHTML = `<p class="text-gray-500">🔒 ตอนนี้สำหรับสมาชิกพรีเมียมเท่านั้น</p>
+                             <a href="/premium" class="text-indigo-600 hover:underline">อัปเกรดเป็นพรีเมียม</a>`;
+          }
+        } else {
+          box.innerHTML = `<article class="prose max-w-none">${data.chapter.content}</article>`;
+        }
+      } catch (err) {
+        box.innerHTML = `<p class="text-red-500">เกิดข้อผิดพลาดในการโหลด</p>`;
+      }
+    });
+  </script>
   <script src="/js/main.js"></script>
 </body>
 </html>
