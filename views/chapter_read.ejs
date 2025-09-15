@@ -20,6 +20,22 @@
       </article>
     <% } %>
 
+<!-- ตอนก่อนหน้า/ถัดไป -->
+        <div class="mt-8 flex items-center justify-between gap-2">
+          <% if (prevChapter) { %>
+            <a class="px-4 py-2 border rounded-lg hover:bg-gray-50"
+               href="/novel/<%= chapter.novel_id %>/chapter/<%= prevChapter.id %>"
+               title="ก่อนหน้า: <%= prevChapter.title %>">← ก่อนหน้า</a>
+          <% } else { %><span></span><% } %>
+
+          <% if (nextChapter) { %>
+            <a class="px-4 py-2 border rounded-lg hover:bg-gray-50"
+               href="/novel/<%= chapter.novel_id %>/chapter/<%= nextChapter.id %>"
+               title="ถัดไป: <%= nextChapter.title %>">ถัดไป →</a>
+          <% } %>
+        </div>
+      <% } %>
+
     <div class="mt-6">
       <a href="/novel/<%= chapter.novel_id %>" 
          class="text-indigo-600 hover:underline">← ย้อนกลับ</a>
