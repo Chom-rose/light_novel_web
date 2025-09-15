@@ -43,7 +43,7 @@ exports.renderNovelDetail = (req, res) => {
 };
 
 
-// ✅ แยกออกมา ไม่ให้ซ้อนอยู่ข้างใน
+// ✅ โค้ดที่แก้ไข
 exports.renderChapter = (req, res) => {
   const { id, chapterId } = req.params;
   db.get(
@@ -57,9 +57,18 @@ exports.renderChapter = (req, res) => {
       if (!chapter) return res.status(404).send("ไม่พบตอนนี้");
 
       const user = req.user || null;
-      res.render("chapter_read", { chapter, user });
+      let canRead = true; // ตั้งค่าเริ่มต้นให้เป็น true
+      
+      // ✅ เพิ่มการตรวจสอบสิทธิ์สำหรับตอนพรีเมี่ยม
+      if (Number(chapter.is_premium) === 1) {
+        if (!user || (Number(user.is_premium) !== 1 && Number(user.id) !== Number(chapter.novel_owner))) {
+          canRead = false;
+        }
+      }
+
+      // ✅ ส่งตัวแปร canRead ไปที่เทมเพลต
+      res.render("chapter_read", { chapter, user, canRead });
     }
   );
-
 };
 

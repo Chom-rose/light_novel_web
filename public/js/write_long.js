@@ -111,7 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       try {
-        const res = await fetch(`/light-novel/api/novels/${novelId}/chapters`, {
+        const res = await fetch(`/chapter/api/novels/${novelId}/chapters`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -159,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         for (const ch of chaptersToSave) {
-          const res = await fetch(`/light-novel/api/novels/${novelId}/chapters`, {
+          const res = await fetch(`/chapter/api/novels/${novelId}/chapters`, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
