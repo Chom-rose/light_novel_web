@@ -1,9 +1,13 @@
 <header>
-  <div class="topbar">
-    <div class="title">หน้าจัดการเรื่อง</div>
-    <div class="actions">
-      <!-- ปุ่มเผยแพร่ -->
+  <div class="topbar flex justify-between items-center">
+    <div class="flex items-center gap-4">
+      <!-- ปุ่มกลับหน้าหลัก (ซ้าย) -->
+      <a href="/" class="btn secondary">← กลับหน้าหลัก</a>
+      <div class="title">หน้าจัดการเรื่อง</div>
+    </div>
+    <div class="actions flex gap-2">
       <button class="btn primary" id="btnPublish">บันทึกและเผยแพร่</button>
+      <button class="btn success" id="btnPublishAll">บันทึกทั้งหมด</button>
     </div>
   </div>
 </header>

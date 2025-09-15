@@ -11,10 +11,12 @@ if (novelList) {
           const card = document.createElement("article");
           card.className = "bg-white rounded-xl shadow p-2";
           card.innerHTML = `
+          <a href="/novel/${novel.id}" class="block hover:shadow-lg transition rounded-lg overflow-hidden">
             <img src="${novel.image || 'https://picsum.photos/200/300'}" class="rounded-lg w-full">
             <h4 class="font-semibold mt-2">${novel.name}</h4>
             <p class="text-sm text-zinc-500">${novel.author || 'ไม่ระบุผู้แต่ง'}</p>
-          `;
+          </a>
+        `;
           novelList.appendChild(card);
         });
       }
@@ -292,5 +294,11 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch(() => {
       statusEl.textContent = "เกิดข้อผิดพลาด";
+      if (btnPremium) {
+        btnPremium.addEventListener("click", () => {
+          alert("กรุณาเข้าสู่ระบบก่อน");
+          window.location.href = "/login";
+        });
+      }
     });
 });

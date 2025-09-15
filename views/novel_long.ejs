@@ -27,7 +27,7 @@
               <span class="text-gray-400"><%= ch.title %> 🔒 (ล็อกอินเพื่ออ่าน)</span>
             <% } else if (user.is_premium === 1 || user.id === novel.user_id) { %>
               <!-- เป็นพรีเมียม หรือ เจ้าของเรื่อง -->
-              <a href="/light-novel/api/novels/<%= novel.id %>/chapters/<%= ch.id %>"
+              <a href="/novel/<%= novel.id %>/chapter/<%= ch.id %>"
                  class="text-blue-600 hover:underline">
                 <%= ch.title %> 🔒
               </a>
@@ -39,7 +39,7 @@
             <% } %>
           <% } else { %>
             <!-- ตอนฟรี -->
-            <a href="/light-novel/api/novels/<%= novel.id %>/chapters/<%= ch.id %>"
+            <a href="/novel/<%= novel.id %>/chapter/<%= ch.id %>"
                class="text-blue-600 hover:underline">
               <%= ch.title %>
             </a>
@@ -48,5 +48,7 @@
       <% }) %>
     </ul>
   </main>
+  <script src="/js/main.js"></script>
 </body>
+
 </html>

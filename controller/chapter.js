@@ -4,43 +4,27 @@ const db = require("../db/db");
 exports.getchapter = (req, res) => {
   const { id, chapterId } = req.params;
   db.get(
-    "SELECT * FROM chapters WHERE novel_id = ? AND id = ?",
-    [id, chapterId],
+    "SELECT c.*, n.user_id as owner_id FROM chapters c JOIN novels n ON c.novel_id = n.id WHERE c.id = ? AND c.novel_id = ?",
+    [chapterId, id],
     (err, row) => {
       if (err) return res.status(500).json({ error: err.message });
       if (!row) return res.status(404).json({ error: "Chapter not found" });
 
-      // ✅ ถ้าเป็นตอนพรีเมียม ต้องเช็คสิทธิ์
+      // ถ้าเป็นตอน premium
       if (row.is_premium === 1) {
         if (!req.user) {
-          return res.status(401).json({ error: "กรุณาล็อกอินเพื่ออ่านตอนพรีเมียม" });
+          return res.status(403).json({ error: "ตอนนี้เป็นพรีเมียม 🔒 ต้องล็อกอินก่อน" });
         }
-
-        // ดึง novel มาเช็คว่าใครเป็นเจ้าของ
-        db.get("SELECT user_id FROM novels WHERE id = ?", [id], (err2, novel) => {
-          if (err2) return res.status(500).json({ error: err2.message });
-          if (!novel) return res.status(404).json({ error: "Novel not found" });
-
-          // ✅ เจ้าของอ่านได้เสมอ
-          if (novel.user_id === req.user.uid) {
-            return res.json(row);
-          }
-
-          // ✅ ถ้าไม่ใช่เจ้าของ ต้องเป็นพรีเมียม
-          db.get("SELECT is_premium FROM users WHERE id = ?", [req.user.uid], (err3, user) => {
-            if (err3) return res.status(500).json({ error: err3.message });
-            if (!user || user.is_premium !== 1) {
-              return res.status(403).json({ error: "ตอนนี้สำหรับสมาชิกพรีเมียมเท่านั้น" });
-            }
-            return res.json(row);
-          });
-        });
-      } else {
-        return res.json(row); // ตอนฟรี
+        if (req.user.is_premium !== 1 && req.user.id !== row.owner_id) {
+          return res.status(403).json({ error: "ตอนนี้สำหรับสมาชิกพรีเมียมเท่านั้น 🔒" });
+        }
       }
+
+      return res.json(row);
     }
   );
 };
+
 
 // ====================== CREATE ======================
 exports.addchapter = (req, res) => {
@@ -153,4 +137,34 @@ exports.deletechapter = (req, res) => {
       }
     );
   });
+};
+
+
+exports.readChapter = (req, res) => {
+  const { id, chapterId } = req.params;
+
+  db.get(
+    "SELECT c.*, n.user_id as owner_id FROM chapters c JOIN novels n ON c.novel_id = n.id WHERE c.id = ? AND c.novel_id = ?",
+    [chapterId, id],
+    (err, chapter) => {
+      if (err) return res.status(500).send("DB error");
+      if (!chapter) return res.status(404).send("ไม่พบตอนนี้");
+
+      // ถ้าเป็นตอนพรีเมียม
+      if (chapter.is_premium === 1) {
+        // ยังไม่ได้ login
+        if (!req.user) {
+          return res.status(403).send("ตอนนี้เป็นพรีเมียม 🔒 ต้องล็อกอินก่อน");
+        }
+
+        // login แล้วแต่ไม่ใช่ premium และไม่ใช่เจ้าของนิยาย
+        if (req.user.is_premium !== 1 && req.user.id !== chapter.owner_id) {
+          return res.status(403).send("ตอนนี้สำหรับพรีเมียมเท่านั้น 🔒");
+        }
+      }
+
+      // ปกติ → render หน้าอ่านตอน
+      res.render("chapter_read", { chapter, user: req.user || null });
+    }
+  );
 };
