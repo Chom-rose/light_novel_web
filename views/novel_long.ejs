@@ -21,33 +21,29 @@
     <ul class="space-y-2">
       <% novel.chapters.forEach(ch => { %>
         <li class="border-b pb-2">
-          <% if (ch.is_premium === 1) { %>
-            <% if (!user) { %>
-              <!-- ยังไม่ล็อกอิน -->
-              <span class="text-gray-400"><%= ch.title %> 🔒 (ล็อกอินเพื่ออ่าน)</span>
-            <% } else if (user.is_premium === 1 || user.id === novel.user_id) { %>
-              <!-- เป็นพรีเมียม หรือ เจ้าของเรื่อง -->
-              <a href="/novel/<%= novel.id %>/chapter/<%= ch.id %>"
-                 class="text-blue-600 hover:underline">
-                <%= ch.title %> 🔒
-              </a>
-            <% } else { %>
-              <!-- เป็นสมาชิกฟรี -->
-              <span class="text-gray-400"><%= ch.title %> 🔒 (สำหรับพรีเมียมเท่านั้น)</span>
-              <a href="/premium"
-                 class="ml-2 text-sm text-indigo-600 hover:underline">อัปเกรดเป็นพรีเมียม</a>
-            <% } %>
-          <% } else { %>
-            <!-- ตอนฟรี -->
-            <a href="/novel/<%= novel.id %>/chapter/<%= ch.id %>"
-               class="text-blue-600 hover:underline">
-              <%= ch.title %>
-            </a>
-          <% } %>
+          <a href="/novel/<%= novel.id %>/chapter/<%= ch.id %>"
+             class="chapter-link text-blue-600 hover:underline"
+             data-premium="<%= ch.is_premium %>">
+            <%= ch.title %> <%= ch.is_premium === 1 ? "🔒" : "" %>
+          </a>
         </li>
       <% }) %>
     </ul>
   </main>
+
+  <!-- Modal -->
+<div id="premiumModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 shadow-lg max-w-sm text-center">
+    <h2 class="text-lg font-bold mb-2">🔒 ตอนนี้สำหรับสมาชิกพรีเมียม</h2>
+    <p class="text-gray-600 mb-4">กรุณาอัปเกรดบัญชีเพื่ออ่านตอนนี้</p>
+    <div class="flex justify-center gap-4">
+      <a href="/premium" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">อัปเกรด</a>
+      <button id="closeModal" class="px-4 py-2 border rounded">ปิด</button>
+    </div>
+  </div>
+</div>
+
+
   <script src="/js/main.js"></script>
 </body>
 

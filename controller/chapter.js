@@ -150,21 +150,25 @@ exports.readChapter = (req, res) => {
       if (err) return res.status(500).send("DB error");
       if (!chapter) return res.status(404).send("ไม่พบตอนนี้");
 
-      // ถ้าเป็นตอนพรีเมียม
-      if (chapter.is_premium === 1) {
-        // ยังไม่ได้ login
-        if (!req.user) {
-          return res.status(403).send("ตอนนี้เป็นพรีเมียม 🔒 ต้องล็อกอินก่อน");
-        }
+      const user = req.user || null;
 
-        // login แล้วแต่ไม่ใช่ premium และไม่ใช่เจ้าของนิยาย
-        if (req.user.is_premium !== 1 && req.user.id !== chapter.owner_id) {
-          return res.status(403).send("ตอนนี้สำหรับพรีเมียมเท่านั้น 🔒");
+      let canRead = true;
+      if (Number(chapter.is_premium) === 1) {
+        if (!user) {
+          canRead = false;
+        } else {
+          const isPremiumUser = Number(user.is_premium) === 1;
+          const isOwner = Number(user.id) === Number(chapter.owner_id);
+
+          if (!isPremiumUser && !isOwner) {
+            canRead = false;
+          }
         }
       }
 
-      // ปกติ → render หน้าอ่านตอน
-      res.render("chapter_read", { chapter, user: req.user || null });
+      console.log("readChapter user =", user, "canRead =", canRead);
+
+      res.render("chapter_read", { chapter, user, canRead });
     }
   );
 };

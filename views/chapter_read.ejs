@@ -6,23 +6,15 @@
   <main class="max-w-3xl mx-auto p-6">
     <h1 class="text-2xl font-bold mb-4"><%= chapter.title %></h1>
 
-    <% if (chapter.is_premium === 1) { %>
+    <% if (Number(chapter.is_premium) === 1 && !canRead) { %>
       <% if (!user) { %>
-        <!-- ยังไม่ล็อกอิน -->
         <p class="text-gray-500">🔒 กรุณาเข้าสู่ระบบเพื่ออ่านตอนนี้</p>
         <a href="/login" class="text-indigo-600 hover:underline">เข้าสู่ระบบ</a>
-      <% } else if (user.is_premium === 1 || user.id === chapter.user_id) { %>
-        <!-- Premium หรือเจ้าของเรื่อง -->
-        <article class="prose max-w-none">
-          <%- chapter.content %>
-        </article>
       <% } else { %>
-        <!-- เป็นสมาชิกฟรี -->
         <p class="text-gray-500">🔒 ตอนนี้สำหรับสมาชิกพรีเมียมเท่านั้น</p>
         <a href="/premium" class="text-indigo-600 hover:underline">อัปเกรดเป็นพรีเมียม</a>
       <% } %>
     <% } else { %>
-      <!-- ตอนฟรี -->
       <article class="prose max-w-none">
         <%- chapter.content %>
       </article>
