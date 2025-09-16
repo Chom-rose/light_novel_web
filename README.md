@@ -29,3 +29,20 @@ npm install express
 ```bash
 npm install nodemon --save-dev
 ```
+
+
+เทสสมัครพรีเมี่ยม ก็อปโค้ดใส่devtool/console
+const t = localStorage.getItem('token'); // ถ้า login แล้วอาจมี cookie อยู่ ก็ข้าม header ได้
+fetch('/premium/upgrade', {
+  method: 'POST',
+  headers: t ? { Authorization: 'Bearer ' + t } : {}
+})
+  .then(r => r.json())
+  .then(console.log)
+  .catch(console.error);
+
+  เอาพรีเมี่ยมออก
+  const t = localStorage.getItem('token'); 
+fetch('/premium/cancel', { method: 'POST', headers: { Authorization: 'Bearer ' + t }})
+  .then(r => r.json()).then(console.log).catch(console.error);
+
