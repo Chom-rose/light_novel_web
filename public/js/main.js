@@ -77,20 +77,27 @@
   }
 
   function logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("username");
+  fetch("/auth/logout", { method: "POST" })
+    .then(() => {
+      localStorage.removeItem("token");
+      localStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("username");
 
-    const statusEl = document.getElementById("userStatus");
-    if (statusEl) statusEl.textContent = "ยังไม่ได้เข้าสู่ระบบ";
+      const statusEl = document.getElementById("userStatus");
+      if (statusEl) statusEl.textContent = "ยังไม่ได้เข้าสู่ระบบ";
 
-    const btnPremium = document.getElementById("btnPremium");
-    if (btnPremium) btnPremium.style.display = "inline-block"; // ให้กลับมาแสดง
+      const btnPremium = document.getElementById("btnPremium");
+      if (btnPremium) btnPremium.style.display = "inline-block";
 
-    renderProfileMenu();
-    alert("ออกจากระบบแล้ว");
-  }
-
+      renderProfileMenu();
+      alert("ออกจากระบบแล้ว");
+      window.location.href = "/login"; // redirect ไปหน้า login
+    })
+    .catch(err => {
+      console.error("Logout error:", err);
+      alert("เกิดข้อผิดพลาดตอนออกจากระบบ");
+    });
+}
 
   if (content) renderProfileMenu();
 

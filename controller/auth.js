@@ -99,3 +99,8 @@ exports.me = (req, res) => {
     }
   );
 };
+
+exports.logout = (req, res) => {
+  res.clearCookie("token");
+  return res.json({ message: "ออกจากระบบสำเร็จ" });
+}
