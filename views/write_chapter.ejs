@@ -1,0 +1,51 @@
+<%- include('includes/head') %>
+  <link rel="stylesheet" href="/css/write.css">
+  </head>
+
+  <body>
+    <%- include('includes/nav_write') %>
+
+      <div class="wrap">
+        <!-- LEFT -->
+        <aside class="side">
+          <div class="head">เรื่องยาว</div>
+          <div class="tabs">
+            <div class="tab active" id="tabCh">ทั้งหมด</div>
+          </div>
+          <div class="list" id="chapterList"></div>
+          <div class="addrow">
+            <button class="addbtn" id="addChapter">+ เพิ่มตอน</button>
+          </div>
+        </aside>
+
+        <!-- RIGHT -->
+        <section class="main">
+          <h1 class="novel-title">
+            <%= novel ? novel.name : "นิยาย" %>
+          </h1>
+
+          <!-- Title -->
+          <input id="chapterTitle" class="chapter-title w-full border rounded p-2" placeholder="ตั้งชื่อตอน" />
+
+          <!-- Toolbar -->
+          <div class="toolbar">
+            <button type="button" class="tbtn" data-cmd="bold"><b>B</b></button>
+            <button type="button" class="tbtn" data-cmd="italic"><i>I</i></button>
+            <button type="button" class="tbtn" data-cmd="underline"><u>U</u></button>
+            <button type="button" class="tbtn" data-cmd="insertUnorderedList">• List</button>
+            <button type="button" class="tbtn" data-cmd="insertOrderedList">1. List</button>
+            <button type="button" class="tbtn" id="btnH1">หัวเรื่อง</button>
+            <button type="button" class="tbtn" id="btnQuote">อ้างอิง</button>
+          </div>
+
+          <!-- Editor -->
+          <div id="editor" class="editor w-full border rounded p-2 min-h-[300px]" contenteditable="true"
+            placeholder="พิมพ์เนื้อหาตอนที่นี่..."></div>
+
+        </section>
+      </div>
+
+      <script src="/js/write_long.js"></script>
+  </body>
+
+  </html>

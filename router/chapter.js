@@ -1,22 +1,21 @@
-const express = require("express");
-const router = express.Router();
-const {
-  addchapter,
-  updatechapter,
-  deletechapter,
-  getchapter,
-} = require("../controller/chapter");
+  const express = require("express");
+  const router = express.Router();
+  const { addchapter, updatechapter, deletechapter, getchapter, readChapter } = require("../controller/chapter");
+  const { authRequired } = require("../controller/auth");
+  const authOptional = require("../middleware/authOptional");
+  const novelView = require("../controller/novelView");
 
-const { authRequired } = require("../controller/auth");
+  // สร้าง/แก้ไข/ลบ = ต้อง login
+  router.post("/api/novels/:id/chapters", authRequired, addchapter);
+  router.put("/api/novels/:id/chapters/:chapterId", authRequired, updatechapter);
+  router.delete("/api/novels/:id/chapters/:chapterId", authRequired, deletechapter);
 
-// API
-router.post("/api/novels/:id/chapters", authRequired, addchapter);
-router.put("/api/novels/:id/chapters/:chapterId", authRequired, updatechapter);
-router.delete(
-  "/api/novels/:id/chapters/:chapterId",
-  authRequired,
-  deletechapter
-);
-router.get("/api/novels/:id/chapters/:chapterId", getchapter);
 
-module.exports = router;
+  // อ่านตอน = public แต่เช็ก premium
+  router.get("/chapter/api/novels/:id/chapters/:chapterId", authOptional, getchapter);
+
+
+  router.get("/novel/:id/chapter/:chapterId", authOptional, novelView.renderChapter);
+
+    
+    module.exports = router;

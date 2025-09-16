@@ -238,3 +238,38 @@ header {
     }
 }
 
+.chapter-row {
+    font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+}
+
+.chapter-row input.premium-check {
+    accent-color: #f59e0b;
+    /* สีทอง */
+    cursor: pointer;
+}
+
+.badge {
+    background: #f59e0b;
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin-left: 4px;
+}
+
+/* ===== สำหรับนิยายสั้น (Single) ===== */
+.wrap.single {
+    display: block !important;   /* บังคับไม่ใช้ grid */
+    max-width: 1000px;           /* กำหนดความกว้างตามใจชอบ */
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .wrap.single .main {
+    width: 100%;
+  }
+  

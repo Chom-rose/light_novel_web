@@ -1,0 +1,75 @@
+<header>
+  <nav>
+    <div class="nav-header flex justify-between items-center">
+      <div class="logo text-xl font-bold">logo</div>
+
+      <div class="search-user flex items-center gap-3">
+        <!-- ปุ่มค้นหา -->
+        <button id="openSearch" class="p-2">
+          <i class="bx bx-search text-2xl"></i>
+        </button>
+
+        <!-- Overlay กล่องค้นหา -->
+        <div id="searchOverlay" class="fixed inset-0 bg-black/40 flex items-start justify-center pt-3 hidden z-50">
+          <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl relative">
+            <div class="flex items-center gap-2">
+
+              <!-- ประเภท -->
+              <select id="searchType" class="border rounded-lg px-3 py-2 text-sm">
+                <option value="short">นิยายสั้น</option>
+                <option value="long">นิยายยาว</option>
+              </select>
+
+              <!-- หมวดหมู่ -->
+              <select id="searchCategory" class="border rounded-lg px-3 py-2 text-sm">
+                <option value="">ทุกหมวด</option>
+                <option>แฟนตาซี</option>
+                <option>ระทึกขวัญ</option>
+                <option>โรแมนซ์</option>
+                <option>แอ๊คชั่น</option>
+                <option>ดราม่า</option>
+                <option>ไซไฟ</option>
+                <option>ตลก</option>
+              </select>
+
+              <!-- Input -->
+              <input id="searchInput" type="text" placeholder="ค้นหานิยาย ชื่อเรื่อง หรือผู้เขียน"
+                class="flex-1 border rounded-lg px-3 py-2 text-sm">
+
+              <!-- ปุ่มค้นหา -->
+              <button onclick="doSearch()" class="bg-orange-500 text-white px-5 py-2 rounded-lg hover:bg-indigo-700">
+                ค้นหา
+              </button>
+
+              <!-- ปุ่มปิด -->
+              <button id="closeSearch" class="ml-2 text-gray-500 hover:text-black">✕</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- โปรไฟล์ -->
+        <div class="profile relative">
+          <button id="profileBtn" class="p-2">
+            <i class="bx bx-user text-2xl"></i>
+          </button>
+          <div id="profileMenu" class="dropdown hidden absolute right-0 mt-2 bg-white shadow rounded w-40 z-50">
+            <div id="profileContent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-body flex justify-between items-center mt-2">
+      <ul class="nav-links flex gap-4">
+        <li><a href="/" class="hover:underline">หน้าหลัก</a></li>
+        <li><a href="/create" class="hover:underline">สร้างผลงาน</a></li>
+      </ul>
+      <div class="coin-balance flex items-center gap-3">
+        <span id="userStatus" class="text-sm text-gray-600">กำลังโหลด...</span>
+        <button id="btnPremium" class="bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700">
+          สมัครพรีเมี่ยม
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>

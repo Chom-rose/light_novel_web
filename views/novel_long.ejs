@@ -1,0 +1,50 @@
+<%- include('includes/head') %>
+</head>
+<body>
+  <%- include('includes/nav') %>
+
+  <main class="max-w-4xl mx-auto p-6">
+    <!-- ข้อมูลนิยาย -->
+    <div class="flex gap-6 mb-8">
+      <img src="<%= novel.image %>" alt="<%= novel.name %>"
+           class="w-40 h-56 object-cover rounded shadow">
+      <div>
+        <h1 class="text-3xl font-bold"><%= novel.name %></h1>
+        <p class="text-gray-600">ผู้เขียน: <%= novel.author %></p>
+        <p class="mt-2 text-gray-800"><%= novel.content %></p>
+        <p class="mt-2 text-sm text-gray-500">หมวดหมู่: <%= novel.category %></p>
+      </div>
+    </div>
+
+    <!-- สารบัญ -->
+    <h2 class="text-xl font-bold mb-4">สารบัญ</h2>
+    <ul class="space-y-2">
+      <% novel.chapters.forEach(ch => { %>
+        <li class="border-b pb-2">
+          <a href="/novel/<%= novel.id %>/chapter/<%= ch.id %>"
+             class="chapter-link text-blue-600 hover:underline"
+             data-premium="<%= ch.is_premium %>">
+            <%= ch.title %> <%= ch.is_premium === 1 ? "🔒" : "" %>
+          </a>
+        </li>
+      <% }) %>
+    </ul>
+  </main>
+
+  <!-- Modal -->
+<div id="premiumModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+  <div class="bg-white rounded-xl p-6 shadow-lg max-w-sm text-center">
+    <h2 class="text-lg font-bold mb-2">🔒 ตอนนี้สำหรับสมาชิกพรีเมียม</h2>
+    <p class="text-gray-600 mb-4">กรุณาอัปเกรดบัญชีเพื่ออ่านตอนนี้</p>
+    <div class="flex justify-center gap-4">
+      <a href="/premium" class="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700">อัปเกรด</a>
+      <button id="closeModal" class="px-4 py-2 border rounded">ปิด</button>
+    </div>
+  </div>
+</div>
+
+
+  <script src="/js/main.js"></script>
+</body>
+
+</html>

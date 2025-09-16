@@ -1,0 +1,50 @@
+<%- include('includes/head') %>
+</head>
+<body>
+  <%- include('includes/nav') %>
+  <main class="max-w-3xl mx-auto p-6">
+    <h1 class="text-2xl font-bold mb-4"><%= chapter.title %></h1>
+
+    <% const premium = Number(chapter.is_premium) === 1; %>
+    <% if (premium && !canRead) { %>
+      <% if (!user) { %>
+        <p class="text-gray-500">🔒 กรุณาเข้าสู่ระบบเพื่ออ่านตอนนี้</p>
+        <a href="/login" class="text-indigo-600 hover:underline">เข้าสู่ระบบ</a>
+      <% } else { %>
+        <p class="text-gray-500">🔒 ตอนนี้สำหรับสมาชิกพรีเมียมเท่านั้น</p>
+        <a href="/premium" class="text-indigo-600 hover:underline">อัปเกรดเป็นพรีเมียม</a>
+      <% } %>
+    <% } else { %>
+      <article class="prose max-w-none">
+        <%- safeContent %>
+      </article>
+
+      <!-- ปุ่มก่อนหน้า / ถัดไป -->
+      <div class="mt-8 flex items-center justify-between gap-2">
+        <% if (prevChapter) { %>
+          <a
+            class="px-4 py-2 border rounded-lg hover:bg-gray-50"
+            href="/novel/<%= chapter.novel_id %>/chapter/<%= prevChapter.id %>"
+            title="ก่อนหน้า: <%= prevChapter.title %>"
+          >← ก่อนหน้า</a>
+        <% } else { %>
+          <span></span>
+        <% } %>
+
+        <% if (nextChapter) { %>
+          <a
+            class="px-4 py-2 border rounded-lg hover:bg-gray-50"
+            href="/novel/<%= chapter.novel_id %>/chapter/<%= nextChapter.id %>"
+            title="ถัดไป: <%= nextChapter.title %>"
+          >ถัดไป →</a>
+        <% } %>
+      </div>
+    <% } %>
+
+    <div class="mt-6">
+      <a href="/novel/<%= chapter.novel_id %>" class="text-indigo-600 hover:underline">← ย้อนกลับ</a>
+    </div>
+  </main>
+  <script src="/js/main.js"></script>
+</body>
+</html>

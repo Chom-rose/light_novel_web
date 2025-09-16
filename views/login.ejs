@@ -1,0 +1,34 @@
+<%- include('includes/head') %>
+    </head>
+
+    <body>
+        <%- include('includes/nav_login') %>
+
+            <main class="bg-gray-100 py-12">
+                <div class="bg-white p-8 rounded-xl shadow-md w-full max-w-md mx-auto">
+                    <h1 class="text-2xl font-bold mb-6 text-center">เข้าสู่ระบบ</h1>
+                    <form id="loginForm" class="space-y-4">
+                        <div>
+                            <label class="block text-sm">ชื่อผู้ใช้</label>
+                            <input id="username" type="text" required class="w-full border p-2 rounded-md">
+                        </div>
+                        <div>
+                            <label class="block text-sm">รหัสผ่าน</label>
+                            <input id="password" type="password" required class="w-full border p-2 rounded-md">
+                        </div>
+                        <button type="submit"
+                            class="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700">
+                            เข้าสู่ระบบ
+                        </button>
+                    </form>
+                    <p class="text-sm mt-4 text-center">
+                        ยังไม่มีบัญชี? <a href="/register"
+                            class="text-indigo-600 hover:underline">สมัครสมาชิก</a>
+                    </p>
+                </div>
+            </main>
+            <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+            <script src="/js/main.js"></script>
+    </body>
+
+    </html>

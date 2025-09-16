@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev_secret_change_me";
 
-// POST /api/auth/login  (ล็อกอิน)
+// ====================== LOGIN ======================
 exports.login = (req, res) => {
   const { username, password } = req.body;
   if (!username || !password)
@@ -23,12 +23,27 @@ exports.login = (req, res) => {
         .status(401)
         .json({ error: "ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง" });
 
+    // ✅ ใช้ id ตรงกับ DB
     const token = jwt.sign(
-      { uid: user.id, username: user.username },
+      {
+        id: user.id,
+        username: user.username,
+        is_admin: user.is_admin,
+        is_premium: user.is_premium,
+      },
       JWT_SECRET,
       { expiresIn: "7d" }
     );
 
+    // ✅ set cookie ด้วย
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 วัน
+      sameSite: "lax",
+      secure: false, // ถ้าใช้ https ให้เปลี่ยนเป็น true
+    });
+
+    // ✅ ยังคงส่ง JSON กลับเหมือนเดิม (ไม่พังของเก่า)
     return res.json({
       message: "ล็อกอินสำเร็จ",
       token,
@@ -36,37 +51,56 @@ exports.login = (req, res) => {
         id: user.id,
         username: user.username,
         email: user.email,
-        age: user.age || null,
+        birthdate: user.birthdate || null,
+        is_admin: user.is_admin,
+        is_premium: user.is_premium,
       },
     });
   });
 };
 
-// Middleware ตรวจ token
+// ====================== AUTH MIDDLEWARE ======================
 exports.authRequired = (req, res, next) => {
+  let token = null;
+
+  // 1) ลองอ่านจาก Authorization header
   const h = req.headers.authorization || "";
-  const token = h.startsWith("Bearer ") ? h.slice(7) : null;
-  if (!token) return res.status(401).json({ error: "Missing Bearer token" });
+  if (h.startsWith("Bearer ")) {
+    token = h.slice(7);
+  }
+
+  // 2) ถ้า header ไม่มี ลองอ่านจาก cookie
+  if (!token && req.cookies && req.cookies.token) {
+    token = req.cookies.token;
+  }
+
+  if (!token) return res.status(401).json({ error: "Missing token" });
 
   try {
     const payload = jwt.verify(token, JWT_SECRET);
-    req.user = payload; // { uid, username, iat, exp }
+    req.user = payload; // { id, username, is_admin, is_premium, iat, exp }
     next();
   } catch (e) {
     return res.status(401).json({ error: "Invalid/expired token" });
   }
 };
 
+// ====================== ME ======================
 // GET /api/auth/me  (โปรไฟล์ตัวเองจาก token)
 exports.me = (req, res) => {
-  // ดึงข้อมูลสดจาก DB เพื่อความชัวร์
   db.get(
-    "SELECT id, username, email, age FROM users WHERE id = ?",
-    [req.user.uid],
+    "SELECT id, username, email, birthdate, is_admin, is_premium FROM users WHERE id = ?",
+    [req.user.id],
     (err, row) => {
       if (err) return res.status(500).json({ error: err.message });
       if (!row) return res.status(404).json({ error: "ไม่พบผู้ใช้" });
+
       return res.json({ user: row });
     }
   );
 };
+
+exports.logout = (req, res) => {
+  res.clearCookie("token");
+  return res.json({ message: "ออกจากระบบสำเร็จ" });
+}

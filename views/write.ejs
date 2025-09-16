@@ -1,0 +1,38 @@
+<%- include('includes/head') %>
+<link rel="stylesheet" href="/css/write.css">
+</head>
+
+<body>
+  <%- include('includes/nav_write') %>
+
+  <!-- ใช้ wrap แบบ single ไปเลย -->
+  <div class="wrap single max-w-5xl mx-auto px-6 py-6">
+    <section class="main">
+      <!-- ชื่อเรื่องจาก DB แสดงอย่างเดียว -->
+      <h1 class="novel-title text-3xl font-bold mb-4">
+        <%= novel ? novel.name : "ไม่มีชื่อเรื่อง" %>
+      </h1>
+
+      <!-- Toolbar -->
+      <div class="toolbar flex gap-2 mb-4">
+        <button class="tbtn" data-cmd="bold"><b>B</b></button>
+        <button class="tbtn" data-cmd="italic"><i>I</i></button>
+        <button class="tbtn" data-cmd="underline"><u>U</u></button>
+        <button class="tbtn" data-cmd="insertUnorderedList">• List</button>
+        <button class="tbtn" data-cmd="insertOrderedList">1. List</button>
+        <button class="tbtn" id="btnH1">หัวเรื่อง</button>
+        <button class="tbtn" id="btnQuote">อ้างอิง</button>
+      </div>
+
+      <!-- Editor -->
+      <div id="editor"
+           class="editor border rounded-lg p-4 min-h-[500px] w-full text-gray-800 leading-relaxed focus:outline-none"
+           contenteditable="true"
+           placeholder="พิมพ์เนื้อหาตรงนี้...">
+      </div>
+    </section>
+  </div>
+
+  <script src="/js/write_short.js"></script>
+</body>
+</html>
