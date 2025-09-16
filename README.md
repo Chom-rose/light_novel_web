@@ -59,7 +59,6 @@ OMISE_SECRET_KEY=your_secret_key
 npm init -y
 ```
 
-ติดตั้ง package:
 ```bash
 npm install express sqlite3 bcryptjs jsonwebtoken cookie-parser dotenv ejs omise
 ```
@@ -69,7 +68,7 @@ npm install express sqlite3 bcryptjs jsonwebtoken cookie-parser dotenv ejs omise
 npm install nodemon --save-dev
 ```
 
-```bash
+```json
 "scripts": {
   "dev": "nodemon server.js",
 },
@@ -91,7 +90,7 @@ npm run dev
 
 ```
 ```js
-เทสสมัครพรีเมี่ยม ก็อปโค้ดใส่ devtool/console
+// เทสสมัครพรีเมี่ยม ก็อปโค้ดใส่ devtool/console
 const t = localStorage.getItem('token');
 
 fetch('/premium/upgrade', {
@@ -108,7 +107,7 @@ headers: t ? { Authorization: 'Bearer ' + t } : {}
 
 .catch(console.error);
 
-เอาพรีเมี่ยมออก
+// เอาพรีเมี่ยมออก
 const t = localStorage.getItem('token');
 
 fetch('/premium/cancel', { method: 'POST', headers: { Authorization: 'Bearer ' + t }})
