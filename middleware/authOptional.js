@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-const SECRET = process.env.JWT_SECRET || "secret123"; // ใช้ค่าเดียวกับ auth.js
+const SECRET = process.env.JWT_SECRET || "dev_secret_change_me"; // ใช้ค่าเดียวกับ auth.js
 
 module.exports = function (req, res, next) {
   let token = null;
