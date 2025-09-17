@@ -30,6 +30,7 @@ const authRouter       = require("./router/auth");     // /auth/login, /auth/me
 const premiumRouter    = require("./router/premium");  // /premium/upgrade, /premium/cancel
 const paymentRouter    = require("./router/payment");  // /payment/start, /payment/webhook
 const novelViewRouter  = require("./router/novelView");// /novel/:id, /novel/:id/chapter/:chapterId, /write/:id, ...
+const dialogflowRouter = require("./router/dialogflow"); // /dialogflow/chat
 
 app.use("/admin", adminRouter);
 app.use("/register", registerRouter);
@@ -38,6 +39,7 @@ app.use("/chapter", chapterRouter);
 app.use("/auth", authRouter);
 app.use("/premium", premiumRouter);
 app.use("/payment", paymentRouter);
+app.use("/dialogflow", dialogflowRouter);
 
 /* ---------- Page render (EJS pages) ---------- */
 app.get("/", (_req, res) => {
