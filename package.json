@@ -23,7 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "omise": "^1.0.0",
     "sqlite3": "^5.1.7",
-    "uuid": "^13.0.0"
+    "uuid": "^8.3.2"
   },
   "repository": {
     "type": "git",

@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const dialogflow = require("@google-cloud/dialogflow");
-const uuid = require("uuid");
+const { v4: uuidv4 } = require("uuid");
+
 
 // client ใช้ key json ที่คุณโหลดมา
 const sessionClient = new dialogflow.SessionsClient({
-  keyFilename: "keys/dialogflow-key.json",
+  keyFilename: "key/the-utility-472408-c6-39b8f46a821c.json",
 });
 
 const projectId = "the-utility-472408-c6"; // เปลี่ยนเป็น project ID จริงของคุณ
@@ -14,7 +15,7 @@ const projectId = "the-utility-472408-c6"; // เปลี่ยนเป็น 
 router.post("/chat", async (req, res) => {
   try {
     const { message } = req.body;
-    const sessionId = uuid.v4();
+    const sessionId = uuidv4();
     const sessionPath = sessionClient.projectAgentSessionPath(projectId, sessionId);
 
     const request = {
