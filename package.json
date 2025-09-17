@@ -12,14 +12,18 @@
   "license": "ISC",
   "description": "Light novel CRUD demo (Express + SQLite + Auth)",
   "dependencies": {
+    "@google-cloud/dialogflow": "^7.2.0",
     "bcryptjs": "^3.0.2",
     "cookie-parser": "^1.4.7",
+    "dialogflow": "^4.0.3",
     "dotenv": "^17.2.2",
     "ejs": "^3.1.10",
     "express": "^5.1.0",
+    "google-auth-library": "^10.3.0",
     "jsonwebtoken": "^9.0.2",
     "omise": "^1.0.0",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "uuid": "^13.0.0"
   },
   "repository": {
     "type": "git",
