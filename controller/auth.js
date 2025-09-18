@@ -88,6 +88,10 @@ exports.authRequired = (req, res, next) => {
 // ====================== ME ======================
 // GET /api/auth/me  (โปรไฟล์ตัวเองจาก token)
 exports.me = (req, res) => {
+  if (!req.user) {
+    return res.status(200).json({ user: null });
+  }
+  
   db.get(
     "SELECT id, username, email, birthdate, is_admin, is_premium FROM users WHERE id = ?",
     [req.user.id],
