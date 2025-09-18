@@ -1,0 +1,51 @@
+<% if (user && user.id === chapter.novel_owner) { %>
+    <!-- ปุ่มแก้ไข / ลบ -->
+    <div class="mt-4 flex gap-2">
+      <button id="editChapterBtn"
+              class="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700">
+        ✏️ แก้ไขตอน
+      </button>
+      <button id="deleteChapterBtn"
+              class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
+        🗑️ ลบตอน
+      </button>
+    </div>
+  
+    <!-- Modal แก้ไขตอน -->
+    <div id="editChapterModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-50">
+      <div class="bg-white rounded-xl p-6 shadow-lg max-w-2xl w-full">
+        <h2 class="text-lg font-bold mb-4">แก้ไขตอน</h2>
+  
+        <!-- Title -->
+        <input type="text" id="editChapterTitle"
+               class="w-full border p-2 rounded mb-3"
+               value="<%= chapter.title %>">
+  
+        <!-- Toolbar -->
+        <div class="toolbar flex gap-2 mb-2">
+          <button type="button" class="tbtn px-2 border" data-cmd="bold"><b>B</b></button>
+          <button type="button" class="tbtn px-2 border" data-cmd="italic"><i>I</i></button>
+          <button type="button" class="tbtn px-2 border" data-cmd="underline"><u>U</u></button>
+          <button type="button" class="tbtn px-2 border" data-cmd="insertUnorderedList">• List</button>
+          <button type="button" class="tbtn px-2 border" data-cmd="insertOrderedList">1. List</button>
+          <button type="button" class="tbtn px-2 border" id="btnH1">หัวเรื่อง</button>
+          <button type="button" class="tbtn px-2 border" id="btnQuote">อ้างอิง</button>
+        </div>
+  
+        <!-- Editor -->
+        <div id="editChapterContent"
+             class="editor w-full border rounded p-2 min-h-[200px]"
+             contenteditable="true"><%- chapter.content %></div>
+  
+        <div class="flex justify-end gap-2 mt-4">
+          <button type="button" id="closeEditChapterModal"
+                  class="px-3 py-1 border rounded">ยกเลิก</button>
+          <button type="button" id="saveEditChapter"
+                  class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700">
+            บันทึก
+          </button>
+        </div>
+      </div>
+    </div>
+  <% } %>
+  

@@ -41,6 +41,9 @@
       </div>
     <% } %>
 
+    <%- include('includes/chapter_actions', { chapter, user }) %>
+
+
     <div class="mt-6">
       <a href="/novel/<%= chapter.novel_id %>" class="text-indigo-600 hover:underline">← ย้อนกลับ</a>
     </div>

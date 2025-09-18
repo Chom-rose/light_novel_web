@@ -359,35 +359,88 @@
   }
   
 
-  const editForm = document.getElementById("editNovelForm");
-if (editForm) {
-  editForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+  const pathParts = window.location.pathname.split("/");
+  const novelId = pathParts[2];
+  const chapterId = pathParts[4];
 
-    const novelId = window.location.pathname.split("/").pop();
+  const editBtn = document.getElementById("editChapterBtn");
+  const deleteBtn = document.getElementById("deleteChapterBtn");
+  const editModal = document.getElementById("editChapterModal");
+  const closeEditModal = document.getElementById("closeEditChapterModal");
+
+  if (editBtn) {
+    editBtn.addEventListener("click", () => {
+      editModal.classList.remove("hidden");
+      editModal.classList.add("flex");
+    });
+  }
+
+  if (closeEditModal) {
+    closeEditModal.addEventListener("click", () => {
+      editModal.classList.add("hidden");
+      editModal.classList.remove("flex");
+    });
+  }
+
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", async () => {
+      if (confirm("คุณแน่ใจว่าจะลบตอนนี้?")) {
+        const res = await fetch(`/light-novel/api/novels/${novelId}/chapters/${chapterId}`, {
+          method: "DELETE",
+          headers: { "Authorization": "Bearer " + token }
+        });
+
+        const data = await res.json();
+        if (res.ok) {
+          alert("ลบตอนสำเร็จ");
+          window.location.href = `/novel/${novelId}`;
+        } else {
+          alert("ลบไม่สำเร็จ: " + (data.error || "ไม่ทราบสาเหตุ"));
+        }
+      }
+    });
+  }
+});
+
+// Toolbar สำหรับ modal edit chapter
+document.querySelectorAll("#editChapterModal .tbtn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const cmd = btn.dataset.cmd;
+    if (cmd) document.execCommand(cmd, false, null);
+    if (btn.id === "btnH1") document.execCommand("formatBlock", false, "h1");
+    if (btn.id === "btnQuote") document.execCommand("formatBlock", false, "blockquote");
+  });
+});
+
+// Save edit chapter
+const saveEditChapter = document.getElementById("saveEditChapter");
+if (saveEditChapter) {
+  saveEditChapter.addEventListener("click", async () => {
+    const pathParts = window.location.pathname.split("/");
+    const novelId = pathParts[2];
+    const chapterId = pathParts[4];
     const token = localStorage.getItem("token");
 
-    const name = document.getElementById("editName").value.trim();
-    const author = document.getElementById("editAuthor").value.trim();
-    const category = document.getElementById("editCategory").value.trim();
-    const description = document.getElementById("editDescription").value.trim();
-    const coverImage = document.getElementById("editCoverImage").value.trim();
+    const title = document.getElementById("editChapterTitle").value.trim();
+    const content = document.getElementById("editChapterContent").innerHTML.trim();
 
-    const res = await fetch(`/light-novel/api/novels/${novelId}`, {
+    const res = await fetch(`/chapter/api/novels/${novelId}/chapters/${chapterId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer " + token
       },
-      body: JSON.stringify({ name, author, category, description, coverImage })
+      body: JSON.stringify({ title, content })
     });
 
     const data = await res.json();
     if (res.ok) {
-      alert("อัปเดตนิยายสำเร็จ");
+      alert("อัปเดตตอนสำเร็จ");
       location.reload();
     } else {
-      alert("อัปเดตไม่สำเร็จ: " + (data.error || "ไม่ทราบสาเหตุ"));
+      alert("แก้ไขไม่สำเร็จ: " + (data.error || "ไม่ทราบสาเหตุ"));
     }
   });
 }
