@@ -63,11 +63,41 @@
         </section>
       </main>
 
+      <!-- Overlay กล่องค้นหา -->
+      <div id="searchOverlay" class="fixed inset-0 bg-black/40 flex items-start justify-center pt-3 hidden z-50">
+        <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-3xl relative">
+          <!-- ปุ่มปิด -->
+          <button id="closeSearch" class="absolute top-2 right-2 text-gray-600">✕</button>
+
+          <form action="/search" method="get" class="flex flex-col gap-3">
+            <input type="text" name="q" placeholder="ค้นหาชื่อเรื่องหรือผู้แต่ง" class="border rounded-lg px-3 py-2" />
+
+            <select name="category" class="border rounded-lg px-3 py-2">
+              <option value="">-- ทุกแนว --</option>
+              <option value="Romance">Romance</option>
+              <option value="Fantasy">Fantasy</option>
+              <option value="Action">Action</option>
+            </select>
+
+            <select name="type" class="border rounded-lg px-3 py-2">
+              <option value="">-- ทุกประเภท --</option>
+              <option value="short">นิยายสั้น</option>
+              <option value="long">นิยายยาว</option>
+            </select>
+
+            <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-lg">ค้นหา</button>
+          </form>
+        </div>
+      </div>
+
+
       <%- include('includes/footer') %>
 
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <%- include('includes/chatbot') %>
-        <script src="/js/main.js"></script>
+          <script src="/js/main.js"></script>
+          <script src="/js/search.js"></script>
+
   </body>
 
   </html>

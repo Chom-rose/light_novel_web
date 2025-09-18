@@ -101,35 +101,6 @@
 
   if (content) renderProfileMenu();
 
-  // ========== search.html ==========
-  const params = new URLSearchParams(window.location.search);
-  const q = params.get("q") || "";
-  const keywordEl = document.getElementById("keyword");
-  if (keywordEl) keywordEl.textContent = q;
-
-  const resultsDiv = document.getElementById("results");
-  if (resultsDiv) {
-    fetch("/light-novel/api/novels")
-      .then(res => res.json())
-      .then(novels => {
-        const filtered = novels.filter(n => n.name.includes(q) || n.author.includes(q));
-        if (filtered.length === 0) {
-          resultsDiv.innerHTML = `<p class="text-gray-500 col-span-full">ไม่พบนิยายที่ค้นหา</p>`;
-        } else {
-          filtered.forEach(novel => {
-            const card = document.createElement("div");
-            card.className = "bg-white rounded-xl shadow p-2";
-            card.innerHTML = `
-              <img src="${novel.image || 'https://picsum.photos/200/300'}" alt="${novel.name}" class="rounded-lg w-full">
-              <h4 class="font-semibold mt-2">${novel.name}</h4>
-              <p class="text-sm text-zinc-500">${novel.author}</p>
-            `;
-            resultsDiv.appendChild(card);
-          });
-        }
-      });
-  }
-
   // ========== create.html ==========
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("novel-form");
