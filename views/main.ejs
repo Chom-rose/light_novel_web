@@ -46,21 +46,6 @@
           <!-- 👇 JS จะเติมนิยายจริงตรงนี้ -->
           <div id="novelList" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"></div>
         </section>
-
-        <!-- Trending -->
-        <section>
-          <div class="flex items-center justify-between mb-4">
-            <h3 class="text-xl font-bold">กำลังมาแรง</h3>
-            <a href="#" class="text-sm text-indigo-600 hover:underline">ดูอันดับ</a>
-          </div>
-          <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
-            <article class="bg-white rounded-xl shadow p-2">
-              <img src="https://picsum.photos/200/300?random=3" alt="" class="rounded-lg">
-              <h4 class="font-semibold mt-2">กาลครั้งในอาณาจักรชา</h4>
-              <p class="text-sm text-zinc-500">Sora</p>
-            </article>
-          </div>
-        </section>
       </main>
 
       <!-- Overlay กล่องค้นหา -->
@@ -92,11 +77,11 @@
 
 
       <%- include('includes/footer') %>
-
+      <script src="/js/main.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
         <%- include('includes/chatbot') %>
-          <script src="/js/main.js"></script>
-          <script src="/js/search.js"></script>
+      <script src="/js/search.js"></script>
+          
 
   </body>
 
