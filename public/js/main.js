@@ -30,6 +30,59 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+  const popularNovels = document.getElementById("popularNovels");
+  if (popularNovels) {
+    fetch("/light-novel/api/novels")
+      .then(res => res.json())
+      .then(novels => {
+        if (novels.length === 0) {
+          popularNovels.innerHTML = `<div class="swiper-slide text-gray-500">ยังไม่มีนิยาย</div>`;
+        } else {
+          novels.forEach(novel => {
+            const slide = document.createElement("div");
+            slide.className = "swiper-slide";
+            slide.innerHTML = `
+              <div class="relative">
+                <a href="/novel/${novel.id}">
+                  <img src="${novel.image || 'https://picsum.photos/800/400'}"
+                       class="w-full rounded-xl object-cover h-60">
+                  <div class="absolute bottom-3 left-3 bg-black/60 text-white px-3 py-1 rounded-lg">
+                    ${novel.name}
+                  </div>
+                </a>
+              </div>
+            `;
+            popularNovels.appendChild(slide);
+          });
+
+          // init swiper หลังจากเติมข้อมูลแล้ว
+          new Swiper(".popularSwiper", {
+            slidesPerView: 1,
+            spaceBetween: 10,
+            loop: true,
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+            },
+            breakpoints: {
+              640: { slidesPerView: 2 },
+              1024: { slidesPerView: 3 },
+            }
+          });
+        }
+      })
+      .catch(() => {
+        popularNovels.innerHTML = `<div class="swiper-slide text-red-500">โหลดข้อมูลผิดพลาด</div>`;
+      });
+  }
+});
+
+
 
 // เปิดกล่องค้นหา
 const openBtn = document.getElementById("openSearch");
