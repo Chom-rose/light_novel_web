@@ -312,3 +312,35 @@
     }
   });
   
+  document.addEventListener("DOMContentLoaded", () => {
+    const deleteBtn = document.getElementById("deleteNovelBtn");
+    const editBtn = document.getElementById("editNovelBtn");
+    const novelId = window.location.pathname.split("/").pop();
+    const token = localStorage.getItem("token");
+  
+    if (deleteBtn) {
+      deleteBtn.addEventListener("click", async () => {
+        if (confirm("คุณแน่ใจว่าจะลบนิยายนี้?")) {
+          const res = await fetch(`/light-novel/api/novels/${novelId}`, {
+            method: "DELETE",
+            headers: { "Authorization": "Bearer " + token }
+          });
+          const data = await res.json();
+          if (res.ok) {
+            alert("ลบนิยายสำเร็จ");
+            window.location.href = "/";
+          } else {
+            alert("ลบไม่สำเร็จ: " + (data.error || "ไม่ทราบสาเหตุ"));
+          }
+        }
+      });
+    }
+  
+    if (editBtn) {
+      editBtn.addEventListener("click", () => {
+        // modal แบบง่าย หรือ redirect ไปหน้า /edit
+        alert("ฟีเจอร์แก้ไขจะมาเร็ว ๆ นี้ ✨");
+      });
+    }
+  });
+  
