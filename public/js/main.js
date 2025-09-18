@@ -112,7 +112,7 @@
     fetch("/light-novel/api/novels")
       .then(res => res.json())
       .then(novels => {
-        const filtered = novels.filter(n => n.title.includes(q) || n.author.includes(q));
+        const filtered = novels.filter(n => n.name.includes(q) || n.author.includes(q));
         if (filtered.length === 0) {
           resultsDiv.innerHTML = `<p class="text-gray-500 col-span-full">ไม่พบนิยายที่ค้นหา</p>`;
         } else {
@@ -338,9 +338,56 @@
   
     if (editBtn) {
       editBtn.addEventListener("click", () => {
-        // modal แบบง่าย หรือ redirect ไปหน้า /edit
-        alert("ฟีเจอร์แก้ไขจะมาเร็ว ๆ นี้ ✨");
+        const editModal = document.getElementById("editModal");
+        if (editModal) {
+          editModal.classList.remove("hidden");
+          editModal.classList.add("flex"); // ให้ modal ใช้ flex layout
+        }
       });
     }
   });
   
+  const closeEditModal = document.getElementById("closeEditModal");
+  if (closeEditModal) {
+    closeEditModal.addEventListener("click", () => {
+      const editModal = document.getElementById("editModal");
+      if (editModal) {
+        editModal.classList.add("hidden");
+        editModal.classList.remove("flex");
+      }
+    });
+  }
+  
+
+  const editForm = document.getElementById("editNovelForm");
+if (editForm) {
+  editForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const novelId = window.location.pathname.split("/").pop();
+    const token = localStorage.getItem("token");
+
+    const name = document.getElementById("editName").value.trim();
+    const author = document.getElementById("editAuthor").value.trim();
+    const category = document.getElementById("editCategory").value.trim();
+    const description = document.getElementById("editDescription").value.trim();
+    const coverImage = document.getElementById("editCoverImage").value.trim();
+
+    const res = await fetch(`/light-novel/api/novels/${novelId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
+      },
+      body: JSON.stringify({ name, author, category, description, coverImage })
+    });
+
+    const data = await res.json();
+    if (res.ok) {
+      alert("อัปเดตนิยายสำเร็จ");
+      location.reload();
+    } else {
+      alert("อัปเดตไม่สำเร็จ: " + (data.error || "ไม่ทราบสาเหตุ"));
+    }
+  });
+}

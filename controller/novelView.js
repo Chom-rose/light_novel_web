@@ -35,6 +35,9 @@ exports.renderNovelDetail = (req, res) => {
 
     // ดึง user จาก req.user (middleware authRequired ตั้งค่าไว้)
     const user = req.user || null;
+    console.log("DEBUG novel detail page");
+    console.log("novel.user_id =", novel.user_id);
+    console.log("req.user =", user);
 
     if (novel.type === "short") {
       res.render("novel_short", { novel, user });

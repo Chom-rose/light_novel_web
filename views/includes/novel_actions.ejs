@@ -21,8 +21,15 @@
                class="w-full border rounded p-2" placeholder="ชื่อเรื่อง" value="<%= novel.name %>">
         <input type="text" id="editAuthor" name="author"
                class="w-full border rounded p-2" placeholder="ผู้แต่ง" value="<%= novel.author %>">
-        <input type="text" id="editCategory" name="category"
-               class="w-full border rounded p-2" placeholder="หมวดหมู่" value="<%= novel.category %>">
+               <select id="editCategory" name="category" class="w-full border rounded p-2">
+                <option value="แฟนตาซี" <%= novel.category === "แฟนตาซี" ? "selected" : "" %>>แฟนตาซี</option>
+                <option value="ระทึกขวัญ" <%= novel.category === "ระทึกขวัญ" ? "selected" : "" %>>ระทึกขวัญ</option>
+                <option value="โรแมนซ์" <%= novel.category === "โรแมนซ์" ? "selected" : "" %>>โรแมนซ์</option>
+                <option value="แอ๊คชั่น" <%= novel.category === "แอ๊คชั่น" ? "selected" : "" %>>แอ๊คชั่น</option>
+                <option value="ดราม่า" <%= novel.category === "ดราม่า" ? "selected" : "" %>>ดราม่า</option>
+                <option value="ไซไฟ" <%= novel.category === "ไซไฟ" ? "selected" : "" %>>ไซไฟ</option>
+                <option value="ตลก" <%= novel.category === "ตลก" ? "selected" : "" %>>ตลก</option>
+              </select>              
         <textarea id="editDescription" name="description"
                   class="w-full border rounded p-2" rows="4" placeholder="คำโปรย"><%= novel.content %></textarea>
         <input type="text" id="editCoverImage" name="coverImage"
