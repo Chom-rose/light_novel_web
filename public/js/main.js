@@ -376,9 +376,10 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-const closeEditModal = document.getElementById("closeEditModal");
-if (closeEditModal) {
-  closeEditModal.addEventListener("click", () => {
+// ====== Novel Modal ======
+const closeNovelModal = document.getElementById("closeEditModal");
+if (closeNovelModal) {
+  closeNovelModal.addEventListener("click", () => {
     const editModal = document.getElementById("editModal");
     if (editModal) {
       editModal.classList.add("hidden");
@@ -388,6 +389,7 @@ if (closeEditModal) {
 }
 
 
+// ====== Chapter Modal ======
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("token");
   const pathParts = window.location.pathname.split("/");
@@ -396,20 +398,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const editBtn = document.getElementById("editChapterBtn");
   const deleteBtn = document.getElementById("deleteChapterBtn");
-  const editModal = document.getElementById("editChapterModal");
-  const closeEditModal = document.getElementById("closeEditChapterModal");
+  const editChapterModal = document.getElementById("editChapterModal");
+  const closeChapterModal = document.getElementById("closeEditChapterModal");
 
   if (editBtn) {
     editBtn.addEventListener("click", () => {
-      editModal.classList.remove("hidden");
-      editModal.classList.add("flex");
+      editChapterModal.classList.remove("hidden");
+      editChapterModal.classList.add("flex");
     });
   }
 
-  if (closeEditModal) {
-    closeEditModal.addEventListener("click", () => {
-      editModal.classList.add("hidden");
-      editModal.classList.remove("flex");
+  if (closeChapterModal) {
+    closeChapterModal.addEventListener("click", () => {
+      editChapterModal.classList.add("hidden");
+      editChapterModal.classList.remove("flex");
     });
   }
 
@@ -473,3 +475,4 @@ if (saveEditChapter) {
     }
   });
 }
+
