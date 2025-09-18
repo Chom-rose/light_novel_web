@@ -11,6 +11,9 @@
     <article class="prose max-w-none">
       <%- novel.content %>
     </article>
+
+        <!-- include ปุ่มแก้ไข/ลบ -->
+        <%- include('includes/novel_actions', { novel, user }) %>
   </main>
   <script src="/js/main.js"></script>
 </body>
