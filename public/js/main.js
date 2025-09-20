@@ -296,8 +296,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (token) {
     // กรณีมี token → ใช้ Bearer
     fetch("/auth/me", {
-      headers: { Authorization: "Bearer " + token }
-    })
+      headers: { headers: { Authorization: "Bearer " + token }
+    }})
       .then(res => res.json())
       .then(data => handleUser(data, statusEl, btnPremium))
       .catch(() => setGuest(statusEl, btnPremium));
