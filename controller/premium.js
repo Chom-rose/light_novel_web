@@ -28,15 +28,30 @@ function issueToken(user, res) {
 exports.upgrade = (req, res) => {
   db.run("UPDATE users SET is_premium = 1 WHERE id = ?", [req.user.id], function (err) {
     if (err) return res.status(500).json({ error: err.message });
-    // 2. ดึงข้อมูล user ที่อัปเดตแล้วมาสร้าง token ใหม่
+
+    // **ส่วนที่แก้ไข: ไม่ต้องสร้าง Token ใหม่ และบังคับลบ Cookie**
+
+    // 1. ลบคุกกี้ token เก่า (บังคับให้ผู้ใช้ออกจากระบบ)
+    res.clearCookie("token");
+
+    // 2. ส่ง response กลับไปให้ client พร้อมข้อความแจ้งเตือนพิเศษ
+    res.json({
+      message: "อัปเกรดเป็นพรีเมียมสำเร็จ 🎉",
+      action: "logout_required", // <-- เพิ่ม action พิเศษ
+      token: null
+    });
+
+    /*
+    // โค้ดเก่า:
     db.get("SELECT * FROM users WHERE id = ?", [req.user.id], (err2, user) => {
       if (err2) return res.status(500).json({ error: err2.message });
       const token = issueToken(user, res);
-      // 3. ส่ง token ใหม่กลับไปให้ client (เผื่อ frontend เก็บใน localStorage ด้วย)
       res.json({ message: "อัปเกรดเป็นพรีเมียมสำเร็จ 🎉", token });
     });
+    */
   });
 };
+
 
 exports.cancel = (req, res) => {
   db.run("UPDATE users SET is_premium = 0 WHERE id = ?", [req.user.id], function (err) {

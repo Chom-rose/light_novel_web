@@ -1,5 +1,25 @@
 <%- include('includes/head') %>
   <link rel="stylesheet" href="/css/main.css">
+  <style>
+    /* Swiper */
+    @import url('https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css');
+  
+    /* การ์ดนิยายที่ JS เติมเข้ามา */
+    #novelList article,
+    #popularNovels .swiper-slide {
+      background: #fff;
+      border-radius: 10px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      cursor: pointer;
+    }
+  
+    /* เอฟเฟกต์ hover */
+    #novelList article:hover,
+    #popularNovels .swiper-slide:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.18);
+    }
+  </style>
   </head>
 
   <body>
