@@ -1,21 +1,24 @@
 # 📚 Light Novel Web
 
-โปรเจกต์เว็บ **Light Novel CRUD Demo** เพื่อให้ผู้ใช้สามารถ 
+A **Light Novel CRUD Demo Web Application** that allows users to:
 
-**สมัครสมาชิก / ล็อกอิน / สร้างนิยาย / เพิ่มตอน / แก้ไข / ลบ**
-  
-## Feature
-- สมัครสมาชิก, เข้าสู่ระบบ, ออกจากระบบ
-- สร้าง ลบ แก้ไข นิยายได้
-  - กําหนด ประเภทตอนสร้างนิยายได้ เช่น สั้น หรือ ยาว
-    - แบบสั้น จะเป็นนิยายตอนเดียวจบ เพิ่มตอนไม่ได้
-    - แบบยาว จะเป็นนิยายหลายตอน เพิ่ม, แก้ไข, ลบ ตอนได้
+**Register / Log in / Create novels / Add chapters / Edit / Delete**
 
-    - สร้างนิยายให้เป็นตอนแบบพรีเมี่ยมได้ สำหรับสมาชิกพรีเมี่ยม
-- ค้นหานิยาย
-- กรองหมวดหมู่ หรือ ประเภท นิยาย
-- สมัครสมาชิกแบบพรีเมี่ยม พร้อมอ่านนิยายแบบพรีเมี่ยม
+---
 
+## ✨ Features
+
+- User registration, login, and logout
+- Create, edit, and delete novels
+  - Define novel type when creating a novel:
+    - **Short novel**: single-chapter story (no additional chapters allowed)
+    - **Long novel**: multi-chapter story (chapters can be added, edited, and deleted)
+  - Create **premium chapters** (available only to premium members)
+- Search novels
+- Filter by category or novel type
+- Premium membership system with access to premium content
+
+---
 
 ## 🚀 Tech Stack  
 
@@ -30,19 +33,22 @@
 ![jsonwebtoken](https://img.shields.io/badge/jsonwebtoken-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white)
 ![omise](https://img.shields.io/badge/Omise-1A6AFF?style=for-the-badge&logo=omise&logoColor=white)
 
-- #### express → Web framework หลัก ใช้สร้าง API + จัดการ routing
-- #### sqlite3 → Database driver ให้ Node.js คุยกับไฟล์ SQLite .db ได้
-- #### bcryptjs → Hash/ตรวจสอบรหัสผ่าน ปลอดภัยเวลาล็อกอิน
-- #### jsonwebtoken → สร้าง/ตรวจสอบ JWT token สำหรับระบบ authentication
-- #### cookie-parser → ใช้อ่าน/เขียนค่า cookie (เช่น token) จาก request
-- #### dotenv → โหลดค่าจากไฟล์ .env เข้ามาเป็น environment variables
-- #### ejs → Template engine สำหรับ render หน้าเว็บ (views/*.ejs)
-- #### omise → SDK ของ Omise ใช้เชื่อมระบบจ่ายเงิน (PromptPay)
+### Libraries Overview
 
+- **express** → Main web framework for API creation and routing
+- **sqlite3** → Database driver for connecting Node.js with SQLite `.db` files
+- **bcryptjs** → Password hashing and verification for secure authentication
+- **jsonwebtoken** → JWT creation and validation for authentication
+- **cookie-parser** → Read/write cookies (e.g., auth tokens) from requests
+- **dotenv** → Load environment variables from `.env`
+- **ejs** → Template engine for rendering web pages (`views/*.ejs`)
+- **omise** → Omise SDK for payment integration (PromptPay)
+
+---
 
 ## 🔑 Environment Variables
 
-สร้างไฟล์ `.env` ใน root:
+Create a `.env` file in the project root:
 
 ```env
 PORT=3000
